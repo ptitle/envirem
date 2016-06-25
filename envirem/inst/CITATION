@@ -1,0 +1,12 @@
+citHeader("To cite the envirem package in publications, use:")
+
+citEntry(entry="Article",
+         title = "ENVIREM: An expanded set of bioclimatic variables improves ecological niche modeling performance",
+         author = personList(as.person("PO Title"),
+         as.person("JB Bemmels")),
+	 journal = "Methods in Ecology and Evolution",
+         year = "Sunmitted",
+         volume = "",
+         pages = "",
+         textVersion = "Pascal O. Title and Jordan B. Bemmels. Sumbitted. ENVIREM: An expanded set of bioclimatic variables improves ecological niche modeling performance. Methods in Ecology and Evolution.")
+

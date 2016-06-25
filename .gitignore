@@ -1,0 +1,7 @@
+*.DS_Store
+envirem.Rcheck/*
+*.tar.gz
+*.Rapp.history
+*.o
+*.so
+old/*
