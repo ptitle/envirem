@@ -12,6 +12,8 @@
 ##' @details The function \code{\link{verifyFileStructure}} should be used to 
 ##' verify that the appropriate rasters are present in \code{masterstack}.
 ##' 
+##' This function is called internally by \code{\link{generateRasters}}. 
+##' 
 ##'	Possible variables to generate include:\cr
 ##'
 ##'	aridityIndexThornthwaite \cr

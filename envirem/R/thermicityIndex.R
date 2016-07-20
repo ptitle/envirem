@@ -66,6 +66,12 @@ thermicityIndex <- function(annualTemp, minTemp, maxTemp, continentality, return
 	
 	if (returnCompensated) {
 		# use continentality values to implement corrections for compensated metric
+		ind <- which(raster::values(continentality) < 9)
+		c1 <- continentality
+		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[ind] <- (9 - c1[ind]) * 10
+		thermicity[ind] <- thermicity[ind] - c1[ind]		
+		
 		ind <- intersect(which(raster::values(continentality) > 18), which(raster::values(continentality) <= 21))
 		c1 <- continentality
 		c1[setdiff(1:raster::ncell(c1), ind)] <- NA

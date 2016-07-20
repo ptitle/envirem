@@ -4,4 +4,6 @@ envirem.Rcheck/*
 *.Rapp.history
 *.o
 *.so
+.RData
+.Rhistory
 old/*
