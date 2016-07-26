@@ -36,7 +36,7 @@
 #function returns a stack of max temp of coldest month and min temp of warmest month
 otherTempExtremes <- function(meantempStack, mintempStack, maxtempStack) {
 	
-	#enforce ordering
+	# enforce ordering
 	meantempStack <- meantempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempStack))))]]
 	mintempStack <- mintempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(mintempStack))))]]
 	maxtempStack <- maxtempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(maxtempStack))))]]
