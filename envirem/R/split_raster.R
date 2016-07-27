@@ -4,7 +4,7 @@
 ##'
 ##' @param file full path to a raster
 ##'
-##' @param s division applied to each side of the raster (s=2 => 4 tiles)
+##' @param s division applied to each side of the raster (s=2 -> 4 tiles)
 ##'
 ##' @param outputDir path and directory name for output
 ##'

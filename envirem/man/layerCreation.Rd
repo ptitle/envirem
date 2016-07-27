@@ -19,6 +19,8 @@ rasterStack
 }
 \description{
 Generates all rasterLayers for one particular input dataset.
+For the distinction between this function and \code{\link{generateRasters}}, 
+see \code{Details}.
 }
 \details{
 The function \code{\link{verifyFileStructure}} should be used to 
@@ -26,25 +28,30 @@ verify that the appropriate rasters are present in \code{masterstack}.
 
 This function is called internally by \code{\link{generateRasters}}. 
 
-Possible variables to generate include:\cr
+The function \code{layerCreation} will generate envirem rasters from input R 
+objects (rasterStacks) and will return the result as an R object. In contrast, 
+the function \code{\link{generateRasters}} reads in input rasters from a specified directory, 
+splits input rasters into tiles if necessary, internally calls 
+\code{layerCreation} and writes the result to file. 
 
+Possible variables to generate include:\cr
+\cr
+annualPET \cr
 aridityIndexThornthwaite \cr
-airidityIndexUNEP \cr
 climaticMoistureIndex \cr
 continentality \cr
 embergerQ \cr
 growingDegDays0 \cr
 growingDegDays5 \cr
-humidityIndex \cr
-monthCountByTemp10 \cr
-PETseasonality \cr
-thermicityIndex \cr
-minSummerPrecip \cr
-maxSummerPrecip \cr
-minWinterPrecip \cr
-maxWinterPrecip \cr
-minTempWarmest \cr
 maxTempColdest \cr
+minTempWarmest \cr
+monthCountByTemp10 \cr
+PETColdestQuarter \cr
+PETDriestQuarter \cr
+PETseasonality \cr
+PETWarmestQuarter \cr
+PETWettestQuarter \cr
+thermicityIndex \cr
 
 If \code{var = 'all'}, then all of the variables will be generated.
 }

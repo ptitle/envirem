@@ -41,40 +41,54 @@ tiling is requested, must be a perfect square}
 The requested set of rasterLayers will be written to \code{outputDir}.
 }
 \description{
-Main function to generate specified layers for multiple temporal datasets.
+Main function to generate specified ENVIREM layers.
 If requested, this function will split input rasters into tiles, generate desired variables,
-and reassemble the results. Results are named according to specified resName and timeName.
+and reassemble the results. Results are named according to specified resName and timeName. 
+For the distinction between this function and \code{\link{generateRasters}}, 
+see \code{Details}.
 }
 \details{
+The function \code{\link{layerCreation}} will generate envirem rasters from input R 
+objects (rasterStacks) and will return the result as an R object. In contrast, 
+the function \code{generateRasters} reads in input rasters from a specified directory, 
+splits input rasters into tiles if necessary, internally calls 
+\code{\link{layerCreation}} and writes the result to file. 
+
 Possible variables to generate include:\cr
+\cr
+annualPET \cr
 aridityIndexThornthwaite \cr
-airidityIndexUNEP \cr
 climaticMoistureIndex \cr
 continentality \cr
 embergerQ \cr
 growingDegDays0 \cr
 growingDegDays5 \cr
-humidityIndex \cr
-monthCountByTemp10 \cr
-PETseasonality \cr
-thermicityIndex \cr
-minSummerPrecip \cr
-maxSummerPrecip \cr
-minWinterPrecip \cr
-maxWinterPrecip \cr
-minTempWarmest \cr
 maxTempColdest \cr
+minTempWarmest \cr
+monthCountByTemp10 \cr
+PETColdestQuarter \cr
+PETDriestQuarter \cr
+PETseasonality \cr
+PETWarmestQuarter \cr
+PETWettestQuarter \cr
+thermicityIndex \cr
 
 If \code{var = 'all'}, then all of the variables will be generated.
 
 \code{resName} and \code{timeName} are only used for naming the output directory.
 
-Rasters in \code{mainDir} should be named appropriately and with identical resolution, origin and extent.
+Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
+and with identical resolution, origin and extent.
+}
+\examples{
+
+
+
 }
 \author{
 Pascal Title
 }
 \seealso{
-Naming of rasters in inputDir will be check with \code{\link{verifyFileStructure}}.
+Naming of rasters in inputDir will be checked with \code{\link{verifyFileStructure}}.
 }
 

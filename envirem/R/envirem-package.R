@@ -1,7 +1,7 @@
 ##' @title envirem
 ##'
-##' @description Generation of bioclimatic rasters that will be particularly useful 
-##' for species distribution modeling. 
+##' @description Generation of bioclimatic rasters that are complementary to the WorldClim dataset.  
+##' 
 ##' 
 ##' @author Pascal O. Title, Jordan B. Bemmels
 ##' 
@@ -11,14 +11,15 @@
 ##' 
 ##' @details
 ##' 
-##' Package: bioclimExtension\cr
+##' Package: envirem\cr
 ##' Type: Package\cr
 ##' Version: 1.0\cr
-##' Date: 2015-11-01\cr
+##' Date: 2016-08-01\cr
 ##' License: GPL-2 | GPL-3\cr
 ##' 
-##' Temperature rasters are assumed to be in degrees C * 10 and precipitation rasters are 
-##' assumed to be in mm, as it is in Worldclim. 
+##' For input rasters, temperature rasters are assumed to be in degrees C * 10 
+##' and precipitation rasters are assumed to be in mm, as is the case in WorldClim. Units of
+##' output rasters are specified in the \code{Value} field of the documentation.
 ##'
 ##' The main function for generating ENVIREM rasters is \code{\link{generateRasters}}. 
 ##' A complete tutorial of this R package can be found at \url{http://envirem.gituhub.io}. 

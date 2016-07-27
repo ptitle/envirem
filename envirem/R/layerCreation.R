@@ -1,6 +1,8 @@
 ##' @title Creates all layers
 ##'
 ##' @description Generates all rasterLayers for one particular input dataset.
+##' For the distinction between this function and \code{\link{generateRasters}}, 
+##' see \code{Details}. 
 ##'
 ##' @param masterstack rasterStack containing all precipitation, 
 ##' min temperature, max temperature and bioclimatic variables
@@ -14,25 +16,30 @@
 ##' 
 ##' This function is called internally by \code{\link{generateRasters}}. 
 ##' 
+##' The function \code{layerCreation} will generate envirem rasters from input R 
+##' objects (rasterStacks) and will return the result as an R object. In contrast, 
+##' the function \code{\link{generateRasters}} reads in input rasters from a specified directory, 
+##' splits input rasters into tiles if necessary, internally calls 
+##' \code{layerCreation} and writes the result to file. 
+##' 
 ##'	Possible variables to generate include:\cr
-##'
-##'	aridityIndexThornthwaite \cr
-##'	airidityIndexUNEP \cr
-##'	climaticMoistureIndex \cr
-##'	continentality \cr
-##'	embergerQ \cr
-##'	growingDegDays0 \cr
-##'	growingDegDays5 \cr
-##'	humidityIndex \cr
-##'	monthCountByTemp10 \cr
-##'	PETseasonality \cr
-##'	thermicityIndex \cr
-##'	minSummerPrecip \cr
-##'	maxSummerPrecip \cr
-##'	minWinterPrecip \cr
-##'	maxWinterPrecip \cr
-##'	minTempWarmest \cr
-##'	maxTempColdest \cr
+##' \cr
+##' annualPET \cr
+##' aridityIndexThornthwaite \cr
+##' climaticMoistureIndex \cr
+##' continentality \cr
+##' embergerQ \cr
+##' growingDegDays0 \cr
+##' growingDegDays5 \cr
+##' maxTempColdest \cr
+##' minTempWarmest \cr
+##' monthCountByTemp10 \cr
+##' PETColdestQuarter \cr
+##' PETDriestQuarter \cr
+##' PETseasonality \cr
+##' PETWarmestQuarter \cr
+##' PETWettestQuarter \cr
+##' thermicityIndex \cr
 ##'
 ##'	If \code{var = 'all'}, then all of the variables will be generated.
 ##'
@@ -67,7 +74,7 @@
 
 layerCreation <- function(masterstack, solradstack, var) {
 
-	allvar <- c('aridityIndexThornthwaite','climaticMoistureIndex','continentality','embergerQ','growingDegDays0','growingDegDays5','monthCountByTemp10','PETseasonality','thermicityIndex','minTempWarmest','maxTempColdest','PETColdestQuarter','PETWarmestQuarter','PETWettestQuarter','PETDriestQuarter')
+	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
 	if (class(var) == 'character') {
 		if (length(var) == 1) {
@@ -118,24 +125,6 @@ layerCreation <- function(masterstack, solradstack, var) {
 	precipstack <- precipstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(precipstack))))]]
 	solradstack <- solradstack[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(solradstack))))]]
 	
-	# if (any(c('solradColdestQuarter', 'solradWarmestQuarter', 'solradWettestQuarter', 'solradDriestQuarter') %in% var)) {
-	# 	cat('\t...solar radiation extremes...\n')
-	# 	srExtremes <- solradExtremes(solradstack, precipstack, tmeanstack)
-	# 	if ('solradColdestQuarter' %in% var) {
-	# 		reslist[['solradColdestQuarter']] <- srExtremes[[1]]
-	# 	}
-	# 	if ('solradWarmestQuarter' %in% var) {
-	# 		reslist[['solradWarmestQuarter']] <- srExtremes[[2]]
-	# 	}
-	# 	if ('solradWettestQuarter' %in% var) {
-	# 		reslist[['solradWettestQuarter']] <- srExtremes[[3]]
-	# 	}
-	# 	if ('solradDriestQuarter' %in% var) {
-	# 		reslist[['solradDriestQuarter']] <- srExtremes[[4]]
-	# 	}
-
-	# }
-
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
 		cat('\t...temp extremes...\n')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)
@@ -210,12 +199,14 @@ layerCreation <- function(masterstack, solradstack, var) {
 		}
 	}
 
+	#annualPET
 	if (any(c('annualPET','climaticMoistureIndex') %in% var)) {
 		cat('\t...annual PET...\n')
 		annualPET <- sum(monthPET)
 		reslist[['annualPET']] <- annualPET
 	}
 
+	#PET seasonality
 	if ('PETseasonality' %in% var) {
 		cat('\t...PET seasonality...\n')
 		seasonalityPET <- PETseasonality(monthPET)
@@ -235,12 +226,6 @@ layerCreation <- function(masterstack, solradstack, var) {
 		aridIndThorn <- aridityIndexThornthwaite(precipstack, monthPET)
 		reslist[['aridityIndexThornthwaite']] <- aridIndThorn
 	}
-
-	# if ('aridityIndexUNEP' %in% var) {
-	# 	cat('\t...UNEP aridity index...\n')
-	# 	aridUNEP <- aridityIndexUNEP(masterstack[[grep('bio_12$', names(masterstack))]], annualPET)
-	# 	reslist[['aridityIndexUNEP']] <- aridUNEP
-	# }
 
 	reslist <- raster::stack(reslist)
 	return(reslist)

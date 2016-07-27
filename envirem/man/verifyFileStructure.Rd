@@ -22,7 +22,8 @@ Ensures that the necessary files are present for other
 functions to work properly.
 }
 \details{
-This function looks for the following:
+This function searches for the following
+in the directory specified by \code{path}:
 
 19 bioclimatic variables named as bio_1.tif
 	

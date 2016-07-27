@@ -21,7 +21,7 @@ rasterLayer in mm / degrees C
 Calculate Emberger's pluviometric quotient.
 }
 \details{
-\code{Q = 2000 P / (M + m + 546.4) * (M - m)}
+\code{Q = 2000 P / [(M + m + 546.4) * (M - m)]}
 }
 \examples{
 # Find example rasters

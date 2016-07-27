@@ -11,7 +11,7 @@ split_raster(file, s = 2, outputDir, gdalinfoPath = NULL,
 \arguments{
 \item{file}{full path to a raster}
 
-\item{s}{division applied to each side of the raster (s=2 => 4 tiles)}
+\item{s}{division applied to each side of the raster (s=2 -> 4 tiles)}
 
 \item{outputDir}{path and directory name for output}
 

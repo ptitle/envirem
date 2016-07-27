@@ -8,7 +8,7 @@
 ##'
 ##' @param m rasterLayer, mean min temperature of the coldest month
 ##'
-##' @details \code{Q = 2000 P / (M + m + 546.4) * (M - m)}
+##' @details \code{Q = 2000 P / [(M + m + 546.4) * (M - m)]}
 ##'
 ##' @return rasterLayer in mm / degrees C
 ##'

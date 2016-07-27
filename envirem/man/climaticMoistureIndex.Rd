@@ -19,7 +19,7 @@ rasterLayer ranging from -1 to +1.
 Generate climatic moisture index.
 }
 \details{
-\code{P/PET - 1} when \code{P < PET}
+\code{P/PET - 1} when \code{P < PET} \cr
 \code{1 - PET/P} when \code{P >= PET}
 }
 \examples{
