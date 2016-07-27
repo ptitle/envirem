@@ -13,7 +13,7 @@ growingDegDays(meantempstack, baseTemp)
 \item{baseTemp}{base temperature in degrees C.}
 }
 \value{
-rasterLayer in degrees C.
+rasterLayer in degrees C * days.
 }
 \description{
 Growing degree days above some base temperature.

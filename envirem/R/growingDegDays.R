@@ -9,7 +9,7 @@
 ##' @details growing degree days = summation of all monthly temps greater than baseTemp, 
 ##' multiplied by total number of days
 ##'
-##' @return rasterLayer in degrees C.
+##' @return rasterLayer in degrees C * days.
 ##'
 ##' @encoding latin1
 ##' @references
@@ -35,8 +35,9 @@ growingDegDays <- function(meantempstack, baseTemp) {
 	
 	meantempstack <- meantempstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempstack))))]]
 	
-	baseTemp <- baseTemp * 10 #to match worldclim data
-	#summation of all monthly temps greater than baseTemp, multiplied by total number of days
+	# we are now operating in deg C, rather than deg C * 10
+	#baseTemp <- baseTemp * 10 #to match worldclim data
+	meantempstack <- meantempstack / 10
 	
 	#get raster of number of months > baseTemp
 	logicstack <- meantempstack > baseTemp
@@ -54,6 +55,6 @@ growingDegDays <- function(meantempstack, baseTemp) {
 	#sum temps
 	meantempstack <- sum(meantempstack)
 	res <- raster::overlay(meantempstack, logicsum, fun = function(a,b) {return(a * b * 30)})
-	names(res) <- paste0('growingDegDays', baseTemp/10)
+	names(res) <- paste0('growingDegDays', baseTemp)
 	return(res)
 }
