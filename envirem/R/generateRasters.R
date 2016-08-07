@@ -3,7 +3,7 @@
 ##' @description Main function to generate specified ENVIREM layers.
 ##' If requested, this function will split input rasters into tiles, generate desired variables,
 ##' and reassemble the results. Results are named according to specified resName and timeName. 
-##' For the distinction between this function and \code{\link{generateRasters}}, 
+##' For the distinction between this function and \code{\link{layerCreation}}, 
 ##' see \code{Details}. 
 ##'
 ##' @param var a vector of variable names to generate, see Details.
@@ -74,7 +74,6 @@
 ##'
 ##' @seealso Naming of rasters in inputDir will be checked with \code{\link{verifyFileStructure}}.
 ##'
-##' @examples
 ##' 
 ##'
 ##'
@@ -175,11 +174,19 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		clim <- raster::dropLayer(clim, which(grepl('solrad', names(clim)) == TRUE))
 
 		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var)
-
+		
 		# write to disk
-		outputName <- paste(timeName, resName, sep = '_')
-		outputName <- paste0(outputDir, outputName)
-		raster::writeRaster(res, outputName, overwrite = overwriteResults, format = outputFormat, bylayer = TRUE, suffix = 'names')
+		for (i in 1:nlayers(res)) {
+			outputName <- paste(timeName, resName, sep = '_')
+			outputName <- paste0(outputDir, outputName, '_', names(res)[i])
+			dtype <- dataTypeCheck(res[[i]])[[2]]
+			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype)	
+		}
+
+		# # write to disk
+		# outputName <- paste(timeName, resName, sep = '_')
+		# outputName <- paste0(outputDir, outputName)
+		# raster::writeRaster(res, outputName, overwrite = overwriteResults, format = outputFormat, bylayer = TRUE, suffix = 'names')
 
 	} else if (nTiles > 1) {
 
@@ -227,7 +234,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 
 		# Combine tiles
-		cat('\tPutting tiles back together...\n')
+		cat('\n\tPutting tiles back together...\n\n')
 		resRasters <- list.files(path = paste0(tempDir, '/res/'), pattern='.tif$')
 		resRasters <- unique(gsub("_tile\\d\\d?", "", resRasters))
 
@@ -244,8 +251,12 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 
 			fn <- paste0(outputName, gsub('temp', '', gsub('.tif', '', resRasters[i])))
 			
+			# determine data type
+			dtype <- dataTypeCheck(tilelist[[1]])[[2]]
+			
 			tilelist$fun <- mean
 			tilelist$filename <- fn
+			tilelist$datatype <- dtype
 			tilelist$format <- outputFormat
 			tilelist$overwrite <- overwriteResults
 

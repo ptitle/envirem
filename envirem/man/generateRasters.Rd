@@ -44,7 +44,7 @@ The requested set of rasterLayers will be written to \code{outputDir}.
 Main function to generate specified ENVIREM layers.
 If requested, this function will split input rasters into tiles, generate desired variables,
 and reassemble the results. Results are named according to specified resName and timeName. 
-For the distinction between this function and \code{\link{generateRasters}}, 
+For the distinction between this function and \code{\link{layerCreation}}, 
 see \code{Details}.
 }
 \details{
@@ -79,11 +79,6 @@ If \code{var = 'all'}, then all of the variables will be generated.
 
 Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
 and with identical resolution, origin and extent.
-}
-\examples{
-
-
-
 }
 \author{
 Pascal Title
