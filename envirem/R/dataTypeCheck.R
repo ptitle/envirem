@@ -6,7 +6,7 @@
 ##'
 ##' @details 	
 ##'
-##' Internal function to determine the most memory efficient data type given whether
+##' Function to determine the most memory efficient data type given whether
 ##' or not the raster contains integer or non-integer values,
 ##' and the range of those values, based on the definitions described
 ##' in \code{\link{dataType}}. 
@@ -16,8 +16,8 @@
 ##' @examples
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' r <- raster(rasterFiles[1])
-##' envirem:::dataTypeCheck(r)
-##'
+##' dataTypeCheck(r)
+##' @export
 
 dataTypeCheck <- function(r) {
 	
