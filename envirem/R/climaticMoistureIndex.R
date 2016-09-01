@@ -11,7 +11,6 @@
 ##'
 ##' @return rasterLayer ranging from -1 to +1.
 ##'
-##' @encoding utf-8
 ##' @references
 ##' Willmott, C. & Feddema, J. (1992). A More Rational Climatic Moisture Index. 
 ##' \emph{The Professional Geographer}, \strong{44}, 84-88.

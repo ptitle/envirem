@@ -12,7 +12,6 @@
 ##'
 ##' @return rasterStack of monthly PET in mm / month
 ##'
-##' @encoding latin1
 ##' @references
 ##' Hargreaves, G. L., Hargreaves, G. H., & Riley, J. P. (1985). Irrigation water requirements 
 ##' for Senegal River basin. \emph{Journal of Irrigation and Drainage Engineering}, 

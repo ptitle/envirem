@@ -14,7 +14,6 @@
 ##'
 ##' @author Pascal Title
 ##' 
-##' @encoding latin1
 ##' @references 
 ##' Thornthwaite, C.W. (1948). An approach toward a rational classification of climate.
 ##' \emph{Geographical Review}, \strong{38}, 55-94.

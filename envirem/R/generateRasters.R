@@ -68,6 +68,9 @@
 ##' Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
 ##' and with identical resolution, origin and extent. 
 ##'
+##' Output rasters are written with the most appropriate \code{\link{dataType}}, as 
+##' inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of these rasters. 
+##'
 ##' @return The requested set of rasterLayers will be written to \code{outputDir}.
 ##'
 ##' @author Pascal Title
@@ -81,31 +84,6 @@
 
 
 
-#### MAIN FUNCTION
-
-# # var: the names of the variables to create (if var = 'all', all variables will be generated)
-# # maindir is directory where input rasters are located, at this stage they have been named appropriately and all have the same resolution, origin and extent. 
-# # resName provides tag name for resolution for output naming
-# # timeName is the name of the temporal aspect of the data, this will be used for naming the output directory
-# # nTiles is the number of tiles to split the rasters when tiling is requested, must be a perfect square
-# # outputDir is the output directory. A directory will be generated according to the resolution and timeName, so this is more of a general output dir.
-
-# # it is worth noting that a temporary directory will be created in tempDir/ and then removed. 
-
-# #testing example
-# maindir <- '~/Documents/worldclim/extraBioclimPaper/current/10arcmin/processed'
-# resSelect <- '10arcmin'
-# timeName <- 'current'
-# outputDir <- '~/Documents/worldclim/extraBioclimPaper/testingResults'
-# rasterExt <- '.tif'
-# tileNfor2.5 <- 4
-# tileNfor30 <- 16
-# overwriteResults <- TRUE
-# outputFormat <- 'GTiff' #see output format options for writeRaster
-# tempDir <- './temp'
-# gdalinfoPath <- NULL
-# gdal_translatePath <- NULL
-# #
 
 generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL) {
 
@@ -134,6 +112,15 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		#number of tiles must be a perfect square
 		if (sqrt(nTiles) != round(sqrt(nTiles), 0)) {
 			stop('Number of tiles must be a perfect square.')
+		}
+	}
+
+	# check that temp directory, if needed, does not conflict
+	# If it does, append a random number code
+	if (nTiles > 1) {
+		tempDir <- gsub('/$', '', tempDir)
+		while (dir.exists(tempDir)) {
+			tempDir <- paste0(tempDir, sample(1:9, 1))
 		}
 	}
 

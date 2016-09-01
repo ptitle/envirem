@@ -78,7 +78,10 @@ If \code{var = 'all'}, then all of the variables will be generated.
 \code{resName} and \code{timeName} are only used for naming the output directory.
 
 Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
-and with identical resolution, origin and extent.
+and with identical resolution, origin and extent. 
+
+Output rasters are written with the most appropriate \code{\link{dataType}}, as 
+inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of these rasters.
 }
 \author{
 Pascal Title

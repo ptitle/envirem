@@ -21,10 +21,9 @@
 ##'
 ##' @return Rasters are written to the output directory. 
 ##'
-##' @encoding latin1
 ##' @references
 ##' GDAL. 2015. GDAL - Geospatial Data Abstraction Library: Version 1.11.3, 
-##' Open Source Geospatial Foundation, \url{http://gdal.osgeo.org}
+##' Open Source Geospatial Foundation, \url{http://gdal.org}
 ##'
 ##' @author Pascal Title
 ##'

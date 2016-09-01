@@ -1,15 +1,18 @@
 Package: envirem
 Type: Package
-Title: Generation of ENVIREM variables
+Title: Generation of ENVIREM Variables
 Version: 1.0
 Date: 2016-01-06
 Author: Pascal O. Title, Jordan B. Bemmels
 Maintainer: Pascal Title <ptitle@umich.edu>
 Depends: raster
 Imports: RSAGA
+Suggests: rgdal
 Description: Generation of bioclimatic rasters that will be particularly 
 	useful for species distribution modeling. 
 License: GPL (>=2)
 URL: envirem.github.io
+BugReports: https://github.com/ptitle/envirem/issues
 NeedsCompilation: yes
+Encoding: UTF-8
 RoxygenNote: 5.0.1

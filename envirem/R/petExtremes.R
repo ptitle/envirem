@@ -13,7 +13,6 @@
 ##' 
 ##' @seealso \code{\link{monthlyPET}}
 ##' 
-##' @encoding latin1
 ##' @references
 ##' Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
 ##' A high-resolution bioclimate map of the world: a unifying framework for global 

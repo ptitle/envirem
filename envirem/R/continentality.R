@@ -10,7 +10,6 @@
 ##'
 ##' @return rasterLayer in units of degrees C.
 ##'
-##' @encoding utf-8
 ##' @references
 ##' Rivas-Martínez, S. & Rivas-Sáenz, S. “Synoptical Worldwide Bioclimatic 
 ##' Classification System”.  Available online at \url{http://www.globalbioclimatics.org/}

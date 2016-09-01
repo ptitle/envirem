@@ -12,7 +12,6 @@
 ##'
 ##' @return rasterLayer in mm / degrees C
 ##'
-##' @encoding utf-8
 ##' @references
 ##' Daget, P. (1977) Le bioclimat méditerranéen: analyse des formes climatiques 
 ##' par le système d’Emberger. \emph{Vegetatio}, \strong{34}, 87–103.

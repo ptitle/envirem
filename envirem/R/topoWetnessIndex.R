@@ -19,7 +19,6 @@
 ##'
 ##' @return rasterLayer, unitless
 ##' 
-##' @encoding utf-8
 ##' @references
 ##' Boehner, J., Koethe, R. Conrad, O., Gross, J., Ringeler, A. & Selige, T. (2002) Soil
 ##' regionalization by means of terrain analysis and process parameterization. \emph{Soil
