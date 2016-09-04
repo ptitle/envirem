@@ -167,7 +167,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			outputName <- paste(timeName, resName, sep = '_')
 			outputName <- paste0(outputDir, outputName, '_', names(res)[i])
 			dtype <- dataTypeCheck(res[[i]])[[2]]
-			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype)	
+			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype, NAflag = -9999)	
 		}
 
 		# # write to disk
@@ -245,6 +245,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			tilelist$filename <- fn
 			tilelist$datatype <- dtype
 			tilelist$format <- outputFormat
+			tilelist$NAflag <- -9999
 			tilelist$overwrite <- overwriteResults
 
 			m <- do.call(raster::mosaic, tilelist)

@@ -21,7 +21,7 @@ in mm / month.
 Calculates mean PET of the coldest, warmest, wettest and driest quarters.
 }
 \details{
-Generates mean PET for the warmest, coldest, wettest and driest 
+Generates mean monthly PET for the warmest, coldest, wettest and driest 
 3 consecutive months.
 }
 \examples{

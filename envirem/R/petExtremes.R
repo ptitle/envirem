@@ -5,7 +5,7 @@
 ##' @param precipStack rasterStack of monthly precipitation
 ##' @param meantempStack rasterStack of monthly mean temperature
 ##' 
-##' @details Generates mean PET for the warmest, coldest, wettest and driest 
+##' @details Generates mean monthly PET for the warmest, coldest, wettest and driest 
 ##' 3 consecutive months.
 ##'
 ##' @return rasterStack of PETColdestQuarter, PETWarmestQuarter, PETWettestQuarter, PETDriestQuarter
