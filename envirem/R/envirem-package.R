@@ -5,16 +5,16 @@
 ##' 
 ##' @author Pascal O. Title, Jordan B. Bemmels
 ##' 
-##' @references \url{http://envirem.gituhub.io}
+##' @references \url{http://envirem.github.io}
 ##'
-##' Title, P.O. and J.B. Bemmels. \emph{Submitted}. ENVIREM: An expanded set of bioclimatic variables improves ecological niche modeling performance. \emph{Methods in Ecology and Evolution}.
+##' Title, P.O. and J.B. Bemmels. \emph{Submitted}. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. \emph{Ecography}.
 ##' 
 ##' @details
 ##' 
 ##' Package: envirem\cr
 ##' Type: Package\cr
 ##' Version: 1.0\cr
-##' Date: 2016-08-01\cr
+##' Date: 2016-09-12\cr
 ##' License: GPL-2 | GPL-3\cr
 ##' 
 ##' For input rasters, temperature rasters are assumed to be in degrees C * 10 
@@ -22,7 +22,7 @@
 ##' output rasters are specified in the \code{Value} field of the documentation.
 ##'
 ##' The main function for generating ENVIREM rasters is \code{\link{generateRasters}}. 
-##' A complete tutorial of this R package can be found at \url{http://envirem.gituhub.io}. 
+##' A complete tutorial of this R package can be found at \url{http://envirem.github.io}. 
 ##' 
 ##' @name envirem
 ##' @docType package

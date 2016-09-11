@@ -111,7 +111,7 @@ layerCreation <- function(masterstack, solradstack, var) {
 	names(reslist) <- var
 
 	#create some separate stacks
-	cat('\t...splitting rasterstack...\n')
+	cat('\t\t...splitting rasterstack...\n')
 	tminstack <- masterstack[[grep('tmin', names(masterstack), value = TRUE)]]
 	tmaxstack <- masterstack[[grep('tmax', names(masterstack), value = TRUE)]]
 	tmeanstack <- (tmaxstack + tminstack) / 2 #new mean
@@ -126,7 +126,7 @@ layerCreation <- function(masterstack, solradstack, var) {
 	solradstack <- solradstack[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(solradstack))))]]
 	
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
-		cat('\t...temp extremes...\n')
+		cat('\t\t...temp extremes...\n')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)
 		if ('minTempWarmest' %in% var) {
 			reslist[['minTempWarmest']] <- tempExtremes[['minTempWarmest']]
@@ -138,7 +138,7 @@ layerCreation <- function(masterstack, solradstack, var) {
 
 	#growing degree days with temp base of 5 deg C and 0 deg C
 	if (any(c('growingDegDays0','growingDegDays5') %in% var)) {
-		cat('\t...growing degree days...\n')
+		cat('\t\t...growing degree days...\n')
 		if ('growingDegDays0' %in% var) {
 			growing0deg <- growingDegDays(tmeanstack, baseTemp = 0)
 			reslist[['growingDegDays0']] <- growing0deg
@@ -151,28 +151,28 @@ layerCreation <- function(masterstack, solradstack, var) {
 
 	#number of months with mean temp above 10 deg C
 	if ('monthCountByTemp10' %in% var) {
-		cat('\t...month count by deg...\n')
+		cat('\t\t...month count by deg...\n')
 		monthCount10deg <- monthCountByTemp(tmeanstack, minTemp = 10)
 		reslist[['monthCountByTemp10']] <- monthCount10deg
 	}
 	
 	#continentality index
 	if (any(c('continentality', 'thermicityIndex') %in% var)) {
-		cat('\t...continentality index...\n')
+		cat('\t\t...continentality index...\n')
 		ci <- continentality(tmax = tempExtremes[[4]], tmin = tempExtremes[[3]])
 		reslist[['continentality']] <- ci
 	}
 	
 	#Compensated Thermicity Index
 	if ('thermicityIndex' %in% var) {
-		cat('\t...thermicity index...\n')
+		cat('\t\t...thermicity index...\n')
 		thermInd <- thermicityIndex(annualTemp=masterstack[[grep('bio_1$', names(masterstack))]], minTemp=masterstack[[grep('bio_6$', names(masterstack))]], maxTemp=tempExtremes[[1]], continentality = ci)
 		reslist[['thermicityIndex']] <- thermInd
 	}
 
 	#Emberger's pluviothermic quotient
 	if ('embergerQ' %in% var) {
-		cat("\t...emberger's Q...\n")
+		cat("\t\t...emberger's Q...\n")
 		emberger <- embergerQ(masterstack[[grep('bio_12$', names(masterstack))]], masterstack[[grep('bio_5$', names(masterstack))]], masterstack[[grep('bio_6$', names(masterstack))]])
 		reslist[['embergerQ']] <- emberger
 	}
@@ -183,7 +183,7 @@ layerCreation <- function(masterstack, solradstack, var) {
 	}
 
 	if (any(c('PETColdestQuarter', 'PETWarmestQuarter', 'PETWettestQuarter', 'PETDriestQuarter') %in% var)) {
-		cat('\t...PET extremes...\n')
+		cat('\t\t...PET extremes...\n')
 		PETextremes <- petExtremes(monthPET, precipstack, tmeanstack)
 		if ('PETColdestQuarter' %in% var) {
 			reslist[['PETColdestQuarter']] <- PETextremes[[1]]
@@ -201,28 +201,28 @@ layerCreation <- function(masterstack, solradstack, var) {
 
 	#annualPET
 	if (any(c('annualPET','climaticMoistureIndex') %in% var)) {
-		cat('\t...annual PET...\n')
+		cat('\t\t...annual PET...\n')
 		annualPET <- sum(monthPET)
 		reslist[['annualPET']] <- annualPET
 	}
 
 	#PET seasonality
 	if ('PETseasonality' %in% var) {
-		cat('\t...PET seasonality...\n')
+		cat('\t\t...PET seasonality...\n')
 		seasonalityPET <- PETseasonality(monthPET)
 		reslist[['PETseasonality']] <- seasonalityPET
 	}
 
 	#climatic moisture index
 	if ('climaticMoistureIndex' %in% var) {
-		cat('\t...climatic moisture index...\n')
+		cat('\t\t...climatic moisture index...\n')
 		cmi <- climaticMoistureIndex(masterstack[[grep('bio_12$', names(masterstack))]], annualPET)
 		reslist[['climaticMoistureIndex']] <- cmi
 	}
 	
 	#Thornthwaite aridity index
 	if ('aridityIndexThornthwaite' %in% var) {
-		cat('\t...Thornthwaite aridity index...\n')
+		cat('\t\t...Thornthwaite aridity index...\n')
 		aridIndThorn <- aridityIndexThornthwaite(precipstack, monthPET)
 		reslist[['aridityIndexThornthwaite']] <- aridIndThorn
 	}

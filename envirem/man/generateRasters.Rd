@@ -81,7 +81,10 @@ Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyF
 and with identical resolution, origin and extent. 
 
 Output rasters are written with the most appropriate \code{\link{dataType}}, as 
-inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of these rasters.
+inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of these rasters. 
+
+If the goal is to use these rasters with the standalone Maxent program, we recommend 
+\code{outputFormat = 'EHdr'}.
 }
 \author{
 Pascal Title

@@ -71,6 +71,9 @@
 ##' Output rasters are written with the most appropriate \code{\link{dataType}}, as 
 ##' inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of these rasters. 
 ##'
+##' If the goal is to use these rasters with the standalone Maxent program, we recommend 
+##' \code{outputFormat = 'EHdr'}.
+##'
 ##' @return The requested set of rasterLayers will be written to \code{outputDir}.
 ##'
 ##' @author Pascal Title
@@ -166,6 +169,9 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		for (i in 1:nlayers(res)) {
 			outputName <- paste(timeName, resName, sep = '_')
 			outputName <- paste0(outputDir, outputName, '_', names(res)[i])
+			if (outputFormat == 'EHdr') {
+				outputName <- paste0(outputName, '.bil')
+			}
 			dtype <- dataTypeCheck(res[[i]])[[2]]
 			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype, NAflag = -9999)	
 		}
@@ -210,7 +216,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			names(res) <- paste(names(res), tilename, sep = '')
 
 			# write to disk
-			raster::writeRaster(res, paste0(tempDir, '/res/temp'), overwrite = TRUE, format = 'GTiff', bylayer = TRUE, suffix = 'names')
+			raster::writeRaster(res, paste0(tempDir, '/res/temp'), overwrite = TRUE, format = 'GTiff', NAflag = -9999, bylayer = TRUE, suffix = 'names')
 		
 			#delete tile-specific temp files
 			toRemove <- list.files(path = tempDir, pattern = paste0(tilename, '.tif$'), full.names = TRUE)
@@ -240,6 +246,10 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			
 			# determine data type
 			dtype <- dataTypeCheck(tilelist[[1]])[[2]]
+			
+			if (outputFormat == 'EHdr') {
+				fn <- paste0(fn, '.bil')
+			}
 			
 			tilelist$fun <- mean
 			tilelist$filename <- fn

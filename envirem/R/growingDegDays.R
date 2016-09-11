@@ -6,7 +6,7 @@
 ##'
 ##' @param baseTemp base temperature in degrees C.
 ##'
-##' @details growing degree days = summation of all monthly temps greater than baseTemp, 
+##' @details growing degree days = sum of all monthly temps greater than baseTemp, 
 ##' multiplied by total number of days
 ##'
 ##' @return rasterLayer in degrees C * days.
