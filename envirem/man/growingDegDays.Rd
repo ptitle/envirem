@@ -18,7 +18,7 @@ rasterLayer in degrees C * days.
 Growing degree days above some base temperature.
 }
 \details{
-growing degree days = summation of all monthly temps greater than baseTemp, 
+growing degree days = sum of all monthly temps greater than baseTemp, 
 multiplied by total number of days
 }
 \examples{
