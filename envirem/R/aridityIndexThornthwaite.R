@@ -21,6 +21,7 @@
 ##' @seealso Requires rasters created with \code{\link{monthlyPET}}. 
 ##'
 ##' @examples
+##' \dontrun{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -44,7 +45,8 @@
 ##' precip <- grep('prec', names(env), value=TRUE)
 ##' precip <- stack(env[[precip]])
 ##'
-##'aridityIndexThornthwaite(precip, pet)
+##' aridityIndexThornthwaite(precip, pet)
+##' }
 ##' 
 ##' @export
 

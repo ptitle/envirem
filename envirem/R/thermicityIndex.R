@@ -33,6 +33,7 @@
 ##' @seealso \link{continentality}
 ##'
 ##' @examples
+##' \dontrun{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -53,6 +54,7 @@
 ##'
 ##' # compensated thermicity index
 ##' thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci)
+##' }
 ##' @export
 
 

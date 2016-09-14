@@ -21,6 +21,7 @@
 ##' 
 ##' @author Pascal Title
 ##' @examples
+##' \dontrun{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -43,7 +44,8 @@
 ##' # get monthly PET
 ##' pet <- monthlyPET(meantemp, solar, tempRange)
 ##'
-##'petExtremes(pet, precip, meantemp)
+##' petExtremes(pet, precip, meantemp)
+##' }
 ##' @export
 
 petExtremes <- function(PETstack, precipStack, meantempStack) {

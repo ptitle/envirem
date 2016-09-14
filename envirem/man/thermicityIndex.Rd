@@ -31,6 +31,7 @@ The compensated thermicity index incorporates corrections designed to make this 
 more appropriately comparable across the globe.
 }
 \examples{
+\dontrun{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -51,6 +52,7 @@ ci <- continentality(temp[['meanTempWarmest']], temp[['meanTempColdest']])
 
 # compensated thermicity index
 thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci)
+}
 }
 \author{
 Pascal Title
