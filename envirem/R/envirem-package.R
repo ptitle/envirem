@@ -14,7 +14,7 @@
 ##' Package: envirem\cr
 ##' Type: Package\cr
 ##' Version: 1.0\cr
-##' Date: 2016-09-14\cr
+##' Date: 2016-09-16\cr
 ##' License: GPL-2 | GPL-3\cr
 ##' 
 ##' For input rasters, temperature rasters are assumed to be in degrees C * 10 
