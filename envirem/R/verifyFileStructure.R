@@ -83,6 +83,15 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 		tmaxCheck <- FALSE
 	}
 
+	#check tmean
+	tmeanFiles <- grep('tmean_\\d\\d?', files, value = TRUE)
+	tmeanFiles <- gsub('(tmean_\\d\\d?)(\\.\\w+$)', '\\1', tmeanFiles)
+	if (all(paste0('tmean_', 1:12) %in% tmeanFiles) & length(tmeanFiles) == 12) {
+		tmeanCheck <- TRUE
+	} else {
+		tmeanCheck <- FALSE
+	}
+
 	#check solrad
 	solradFiles <- grep('et_solrad_\\d\\d?', files, value = TRUE)
 	solradFiles <- gsub('(et_solrad_\\d\\d?)(\\.\\w+$)', '\\1', solradFiles)
@@ -90,6 +99,10 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 		solradCheck <- TRUE
 	} else {
 		solradCheck <- FALSE
+	}
+	
+	if (!tmeanCheck) {
+		cat('\ttmean files are not properly named or missing. Tmean will therefore be calculated.\n')
 	}
 
 	if (!all(bioclimCheck, precipCheck, tminCheck, tmaxCheck, solradCheck)) {
@@ -110,7 +123,11 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 		}
 	} else {
 		if (returnFileNames) {
-			files <- c(bioclimFiles, precipFiles, tminFiles, tmaxFiles, solradFiles)
+			if (tmeanCheck) {
+				files <- c(bioclimFiles, precipFiles, tminFiles, tmaxFiles, tmeanFiles, solradFiles)
+			} else {
+				files <- c(bioclimFiles, precipFiles, tminFiles, tmaxFiles, solradFiles)
+			}
 			files <- paste0(gsub('/?$', '/', path), files, rasterExt)
 			return(files)
 		}

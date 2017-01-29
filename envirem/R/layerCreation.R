@@ -114,17 +114,23 @@ layerCreation <- function(masterstack, solradstack, var) {
 	cat('\t\t...splitting rasterstack...\n')
 	tminstack <- masterstack[[grep('tmin', names(masterstack), value = TRUE)]]
 	tmaxstack <- masterstack[[grep('tmax', names(masterstack), value = TRUE)]]
-	tmeanstack <- (tmaxstack + tminstack) / 2 #new mean
-	names(tmeanstack) <- gsub('tmax', 'tmean', names(tmaxstack))
 	precipstack <- masterstack[[grep('prec', names(masterstack))]]
 	
 	#enforce ordering
 	tminstack <- tminstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tminstack))))]]
 	tmaxstack <- tmaxstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tmaxstack))))]]
-	tmeanstack <- tmeanstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tmeanstack))))]]
 	precipstack <- precipstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(precipstack))))]]
 	solradstack <- solradstack[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(solradstack))))]]
 	
+	# if tmean not already present in stack, then calculate it from tmin and tmax
+	if (!any(grepl('tmean', names(masterstack)))) {
+		tmeanstack <- (tmaxstack + tminstack) / 2 #new mean
+		names(tmeanstack) <- gsub('tmax', 'tmean', names(tmaxstack))
+	} else {
+		tmeanstack <- masterstack[[grep('tmean', names(masterstack), value = TRUE)]]
+		tmeanstack <- tmeanstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tmeanstack))))]]
+	}
+		
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
 		cat('\t\t...temp extremes...\n')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)
