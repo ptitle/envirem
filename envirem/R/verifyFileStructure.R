@@ -20,8 +20,13 @@
 ##'	12 min temperature rasters named as tmin_1.tif
 ##'	
 ##'	12 max temperature rasters named as tmax_1.tif
+##'
+##' 12 mean temperature rasters named as tmean_1.tif [optional]
 ##'	
 ##'	12 solar radiation rasters named as et_solrad_1.tif
+##'
+##' If mean temperature rasters are not detected, the raster creation functions
+##' will create mean temperature by taking the mean of the min and max.
 ##'
 ##' @return Prints messages to the console if problems are found. 
 ##'	If \code{returnFileNames == TRUE}, then a vector of filenames is returned. 

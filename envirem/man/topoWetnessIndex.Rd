@@ -16,9 +16,11 @@ which supplies appropriate SAGA paths, and parallelization information.}
 rasterLayer, unitless
 }
 \description{
-SAGA-GIS topographic wetness index
+SAGA-GIS topographic wetness index [DEPRECATED]
 }
 \details{
+Recent updates appear to have broken this function, therefore it will be removed.
+
 From a DEM, this function will write an appropriate raster
 to disk, run an RSAGA function to calculate the topographic wetness index,
 and will then read it back in and return it. 

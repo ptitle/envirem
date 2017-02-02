@@ -1,13 +1,16 @@
 ##' @title Topographic Wetness Index
 ##'
-##' @description SAGA-GIS topographic wetness index
+##' @description SAGA-GIS topographic wetness index [DEPRECATED]
 ##'
 ##' @param dem elevation rasterLayer, with defined proj4string. 
 ##'
 ##' @param sagaEnv list object returned from \code{RSAGA::rsaga.env}, 
 ##' which supplies appropriate SAGA paths, and parallelization information.
 ##'
-##' @details From a DEM, this function will write an appropriate raster
+##' @details 
+##' Recent updates appear to have broken this function, therefore it will be removed.
+##' 
+##' From a DEM, this function will write an appropriate raster
 ##' to disk, run an RSAGA function to calculate the topographic wetness index,
 ##' and will then read it back in and return it. 
 ##'
@@ -53,6 +56,7 @@
 # sagaEnv: an object returned from rsaga.env, which supplies appropriate SAGA paths, and parallelization information.
 
 topoWetnessIndex <- function(dem, sagaEnv) {
+	warning('This function will be removed as different versions of SAGA-GIS have rendered it problematic.')
 	
 	if (is.null(raster::projection(dem))) {
 		stop('dem must have a proj4string.')

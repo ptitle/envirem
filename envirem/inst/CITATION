@@ -4,9 +4,9 @@ citEntry(entry="Article",
          title = "ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling",
          author = personList(as.person("PO Title"),
          as.person("JB Bemmels")),
-	 journal = "bioRxiv",
-         year = "2016",
+	 journal = "Ecography",
+         year = "2017",
          volume = "",
          pages = "",
-         textVersion = "Title, P.O., Bemmels, J.B. 2016. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. bioRxiv doi: XXXXXXX")
+         textVersion = "Title, P.O., Bemmels, J.B. 2017. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. Ecography doi: 10.1111/ecog.02880")
 

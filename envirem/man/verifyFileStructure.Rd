@@ -33,7 +33,12 @@ in the directory specified by \code{path}:
 
 12 max temperature rasters named as tmax_1.tif
 
+12 mean temperature rasters named as tmean_1.tif [optional]
+
 12 solar radiation rasters named as et_solrad_1.tif
+
+If mean temperature rasters are not detected, the raster creation functions
+will create mean temperature by taking the mean of the min and max.
 }
 \examples{
 # As there are no problems with these files, the list of files 

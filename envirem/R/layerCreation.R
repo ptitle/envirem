@@ -124,6 +124,7 @@ layerCreation <- function(masterstack, solradstack, var) {
 	
 	# if tmean not already present in stack, then calculate it from tmin and tmax
 	if (!any(grepl('tmean', names(masterstack)))) {
+		cat('\t\t...calculating mean temp...\n')
 		tmeanstack <- (tmaxstack + tminstack) / 2 #new mean
 		names(tmeanstack) <- gsub('tmax', 'tmean', names(tmaxstack))
 	} else {
