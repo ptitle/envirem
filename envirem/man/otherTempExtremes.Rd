@@ -22,6 +22,7 @@ Generates max temp of the coldest month, min temp of the warmest month, mean tem
 of the coldest month, mean temp of the warmest month.
 }
 \examples{
+\dontrun{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -37,6 +38,7 @@ tmax <- env[[tmax]]
 
 # calculate temperature extremes
 otherTempExtremes(tmean, tmin, tmax)
+}
 }
 \author{
 Pascal Title

@@ -16,6 +16,7 @@
 ##' @author Pascal Title
 ##'
 ##' @examples
+##' \dontrun{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -31,6 +32,7 @@
 ##' 
 ##' # calculate temperature extremes
 ##' otherTempExtremes(tmean, tmin, tmax)
+##' }
 ##' @export
 
 

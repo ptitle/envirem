@@ -27,6 +27,7 @@
 ##' @seealso \link{thermicityIndex}
 ##'
 ##' @examples
+##' \dontrun{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -47,6 +48,7 @@
 ##' meantempColdest <- temp[['meanTempColdest']]
 ##'
 ##' continentality(meantempWarmest, meantempColdest, tempScale = 10)
+##' }
 ##' @export
 
 # continentality index

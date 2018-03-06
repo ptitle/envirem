@@ -24,6 +24,7 @@ Generate Continentality index.
 \code{continentality index = tmax - tmin}
 }
 \examples{
+\dontrun{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -44,6 +45,7 @@ meantempWarmest <- temp[['meanTempWarmest']]
 meantempColdest <- temp[['meanTempColdest']]
 
 continentality(meantempWarmest, meantempColdest, tempScale = 10)
+}
 }
 \references{
 Rivas-Martínez, S. & Rivas-Sáenz, S. “Synoptical Worldwide Bioclimatic 
