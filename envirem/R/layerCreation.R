@@ -111,7 +111,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	# fix solrad names if needed
 	names(solradstack) <- gsub('0(\\d)', '\\1', names(solradstack))
 	qq <- gregexpr('\\d?\\d$', names(solradstack))
-	names(solradstack) <- paste0('solrad_', unlist(regmatches(names(solradstack), qq)))
+	names(solradstack) <- paste0('et_solrad_', unlist(regmatches(names(solradstack), qq)))
 	
 	
 	#receiving list
@@ -122,7 +122,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	cat('\t\t...splitting rasterstack...\n')
 	tminstack <- masterstack[[grep('tmin', names(masterstack), value = TRUE)]]
 	tmaxstack <- masterstack[[grep('tmax', names(masterstack), value = TRUE)]]
-	precipstack <- masterstack[[grep('prec', names(masterstack))]]
+	precipstack <- masterstack[[grep('prec', names(masterstack), value = TRUE)]]
 	
 	#enforce ordering
 	tminstack <- tminstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tminstack))))]]
