@@ -16,3 +16,4 @@ BugReports: https://github.com/ptitle/envirem/issues
 NeedsCompilation: yes
 Encoding: UTF-8
 RoxygenNote: 6.0.1
+ByteCompile: true
