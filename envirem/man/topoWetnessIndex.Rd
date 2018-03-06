@@ -16,10 +16,12 @@ which supplies appropriate SAGA paths, and parallelization information.}
 rasterLayer, unitless
 }
 \description{
-SAGA-GIS topographic wetness index [DEPRECATED]
+SAGA-GIS topographic wetness index
 }
 \details{
-Recent updates appear to have broken this function, therefore it will be removed.
+If this function returns an error, there may be a conflict with the version of SAGA-GIS
+installed on your machine, and the version of SAGA-GIS that the RSAGA package is designed 
+to work with. 
 
 From a DEM, this function will write an appropriate raster
 to disk, run an RSAGA function to calculate the topographic wetness index,
@@ -43,9 +45,6 @@ parallel = TRUE, version = "2.2.0")
 topoWetnessIndex(elev, sagaEnv)
 }
 }
-\author{
-Pascal Title
-}
 \references{
 Boehner, J., Koethe, R. Conrad, O., Gross, J., Ringeler, A. & Selige, T. (2002) Soil
 regionalization by means of terrain analysis and process parameterization. \emph{Soil
@@ -56,4 +55,6 @@ Conrad, O., Bechtel, B., Bock, M., Dietrich, H., Fischer, E., Gerlitz, L., Wehbe
 Wichmann, V. & Böhner, J. (2015) System for automated geoscientific analyses (SAGA)
 v. 2.1.4. \emph{Geoscientific Model Development}, \strong{8}, 1991-2007.
 }
-
+\author{
+Pascal Title
+}

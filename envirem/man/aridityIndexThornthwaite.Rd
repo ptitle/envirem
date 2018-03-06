@@ -7,7 +7,7 @@
 aridityIndexThornthwaite(precipStack, PETstack)
 }
 \arguments{
-\item{precipStack}{rasterStack of monthly mean precipitation.}
+\item{precipStack}{rasterStack of monthly precipitation.}
 
 \item{PETstack}{rasterStack of monthly potential evapotranspiration.}
 }
@@ -51,9 +51,6 @@ aridityIndexThornthwaite(precip, pet)
 }
 
 }
-\author{
-Pascal Title
-}
 \references{
 Thornthwaite, C.W. (1948). An approach toward a rational classification of climate.
 \emph{Geographical Review}, \strong{38}, 55-94.
@@ -61,4 +58,6 @@ Thornthwaite, C.W. (1948). An approach toward a rational classification of clima
 \seealso{
 Requires rasters created with \code{\link{monthlyPET}}.
 }
-
+\author{
+Pascal Title
+}

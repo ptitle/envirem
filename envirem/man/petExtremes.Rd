@@ -46,13 +46,10 @@ tempRange <- abs(maxtemp - mintemp)
 precip <- stack(env[[precip]])
 
 # get monthly PET
-pet <- monthlyPET(meantemp, solar, tempRange)
+pet <- monthlyPET(meantemp, solar, tempRange, tempScale = 10)
 
 petExtremes(pet, precip, meantemp)
 }
-}
-\author{
-Pascal Title
 }
 \references{
 Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
@@ -63,4 +60,6 @@ biodiversity research and monitoring. \emph{Global Ecology and Biogeography},
 \seealso{
 \code{\link{monthlyPET}}
 }
-
+\author{
+Pascal Title
+}

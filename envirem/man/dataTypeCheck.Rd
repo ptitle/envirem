@@ -26,4 +26,3 @@ dataTypeCheck(r)
 \author{
 Pascal Title
 }
-

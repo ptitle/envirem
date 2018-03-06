@@ -4,7 +4,7 @@
 \alias{embergerQ}
 \title{Emberger's pluviometric quotient}
 \usage{
-embergerQ(P, M, m)
+embergerQ(P, M, m, tempScale = 1)
 }
 \arguments{
 \item{P}{rasterLayer, mean annual precipitation}
@@ -12,6 +12,9 @@ embergerQ(P, M, m)
 \item{M}{rasterLayer, mean max temperature of the warmest month}
 
 \item{m}{rasterLayer, mean min temperature of the coldest month}
+
+\item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
+additional details.}
 }
 \value{
 rasterLayer in mm / degrees C
@@ -27,13 +30,12 @@ Calculate Emberger's pluviometric quotient.
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
 
-embergerQ(env[['bio_12']], env[['bio_5']], env[['bio_6']])
-}
-\author{
-Pascal Title
+embergerQ(env[['bio_12']], env[['bio_5']], env[['bio_6']], tempScale = 10)
 }
 \references{
 Daget, P. (1977) Le bioclimat méditerranéen: analyse des formes climatiques 
 par le système d’Emberger. \emph{Vegetatio}, \strong{34}, 87–103.
 }
-
+\author{
+Pascal Title
+}

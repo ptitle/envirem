@@ -42,11 +42,10 @@ We will split this raster into 4 tiles, that will be written to disk.
 split_raster(bio1file, s = 2, outputDir = '~/temp/', gdalinfoPath = NULL, gdal_translatePath = NULL)
 }
 }
-\author{
-Pascal Title
-}
 \references{
 GDAL. 2015. GDAL - Geospatial Data Abstraction Library: Version 1.11.3, 
 Open Source Geospatial Foundation, \url{http://gdal.org}
 }
-
+\author{
+Pascal Title
+}

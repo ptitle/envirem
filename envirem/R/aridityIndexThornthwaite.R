@@ -2,7 +2,7 @@
 ##'
 ##' @description Generates thornthwaite aridity index raster.
 ##'
-##' @param precipStack rasterStack of monthly mean precipitation.
+##' @param precipStack rasterStack of monthly precipitation.
 ##'
 ##' @param PETstack rasterStack of monthly potential evapotranspiration.
 ##'

@@ -48,4 +48,3 @@ verifyFileStructure(system.file('extdata', package='envirem'))
 \author{
 Pascal Title
 }
-

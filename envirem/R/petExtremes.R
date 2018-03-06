@@ -42,7 +42,7 @@
 ##' precip <- stack(env[[precip]])
 ##' 
 ##' # get monthly PET
-##' pet <- monthlyPET(meantemp, solar, tempRange)
+##' pet <- monthlyPET(meantemp, solar, tempRange, tempScale = 10)
 ##'
 ##' petExtremes(pet, precip, meantemp)
 ##' }

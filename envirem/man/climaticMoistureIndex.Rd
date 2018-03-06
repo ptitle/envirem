@@ -47,9 +47,6 @@ annualPET <- sum(pet)
 
 climaticMoistureIndex(env[['bio_12']], annualPET)
 }
-\author{
-Pascal Title
-}
 \references{
 Willmott, C. & Feddema, J. (1992). A More Rational Climatic Moisture Index. 
 \emph{The Professional Geographer}, \strong{44}, 84-88.
@@ -58,4 +55,6 @@ Vörösmarty, C.J., Douglas, E.M., Green, P.A. & Revenga, C. (2005). Geospatial
 Indicators of Emerging Water Stress: An Application to Africa. 
 \emph{AMBIO: A Journal of the Human Environment}, \strong{34}, 230-236.
 }
-
+\author{
+Pascal Title
+}

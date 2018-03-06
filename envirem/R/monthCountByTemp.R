@@ -2,10 +2,12 @@
 ##'
 ##' @description Number of months with mean temperature greater than some base temp.
 ##'
-##' @param tempStack rasterStack of monthly mean temperature in degrees C * 10
-
+##' @param tempStack rasterStack of monthly mean temperature in degrees C
+##'
 ##' @param minTemp reference temperature in degrees C
 ##'
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
 ##'
 ##' @return rasterLayer with values representing counts of months.
 ##'
@@ -25,20 +27,21 @@
 ##' # identify the appropriate layers
 ##' meantemp <- grep('mean', names(env), value=TRUE)
 ##' meantemp <- env[[meantemp]]
-##' monthCountByTemp(meantemp, 10)
+##' monthCountByTemp(meantemp, 10, tempScale = 10)
 ##' @export
 
 
 #Number of months with a mean temp > T deg
 # needed = monthly mean temp
-monthCountByTemp <- function(tempStack, minTemp = 10) {
+monthCountByTemp <- function(tempStack, minTemp = 10, tempScale = 1) {
 	
 	tempStack <- tempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tempStack))))]]
 	
-	minTemp <- minTemp * 10 #worldclim temps are multiplied by 10
+	tempStack <- tempStack / tempScale
+	
 	#create logical rasters, by minTemp
 	tempStack <- tempStack > minTemp
 	res <- sum(tempStack)
-	names(res) <- paste0('monthCountByTemp', minTemp / 10)
+	names(res) <- paste0('monthCountByTemp', minTemp)
 	return(res)
 }

@@ -86,10 +86,9 @@ inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of the
 If the goal is to use these rasters with the standalone Maxent program, we recommend 
 \code{outputFormat = 'EHdr'}.
 }
-\author{
-Pascal Title
-}
 \seealso{
 Naming of rasters in inputDir will be checked with \code{\link{verifyFileStructure}}.
 }
-
+\author{
+Pascal Title
+}

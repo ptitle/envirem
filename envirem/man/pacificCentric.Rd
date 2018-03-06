@@ -30,4 +30,3 @@ pacificCentric(bio1, crop = TRUE)
 \author{
 Pascal Title
 }
-

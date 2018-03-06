@@ -4,12 +4,15 @@
 \alias{monthCountByTemp}
 \title{Month count by temperature}
 \usage{
-monthCountByTemp(tempStack, minTemp = 10)
+monthCountByTemp(tempStack, minTemp = 10, tempScale = 1)
 }
 \arguments{
-\item{tempStack}{rasterStack of monthly mean temperature in degrees C * 10}
+\item{tempStack}{rasterStack of monthly mean temperature in degrees C}
 
 \item{minTemp}{reference temperature in degrees C}
+
+\item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
+additional details.}
 }
 \value{
 rasterLayer with values representing counts of months.
@@ -25,10 +28,7 @@ env <- stack(rasterFiles)
 # identify the appropriate layers
 meantemp <- grep('mean', names(env), value=TRUE)
 meantemp <- env[[meantemp]]
-monthCountByTemp(meantemp, 10)
-}
-\author{
-Pascal Title
+monthCountByTemp(meantemp, 10, tempScale = 10)
 }
 \references{
 Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
@@ -36,4 +36,6 @@ A high-resolution bioclimate map of the world: a unifying framework for global
 biodiversity research and monitoring. \emph{Global Ecology and Biogeography}, 
 \strong{22}, 630-638.
 }
-
+\author{
+Pascal Title
+}

@@ -6,6 +6,9 @@
 ##'
 ##' @param baseTemp base temperature in degrees C.
 ##'
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
+##'
 ##' @details growing degree days = sum of all monthly temps greater than baseTemp, 
 ##' multiplied by total number of days
 ##'
@@ -25,18 +28,17 @@
 ##' env <- stack(rasterFiles)
 ##'
 ##' meantemp <- env[[grep('tmean', names(env), value=TRUE)]]
-##' growingDegDays(meantemp, 10)
+##' growingDegDays(meantemp, 10, tempScale = 10)
 ##' @export
 
 # Growing degree-days on 0 or 5 degC base
 # needed = mean monthly temp for all months
-growingDegDays <- function(meantempstack, baseTemp) {
+growingDegDays <- function(meantempstack, baseTemp, tempScale = 1) {
 	
 	meantempstack <- meantempstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempstack))))]]
 	
-	# we are now operating in deg C, rather than deg C * 10
-	#baseTemp <- baseTemp * 10 #to match worldclim data
-	meantempstack <- meantempstack / 10
+	# we are operating in deg C, rather than deg C * tempScale
+	meantempstack <- meantempstack / tempScale
 	
 	#get raster of number of months > baseTemp
 	logicstack <- meantempstack > baseTemp

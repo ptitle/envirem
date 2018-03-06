@@ -105,6 +105,11 @@ layerCreation <- function(masterstack, solradstack, var) {
 	if (raster::nlayers(solradstack) != 12 | any(namecheck > 2)) {
 		stop('solrad stack must have names ending in 1:12.')
 	}
+	# fix solrad names if needed
+	names(solradstack) <- gsub('0(\\d)', '\\1', names(solradstack))
+	qq <- gregexpr('\\d?\\d$', names(solradstack))
+	names(solradstack) <- paste0('solrad_', unlist(regmatches(names(solradstack), qq)))
+	
 	
 	#receiving list
 	reslist <- vector('list', length = length(var))

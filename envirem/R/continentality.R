@@ -3,8 +3,11 @@
 ##' @description Generate Continentality index.
 ##'
 ##' @param tmax rasterLayer of average temperature of the warmest month
-
+##'
 ##' @param tmin rasterLayer of average temperature of the coldest month
+##'
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
 ##'
 ##' @details \code{continentality index = tmax - tmin}
 ##'
@@ -43,15 +46,14 @@
 ##' meantempWarmest <- temp[['meanTempWarmest']]
 ##' meantempColdest <- temp[['meanTempColdest']]
 ##'
-##' continentality(meantempWarmest, meantempColdest)
+##' continentality(meantempWarmest, meantempColdest, tempScale = 10)
 ##' @export
 
 # continentality index
 ## mean temperature of warmest month - mean temperature of coldest month
-## assuming temp variables are degrees C * 10
 
-continentality <- function(tmax, tmin) {
-	res <- tmax / 10 - tmin / 10
+continentality <- function(tmax, tmin, tempScale = 1) {
+	res <- tmax / tempScale - tmin / tempScale
 	names(res) <- 'continentality'
 	return(res)
 }

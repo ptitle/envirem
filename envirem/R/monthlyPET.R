@@ -8,7 +8,10 @@
 ##'
 ##' @param TD rasterStack of monthly temperature range
 ##'
-##' @details \code{PET = 0.0023 * RA * (Tmean + 17.8) * TD^0.5}
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
+##'
+##' @details \code{PET = 0.0023 * RA * (Tmean + 17.8) * TD ^ 0.5}
 ##'
 ##' @return rasterStack of monthly PET in mm / month
 ##'
@@ -56,7 +59,7 @@
 # PET = 0.0023 * RA * (Tmean + 17.8) * TD^0.5 = monthly average PET (mm/month)
 # where RA = extra terrestrial radiation, Tmean = mean temp, TD = daily temp range (monthly Bio2)
 # as we want annual mean, we'll just use annual mean temp, and mean daily temp range
-monthlyPET <- function(Tmean, RA, TD) {
+monthlyPET <- function(Tmean, RA, TD, tempScale = 1) {
 	
 	if (raster::nlayers(Tmean) != 12) {
 		stop('Tmean should have 12 layers.')
@@ -74,7 +77,10 @@ monthlyPET <- function(Tmean, RA, TD) {
 	RA <- RA[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(RA))))]]
 	TD <- TD[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(TD))))]]
 	
-	res <- 0.0023 * (RA * 30) * (Tmean / 10 + 17.8) * (TD / 10) ^ 0.5
+	Tmean <- Tmean / tempScale
+	TD <- TD / tempScale
+	
+	res <- 0.0023 * (RA * 30) * (Tmean + 17.8) * TD ^ 0.5
 	for (i in 1:raster::nlayers(res)) {
 		raster::values(res[[i]])[which(raster::values(res[[i]]) < 0)] <- 0
 	}

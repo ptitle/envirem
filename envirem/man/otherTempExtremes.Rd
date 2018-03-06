@@ -14,7 +14,8 @@ otherTempExtremes(meantempStack, mintempStack, maxtempStack)
 \item{maxtempStack}{rasterStack of monthly max temperature}
 }
 \value{
-rasterStack of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in degrees C * 10.
+rasterStack of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in 
+same units as input rasters.
 }
 \description{
 Generates max temp of the coldest month, min temp of the warmest month, mean temp
@@ -40,4 +41,3 @@ otherTempExtremes(tmean, tmin, tmax)
 \author{
 Pascal Title
 }
-

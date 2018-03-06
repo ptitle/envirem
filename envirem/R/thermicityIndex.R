@@ -12,6 +12,10 @@
 ##'
 ##' @param returnCompensated logical: if \code{FALSE}, regular thermicity index is returned.
 ##'
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
+
+##'
 ##' @details 	thermicity index = tempRange + minTemp + maxTemp
 ##'
 ##'	The compensated thermicity index incorporates corrections designed to make this metric
@@ -50,19 +54,22 @@
 ##' # calculate temperature extremes
 ##' temp <- otherTempExtremes(tmean, tmin, tmax)
 ##'
-##' ci <- continentality(temp[['meanTempWarmest']], temp[['meanTempColdest']])
+##' ci <- continentality(temp[['meanTempWarmest']], temp[['meanTempColdest']], tempScale = 10)
 ##'
 ##' # compensated thermicity index
-##' thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci)
+##' thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci, tempScale = 10)
 ##' }
 ##' @export
 
 
 ## compensated thermicity Index
 # (annual mean temp, min temp of coldest month, max temp of coldest month) * 10
-thermicityIndex <- function(annualTemp, minTemp, maxTemp, continentality, returnCompensated = TRUE) {
+thermicityIndex <- function(annualTemp, minTemp, maxTemp, continentality, returnCompensated = TRUE, tempScale = 1) {
 	
-	# not multiplying by 10 because worldclim data already is
+	annualTemp <- annualTemp / tempScale * 10
+	minTemp <- minTemp / tempScale * 10
+	maxTemp <- maxTemp / tempScale * 10
+	
 	thermicity <- annualTemp + minTemp + maxTemp
 	
 	if (returnCompensated) {

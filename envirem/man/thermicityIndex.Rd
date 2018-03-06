@@ -5,7 +5,7 @@
 \title{Compensated Thermicity index}
 \usage{
 thermicityIndex(annualTemp, minTemp, maxTemp, continentality,
-  returnCompensated = TRUE)
+  returnCompensated = TRUE, tempScale = 1)
 }
 \arguments{
 \item{annualTemp}{rasterLayer, mean annual temperature}
@@ -17,6 +17,9 @@ thermicityIndex(annualTemp, minTemp, maxTemp, continentality,
 \item{continentality}{rasterLayer, continentality index}
 
 \item{returnCompensated}{logical: if \code{FALSE}, regular thermicity index is returned.}
+
+\item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
+additional details.}
 }
 \value{
 rasterLayer in degrees C
@@ -48,14 +51,11 @@ tmax <- env[[tmax]]
 # calculate temperature extremes
 temp <- otherTempExtremes(tmean, tmin, tmax)
 
-ci <- continentality(temp[['meanTempWarmest']], temp[['meanTempColdest']])
+ci <- continentality(temp[['meanTempWarmest']], temp[['meanTempColdest']], tempScale = 10)
 
 # compensated thermicity index
-thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci)
+thermicityIndex(env[['bio_1']], env[['bio_6']], temp[['maxTempColdest']], ci, tempScale = 10)
 }
-}
-\author{
-Pascal Title
 }
 \references{
 Rivas-Martínez, S. & Rivas-Sáenz, S. “Synoptical Worldwide Bioclimatic 
@@ -69,4 +69,6 @@ Professional Paper 1768}. Reston, VA.
 \seealso{
 \link{continentality}
 }
-
+\author{
+Pascal Title
+}

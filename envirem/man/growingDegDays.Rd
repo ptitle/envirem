@@ -4,12 +4,15 @@
 \alias{growingDegDays}
 \title{Growing degree days}
 \usage{
-growingDegDays(meantempstack, baseTemp)
+growingDegDays(meantempstack, baseTemp, tempScale = 1)
 }
 \arguments{
 \item{meantempstack}{rasterStack of mean monthly temperature in deg C * 10}
 
 \item{baseTemp}{base temperature in degrees C.}
+
+\item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
+additional details.}
 }
 \value{
 rasterLayer in degrees C * days.
@@ -27,10 +30,7 @@ rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=
 env <- stack(rasterFiles)
 
 meantemp <- env[[grep('tmean', names(env), value=TRUE)]]
-growingDegDays(meantemp, 10)
-}
-\author{
-Pascal Title
+growingDegDays(meantemp, 10, tempScale = 10)
 }
 \references{
 Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
@@ -38,4 +38,6 @@ A high-resolution bioclimate map of the world: a unifying framework for global
 biodiversity research and monitoring. \emph{Global Ecology and Biogeography}, 
 \strong{22}, 630-638.
 }
-
+\author{
+Pascal Title
+}

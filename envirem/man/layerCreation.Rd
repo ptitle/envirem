@@ -70,10 +70,9 @@ solar <- stack(solradFiles)
 layerCreation(worldclim, solar, var='all')
 }
 }
-\author{
-Pascal Title
-}
 \seealso{
 This function is called internally by \code{\link{generateRasters}}.
 }
-
+\author{
+Pascal Title
+}
