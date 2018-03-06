@@ -10,6 +10,9 @@
 ##' @param solradstack rasterStack of monthly solar radiation
 ##'
 ##' @param var vector of names of variables to generate, see Details.
+##'
+##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
+##' 	additional details. 
 ##' 
 ##' @details The function \code{\link{verifyFileStructure}} should be used to 
 ##' verify that the appropriate rasters are present in \code{masterstack}.
@@ -72,7 +75,7 @@
 # Function takes stack of precip, mintemp, maxtemp, bioclim, and a stack of solar radiation, and generates rasterstack of new variables
 # var is a vector of variable names that will be generated. 
 
-layerCreation <- function(masterstack, solradstack, var) {
+layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -127,6 +130,10 @@ layerCreation <- function(masterstack, solradstack, var) {
 	precipstack <- precipstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(precipstack))))]]
 	solradstack <- solradstack[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(solradstack))))]]
 	
+	# adjust temperature rasters to degrees C
+	tminstack <- tminstack / tempScale
+	tmaxstack <- tmaxstack / tempScale
+	
 	# if tmean not already present in stack, then calculate it from tmin and tmax
 	if (!any(grepl('tmean', names(masterstack)))) {
 		cat('\t\t...calculating mean temp...\n')
@@ -135,8 +142,9 @@ layerCreation <- function(masterstack, solradstack, var) {
 	} else {
 		tmeanstack <- masterstack[[grep('tmean', names(masterstack), value = TRUE)]]
 		tmeanstack <- tmeanstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tmeanstack))))]]
+		tmeanstack <- tmeanstack / tempScale
 	}
-		
+			
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
 		cat('\t\t...temp extremes...\n')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)

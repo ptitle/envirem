@@ -4,7 +4,7 @@
 \alias{layerCreation}
 \title{Creates all layers}
 \usage{
-layerCreation(masterstack, solradstack, var)
+layerCreation(masterstack, solradstack, var, tempScale = 1)
 }
 \arguments{
 \item{masterstack}{rasterStack containing all precipitation, 
@@ -13,6 +13,9 @@ min temperature, max temperature and bioclimatic variables}
 \item{solradstack}{rasterStack of monthly solar radiation}
 
 \item{var}{vector of names of variables to generate, see Details.}
+
+\item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
+additional details.}
 }
 \value{
 rasterStack
