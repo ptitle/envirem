@@ -53,7 +53,8 @@
 ## mean temperature of warmest month - mean temperature of coldest month
 
 continentality <- function(tmax, tmin, tempScale = 1) {
-	res <- tmax / tempScale - tmin / tempScale
+	res <- tmax - tmin
+	res <- res / tempScale
 	names(res) <- 'continentality'
 	return(res)
 }
