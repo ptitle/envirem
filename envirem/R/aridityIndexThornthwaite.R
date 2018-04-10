@@ -21,7 +21,7 @@
 ##' @seealso Requires rasters created with \code{\link{monthlyPET}}. 
 ##'
 ##' @examples
-##' \dontrun{
+##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)

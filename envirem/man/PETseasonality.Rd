@@ -19,6 +19,7 @@ Seasonality of potential evapotranspiration
 PET seasonality = 100 * standard deviation of monthly PET.
 }
 \examples{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -40,6 +41,7 @@ tempRange <- abs(maxtemp - mintemp)
 pet <- monthlyPET(meantemp, solar, tempRange)
 
 PETseasonality(pet)
+}
 }
 \references{
 Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 

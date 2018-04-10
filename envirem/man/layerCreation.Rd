@@ -59,7 +59,7 @@ thermicityIndex \cr
 If \code{var = 'all'}, then all of the variables will be generated.
 }
 \examples{
-\dontrun{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 

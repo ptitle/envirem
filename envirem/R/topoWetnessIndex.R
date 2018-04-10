@@ -31,7 +31,7 @@
 ##' Nachtergaele, F. & Montanarella, L.), pp. 213-222. Luxembourg.
 ##'
 ##' Conrad, O., Bechtel, B., Bock, M., Dietrich, H., Fischer, E., Gerlitz, L., Wehberg, J.,
-##' Wichmann, V. & Böhner, J. (2015) System for automated geoscientific analyses (SAGA)
+##' Wichmann, V. & Boehner, J. (2015) System for automated geoscientific analyses (SAGA)
 ##' v. 2.1.4. \emph{Geoscientific Model Development}, \strong{8}, 1991-2007.
 ##'
 ##' @author Pascal Title

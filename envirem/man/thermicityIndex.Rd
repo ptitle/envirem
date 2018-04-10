@@ -34,7 +34,7 @@ The compensated thermicity index incorporates corrections designed to make this 
 more appropriately comparable across the globe.
 }
 \examples{
-\dontrun{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)

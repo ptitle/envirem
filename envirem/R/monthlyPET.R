@@ -32,6 +32,7 @@
 ##' @author Pascal Title
 ##'
 ##' @examples
+##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -50,6 +51,7 @@
 ##' tempRange <- abs(maxtemp - mintemp)
 ##' 
 ##' monthlyPET(meantemp, solar, tempRange)
+##' }
 ##' 
 ##' @export
 

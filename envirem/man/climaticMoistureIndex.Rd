@@ -22,6 +22,7 @@ Generate climatic moisture index.
 \code{1 - PET/P} when \code{P >= PET}
 }
 \examples{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -46,6 +47,7 @@ pet <- monthlyPET(meantemp, solar, tempRange)
 annualPET <- sum(pet)
 
 climaticMoistureIndex(env[['bio_12']], annualPET)
+}
 }
 \references{
 Willmott, C. & Feddema, J. (1992). A More Rational Climatic Moisture Index. 

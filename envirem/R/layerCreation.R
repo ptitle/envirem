@@ -54,7 +54,7 @@
 ##' @seealso This function is called internally by \code{\link{generateRasters}}.
 ##'
 ##' @examples
-##' \dontrun{
+##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##'

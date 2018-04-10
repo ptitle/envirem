@@ -23,6 +23,7 @@
 ##'
 ##'
 ##' @examples
+##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 ##' env <- stack(rasterFiles)
@@ -47,6 +48,7 @@
 ##' annualPET <- sum(pet)
 ##'
 ##' climaticMoistureIndex(env[['bio_12']], annualPET)
+##' }
 ##' @export
 
 

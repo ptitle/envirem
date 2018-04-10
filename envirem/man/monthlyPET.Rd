@@ -26,6 +26,7 @@ Monthly potential evapotranspiration
 \code{PET = 0.0023 * RA * (Tmean + 17.8) * TD ^ 0.5}
 }
 \examples{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
@@ -44,6 +45,7 @@ mintemp <- stack(env[[mintemp]])
 tempRange <- abs(maxtemp - mintemp)
 
 monthlyPET(meantemp, solar, tempRange)
+}
 
 }
 \references{

@@ -23,7 +23,7 @@ where d = sum of monthly differences between precipitation and PET for months wh
 where n = sum of monthly PET for those months
 }
 \examples{
-\dontrun{
+\donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
 env <- stack(rasterFiles)
