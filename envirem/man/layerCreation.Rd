@@ -70,7 +70,7 @@ worldclim <- stack(setdiff(rasterFiles, solradFiles))
 solar <- stack(solradFiles)
 
 # generate all possible envirem variables
-layerCreation(worldclim, solar, var='all')
+layerCreation(worldclim, solar, var='all', tempScale = 10)
 }
 }
 \seealso{

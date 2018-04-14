@@ -44,7 +44,7 @@ maxtemp <- stack(env[[maxtemp]])
 mintemp <- stack(env[[mintemp]])
 tempRange <- abs(maxtemp - mintemp)
 
-monthlyPET(meantemp, solar, tempRange)
+monthlyPET(meantemp, solar, tempRange, tempScale = 10)
 }
 
 }

@@ -65,7 +65,7 @@
 ##' solar <- stack(solradFiles)
 ##' 
 ##' # generate all possible envirem variables
-##' layerCreation(worldclim, solar, var='all')
+##' layerCreation(worldclim, solar, var='all', tempScale = 10)
 ##' }
 ##' @export
 
@@ -133,6 +133,19 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	# adjust temperature rasters to degrees C
 	tminstack <- tminstack / tempScale
 	tmaxstack <- tmaxstack / tempScale
+	
+	# bioclim 1,2,4,5,6,7,8,9,10,11 are affected by tempScale
+	masterstack[[grep('bio_1$', names(masterstack))]] <- masterstack[[grep('bio_1$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_2$', names(masterstack))]] <- masterstack[[grep('bio_2$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_4$', names(masterstack))]] <- masterstack[[grep('bio_4$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_5$', names(masterstack))]] <- masterstack[[grep('bio_5$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_6$', names(masterstack))]] <- masterstack[[grep('bio_6$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_7$', names(masterstack))]] <- masterstack[[grep('bio_7$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_8$', names(masterstack))]] <- masterstack[[grep('bio_8$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_9$', names(masterstack))]] <- masterstack[[grep('bio_9$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_10$', names(masterstack))]] <- masterstack[[grep('bio_10$', names(masterstack))]] / tempScale
+	masterstack[[grep('bio_11$', names(masterstack))]] <- masterstack[[grep('bio_11$', names(masterstack))]] / tempScale
+	
 	
 	# if tmean not already present in stack, then calculate it from tmin and tmax
 	if (!any(grepl('tmean', names(masterstack)))) {
