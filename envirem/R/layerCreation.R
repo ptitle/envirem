@@ -260,6 +260,17 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 		reslist[['aridityIndexThornthwaite']] <- aridIndThorn
 	}
 
+	# if minTempWarmest or maxTempColdest were requested, put them back on the same
+	# scale as the input temperature rasters
+	if ('minTempWarmest' %in% var) {
+		reslist[['minTempWarmest']] <- reslist[['minTempWarmest']] * tempScale
+	}
+
+	if ('maxTempColdest' %in% var) {
+		reslist[['maxTempColdest']] <- reslist[['maxTempColdest']] * tempScale
+	}
+
+
 	reslist <- raster::stack(reslist)
 	return(reslist)
 }
