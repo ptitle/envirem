@@ -17,7 +17,7 @@
 ##' @references
 
 ##' Prentice, I.C., Cramer, W., Harrison, S.P., Leemans, R., Monserud, R.A. & Solomon, A.M.
-##' (1992). A Global Biome Model Based on Plant Physiology and Domi nance, Soil Properties
+##' (1992). A Global Biome Model Based on Plant Physiology and Dominance, Soil Properties
 ##'  and Climate. \emph{Journal of Biogeography}, \strong{19}, 117–134.
 ##' 
 ##' @author Pascal Title
