@@ -2,7 +2,7 @@
 ##'
 ##' @description Growing degree days above some base temperature.
 ##'
-##' @param meantempstack rasterStack of mean monthly temperature in deg C * 10
+##' @param meantempstack rasterStack of mean monthly temperature in deg C
 ##'
 ##' @param baseTemp base temperature in degrees C.
 ##'
@@ -15,10 +15,10 @@
 ##' @return rasterLayer in degrees C * days.
 ##'
 ##' @references
-##' Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
-##' A high-resolution bioclimate map of the world: a unifying framework for global 
-##' biodiversity research and monitoring. \emph{Global Ecology and Biogeography}, 
-##' \strong{22}, 630-638.
+
+##' Prentice, I.C., Cramer, W., Harrison, S.P., Leemans, R., Monserud, R.A. & Solomon, A.M.
+##' (1992). A Global Biome Model Based on Plant Physiology and Domi nance, Soil Properties
+##'  and Climate. \emph{Journal of Biogeography}, \strong{19}, 117–134.
 ##' 
 ##' @author Pascal Title
 ##'
@@ -35,27 +35,22 @@
 # needed = mean monthly temp for all months
 growingDegDays <- function(meantempstack, baseTemp, tempScale = 1) {
 	
-	meantempstack <- meantempstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempstack))))]]
-	
 	# we are operating in deg C, rather than deg C * tempScale
-	meantempstack <- meantempstack / tempScale
-	
-	#get raster of number of months > baseTemp
-	logicstack <- meantempstack > baseTemp
-	logicsum <- sum(logicstack)
-	
-	#get rasterstack of temps above baseTemp (set all temps below baseTemp to 0)
-	for (i in 1:raster::nlayers(meantempstack)) {
-		cells <- which(raster::values(meantempstack[[i]]) < baseTemp)
-		if (length(cells) > 0) {
-			meantempstack[[i]][cells] <- 0
-		}
+	if (tempScale != 1) {
+		meantempstack <- meantempstack / tempScale
 	}
 	
-	#formula: summation of temps for all months with temp > baseTemp * total number of days in those months
-	#sum temps
-	meantempstack <- sum(meantempstack)
-	res <- raster::overlay(meantempstack, logicsum, fun = function(a,b) {return(a * b * 30)})
-	names(res) <- paste0('growingDegDays', baseTemp)
-	return(res)
+	Ndays <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+	
+	gdd <- meantempstack
+	for (i in 1:raster::nlayers(meantempstack)) {
+		gdd[[i]] <- meantempstack[[i]] - baseTemp
+		gdd[[i]][gdd[[i]] < 0] <- 0
+		gdd[[i]] <- gdd[[i]] * Ndays[i]
+	}
+	
+	gdd <- sum(gdd)
+	names(gdd) <- paste0("growingDegDays", baseTemp)
+	
+	return(gdd)
 }
