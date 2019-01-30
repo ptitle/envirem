@@ -40,9 +40,9 @@
 otherTempExtremes <- function(meantempStack, mintempStack, maxtempStack) {
 	
 	# enforce ordering
-	meantempStack <- meantempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempStack))))]]
-	mintempStack <- mintempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(mintempStack))))]]
-	maxtempStack <- maxtempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(maxtempStack))))]]
+	meantempStack <- meantempStack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(meantempStack))))]]
+	mintempStack <- mintempStack[[order(as.numeric(gsub(paste0(.var$tmin, '([0-9]+)$'), "\\1", names(mintempStack))))]]
+	maxtempStack <- maxtempStack[[order(as.numeric(gsub(paste0(.var$tmax, '([0-9]+)$'), "\\1", names(maxtempStack))))]]
 	
 	# Max temp of coldest month
 	##identify coldest month by mean temp

@@ -44,8 +44,14 @@
 ##'
 ##' precip <- grep('prec', names(env), value=TRUE)
 ##' precip <- stack(env[[precip]])
+##' 
+##' # set up naming scheme - only precip is different from default
+##' assignNames(precip = 'prec_')
 ##'
 ##' aridityIndexThornthwaite(precip, pet)
+##'
+##' # set back to defaults
+##' assignNames(reset = TRUE)
 ##' }
 ##' 
 ##' @export
@@ -54,7 +60,7 @@
 aridityIndexThornthwaite <- function(precipStack, PETstack) {
 
 	#enforce ordering of stack according to numbers in names
-	precipStack <- precipStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(precipStack))))]]
+	precipStack <- precipStack[[order(as.numeric(gsub(paste0(.var$precip, '([0-9]+)$'), "\\1", names(precipStack))))]]
 	PETstack <- PETstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(PETstack))))]]
 
 	#create receiving rasters

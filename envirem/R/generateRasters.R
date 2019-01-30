@@ -162,9 +162,9 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		clim <- raster::stack(files)
 
 		#pull out solar radiation rasters and create new stack
-		solrad <- clim[[which(grepl('solrad', names(clim)) == TRUE)]]
+		solrad <- clim[[which(grepl(.var$solrad, names(clim)) == TRUE)]]
 
-		clim <- raster::dropLayer(clim, which(grepl('solrad', names(clim)) == TRUE))
+		clim <- raster::dropLayer(clim, which(grepl(.var$solrad, names(clim)) == TRUE))
 
 		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale)
 		

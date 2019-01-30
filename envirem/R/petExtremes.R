@@ -40,19 +40,25 @@
 ##' mintemp <- stack(env[[mintemp]])
 ##' tempRange <- abs(maxtemp - mintemp)
 ##' precip <- stack(env[[precip]])
+##'
+##' # set up naming scheme - only precip is different from default
+##' assignNames(precip = 'prec_')
 ##' 
 ##' # get monthly PET
 ##' pet <- monthlyPET(meantemp, solar, tempRange)
 ##'
 ##' petExtremes(pet, precip, meantemp)
+##'
+##' # set back to defaults
+##' assignNames(reset = TRUE)
 ##' }
 ##' @export
 
 petExtremes <- function(PETstack, precipStack, meantempStack) {
 	
 	#enforce ordering
-	meantempStack <- meantempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(meantempStack))))]]
-	precipStack <- precipStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(precipStack))))]]
+	meantempStack <- meantempStack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(meantempStack))))]]
+	precipStack <- precipStack[[order(as.numeric(gsub(paste0(.var$precip, '([0-9]+)$'), "\\1", names(precipStack))))]]
 	PETstack <- PETstack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(PETstack))))]]
 
 	possibleQuarters <- c(1:12, 1, 2)

@@ -35,9 +35,15 @@
 # needed = monthly mean temp
 monthCountByTemp <- function(tempStack, minTemp = 10, tempScale = 1) {
 	
-	tempStack <- tempStack[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(tempStack))))]]
+	if (!all(grepl(.var$tmean, names(tempStack)))) {
+		stop('tempStack does not appear to have the naming scheme defined for tmean. See ?assignNames.')
+	}
 	
-	tempStack <- tempStack / tempScale
+	tempStack <- tempStack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(tempStack))))]]
+	
+	if (tempScale != 1) {	
+		tempStack <- tempStack / tempScale
+	}
 	
 	#create logical rasters, by minTemp
 	tempStack <- tempStack > minTemp

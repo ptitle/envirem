@@ -25,17 +25,24 @@ functions to work properly.
 This function searches for the following
 in the directory specified by \code{path}:
 
-19 bioclimatic variables named as bio_1.tif
+19 bioclimatic variables (default naming: bio_)
 	
-12 precipitation rasters named as prec_1.tif
+12 precipitation rasters (default naming: precip_)
 
-12 min temperature rasters named as tmin_1.tif
+12 min temperature rasters (default naming: tmin_)
 
-12 max temperature rasters named as tmax_1.tif
+12 max temperature rasters (default naming: tmax_)
 
-12 mean temperature rasters named as tmean_1.tif [optional]
+12 mean temperature rasters [optional] (default naming: tmean_)
 
-12 solar radiation rasters named as et_solrad_1.tif
+12 solar radiation rasters (default naming: et_solrad_)
+
+An equivalent function for checking the names of rasters in R can be 
+found at \code{\link{verifyRasterNames}}. 
+
+The naming of the variables is defined by default as shown above. 
+Changes to the naming scheme can easily be made. See \code{link{?assignNames}}
+for more information.
 
 If mean temperature rasters are not detected, the raster creation functions
 will create mean temperature by taking the mean of the min and max.

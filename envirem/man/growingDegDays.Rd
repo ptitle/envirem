@@ -7,7 +7,7 @@
 growingDegDays(meantempstack, baseTemp, tempScale = 1)
 }
 \arguments{
-\item{meantempstack}{rasterStack of mean monthly temperature in deg C * 10}
+\item{meantempstack}{rasterStack of mean monthly temperature in deg C}
 
 \item{baseTemp}{base temperature in degrees C.}
 
@@ -33,10 +33,9 @@ meantemp <- env[[grep('tmean', names(env), value=TRUE)]]
 growingDegDays(meantemp, 10, tempScale = 10)
 }
 \references{
-Metzger, M.J., Bunce, R.G.H., Jongman, R.H.G., Sayre, R., Trabucco, A. & Zomer, R. (2013). 
-A high-resolution bioclimate map of the world: a unifying framework for global 
-biodiversity research and monitoring. \emph{Global Ecology and Biogeography}, 
-\strong{22}, 630-638.
+Prentice, I.C., Cramer, W., Harrison, S.P., Leemans, R., Monserud, R.A. & Solomon, A.M.
+(1992). A Global Biome Model Based on Plant Physiology and Dominance, Soil Properties
+ and Climate. \emph{Journal of Biogeography}, \strong{19}, 117–134.
 }
 \author{
 Pascal Title

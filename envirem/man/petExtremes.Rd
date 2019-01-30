@@ -45,10 +45,16 @@ mintemp <- stack(env[[mintemp]])
 tempRange <- abs(maxtemp - mintemp)
 precip <- stack(env[[precip]])
 
+# set up naming scheme - only precip is different from default
+assignNames(precip = 'prec_')
+
 # get monthly PET
 pet <- monthlyPET(meantemp, solar, tempRange)
 
 petExtremes(pet, precip, meantemp)
+
+# set back to defaults
+assignNames(reset = TRUE)
 }
 }
 \references{

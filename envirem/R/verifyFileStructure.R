@@ -13,17 +13,24 @@
 ##' This function searches for the following
 ##' in the directory specified by \code{path}:
 ##'	
-##'	19 bioclimatic variables named as bio_1.tif
+##'	19 bioclimatic variables (default naming: bio_)
 ##'		
-##'	12 precipitation rasters named as prec_1.tif
+##'	12 precipitation rasters (default naming: precip_)
 ##'	
-##'	12 min temperature rasters named as tmin_1.tif
+##'	12 min temperature rasters (default naming: tmin_)
 ##'	
-##'	12 max temperature rasters named as tmax_1.tif
+##'	12 max temperature rasters (default naming: tmax_)
 ##'
-##' 12 mean temperature rasters named as tmean_1.tif [optional]
+##' 12 mean temperature rasters [optional] (default naming: tmean_)
 ##'	
-##'	12 solar radiation rasters named as et_solrad_1.tif
+##'	12 solar radiation rasters (default naming: et_solrad_)
+##' 
+##' An equivalent function for checking the names of rasters in R can be 
+##' found at \code{\link{verifyRasterNames}}. 
+##'
+##' The naming of the variables is defined by default as shown above. 
+##' Changes to the naming scheme can easily be made. See \code{link{?assignNames}}
+##' for more information.
 ##'
 ##' If mean temperature rasters are not detected, the raster creation functions
 ##' will create mean temperature by taking the mean of the min and max.
@@ -47,60 +54,76 @@
 ### 12 tmin: tmin_1.tif
 ### 12 tmax: tmax_1.tif
 ### 12 solar radiation: et_solrad_1.tif
-### tmean not used because not available for non-current
+### tmean not used because may not be available for non-current
 
 verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif') {
 	files <- list.files(path = path, pattern = paste0(rasterExt, '$'))
 	
+	if (!exists('.var', mode = 'environment')) {
+		stop('Variable naming environment not found.')
+	}
+	
 	#check bioclim
-	bioclimFiles <- grep('bio_\\d\\d?', files, value = TRUE)
-	bioclimFiles <- gsub('(bio_\\d\\d?)(\\.\\w+$)', '\\1', bioclimFiles)
-	if (all(paste0('bio_', 1:19) %in% bioclimFiles) & length(bioclimFiles) == 19) {
+	xx <- paste0(.var$bio, '\\d\\d?')
+	bioclimFiles <- grep(xx, files, value = TRUE)
+	bioclimFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', bioclimFiles)
+	bioclimFiles <- bioclimFiles[order(as.numeric(gsub(paste0('(', .var$bio, ')', '([0-9]+)$'), '\\2', bioclimFiles)))]
+	if ((all(paste0(.var$bio, 1:19) %in% bioclimFiles) | all(paste0(.var$bio, sprintf("%02d", 1:19)) %in% bioclimFiles)) & length(bioclimFiles) == 19) {
 		bioclimCheck <- TRUE
 	} else {
 		bioclimCheck <- FALSE
 	}
 	
 	#check precip
-	precipFiles <- grep('prec_\\d\\d?', files, value = TRUE)
-	precipFiles <- gsub('(prec_\\d\\d?)(\\.\\w+$)', '\\1', precipFiles)
-	if (all(paste0('prec_', 1:12) %in% precipFiles) & length(precipFiles) == 12) {
+	xx <- paste0(.var$precip, '\\d\\d?')
+	precipFiles <- grep(xx, files, value = TRUE)
+	precipFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', precipFiles)
+	precipFiles <- precipFiles[order(as.numeric(gsub(paste0('(', .var$precip, ')', '([0-9]+)$'), '\\2', precipFiles)))]
+	if ((all(paste0(.var$precip, 1:12) %in% precipFiles) | all(paste0(.var$precip, sprintf("%02d", 1:12)) %in% precipFiles)) & length(precipFiles) == 12) {
 		precipCheck <- TRUE
 	} else {
 		precipCheck <- FALSE
 	}
 
 	#check tmin
-	tminFiles <- grep('tmin_\\d\\d?', files, value = TRUE)
-	tminFiles <- gsub('(tmin_\\d\\d?)(\\.\\w+$)', '\\1', tminFiles)
-	if (all(paste0('tmin_', 1:12) %in% tminFiles) & length(tminFiles) == 12) {
+	xx <- paste0(.var$tmin, '\\d\\d?')
+	tminFiles <- grep(xx, files, value = TRUE)
+	tminFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', tminFiles)
+	tminFiles <- tminFiles[order(as.numeric(gsub(paste0('(', .var$tmin, ')', '([0-9]+)$'), '\\2', tminFiles)))]
+	if ((all(paste0(.var$tmin, 1:12) %in% tminFiles) | all(paste0(.var$tmin, sprintf("%02d", 1:12)) %in% tminFiles)) & length(tminFiles) == 12) {
 		tminCheck <- TRUE
 	} else {
 		tminCheck <- FALSE
 	}
 
 	#check tmax
-	tmaxFiles <- grep('tmax_\\d\\d?', files, value = TRUE)
-	tmaxFiles <- gsub('(tmax_\\d\\d?)(\\.\\w+$)', '\\1', tmaxFiles)
-	if (all(paste0('tmax_', 1:12) %in% tmaxFiles) & length(tmaxFiles) == 12) {
+	xx <- paste0(.var$tmax, '\\d\\d?')
+	tmaxFiles <- grep(xx, files, value = TRUE)
+	tmaxFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', tmaxFiles)
+	tmaxFiles <- tmaxFiles[order(as.numeric(gsub(paste0('(', .var$tmax, ')', '([0-9]+)$'), '\\2', tmaxFiles)))]
+	if ((all(paste0(.var$tmax, 1:12) %in% tmaxFiles) | all(paste0(.var$tmax, sprintf("%02d", 1:12)) %in% tmaxFiles)) & length(tmaxFiles) == 12) {
 		tmaxCheck <- TRUE
 	} else {
 		tmaxCheck <- FALSE
 	}
 
 	#check tmean
-	tmeanFiles <- grep('tmean_\\d\\d?', files, value = TRUE)
-	tmeanFiles <- gsub('(tmean_\\d\\d?)(\\.\\w+$)', '\\1', tmeanFiles)
-	if (all(paste0('tmean_', 1:12) %in% tmeanFiles) & length(tmeanFiles) == 12) {
+	xx <- paste0(.var$tmean, '\\d\\d?')
+	tmeanFiles <- grep(xx, files, value = TRUE)
+	tmeanFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', tmeanFiles)
+	tmeanFiles <- tmeanFiles[order(as.numeric(gsub(paste0('(', .var$tmean, ')', '([0-9]+)$'), '\\2', tmeanFiles)))]
+	if ((all(paste0(.var$tmean, 1:12) %in% tmeanFiles) | all(paste0(.var$tmean, sprintf("%02d", 1:12)) %in% tmeanFiles)) & length(tmeanFiles) == 12) {
 		tmeanCheck <- TRUE
 	} else {
 		tmeanCheck <- FALSE
 	}
 
 	#check solrad
-	solradFiles <- grep('et_solrad_\\d\\d?', files, value = TRUE)
-	solradFiles <- gsub('(et_solrad_\\d\\d?)(\\.\\w+$)', '\\1', solradFiles)
-	if (all(paste0('et_solrad_', 1:12) %in% solradFiles) & length(solradFiles) == 12) {
+	xx <- paste0(.var$solrad, '\\d\\d?')
+	solradFiles <- grep(xx, files, value = TRUE)
+	solradFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', solradFiles)
+	solradFiles <- solradFiles[order(as.numeric(gsub(paste0('(', .var$solrad, ')', '([0-9]+)$'), '\\2', solradFiles)))]
+	if ((all(paste0(.var$solrad, 1:12) %in% solradFiles) | all(paste0(.var$solrad, sprintf("%02d", 1:12)) %in% solradFiles)) & length(solradFiles) == 12) {
 		solradCheck <- TRUE
 	} else {
 		solradCheck <- FALSE

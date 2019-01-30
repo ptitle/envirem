@@ -75,12 +75,14 @@ monthlyPET <- function(Tmean, RA, TD, tempScale = 1) {
 
 	names(TD) <- names(Tmean)
 	
-	Tmean <- Tmean[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(Tmean))))]]
-	RA <- RA[[order(as.numeric(gsub("et_solrad_([0-9]+)$", "\\1", names(RA))))]]
-	TD <- TD[[order(as.numeric(gsub("[a-zA-Z]+_([0-9]+)$", "\\1", names(TD))))]]
+	Tmean <- Tmean[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(Tmean))))]]
+	RA <- RA[[order(as.numeric(gsub(paste0(.var$solrad, '([0-9]+)$'), "\\1", names(RA))))]]
+	TD <- TD[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(TD))))]]
 	
-	Tmean <- Tmean / tempScale
-	TD <- TD / tempScale
+	if (tempScale != 1) {
+		Tmean <- Tmean / tempScale
+		TD <- TD / tempScale
+	}
 	
 	res <- 0.0023 * (RA * 30) * (Tmean + 17.8) * TD ^ 0.5
 	for (i in 1:raster::nlayers(res)) {

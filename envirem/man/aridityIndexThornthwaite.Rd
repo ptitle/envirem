@@ -47,7 +47,13 @@ pet <- monthlyPET(meantemp, solar, tempRange)
 precip <- grep('prec', names(env), value=TRUE)
 precip <- stack(env[[precip]])
 
+# set up naming scheme - only precip is different from default
+assignNames(precip = 'prec_')
+
 aridityIndexThornthwaite(precip, pet)
+
+# set back to defaults
+assignNames(reset = TRUE)
 }
 
 }

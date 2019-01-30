@@ -7,14 +7,14 @@
 ##' 
 ##' @references \url{http://envirem.github.io}
 ##'
-##' Title, P.O., Bemmels, J.B. 2017. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. Ecography doi: 10.1111/ecog.02880.
+##' Title, P.O., Bemmels, J.B. 2018. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. Ecography 41:291–307.
 ##' 
 ##' @details
 ##' 
 ##' Package: envirem\cr
 ##' Type: Package\cr
-##' Version: 1.2\cr
-##' Date: 2018-03-06\cr
+##' Version: 1.4\cr
+##' Date: 2019-01-29\cr
 ##' License: GPL-2 | GPL-3\cr
 ##'
 ##' \strong{NOTE}: Temperature rasters are now assumed by default to be in degrees C. However, 
@@ -49,7 +49,7 @@
 ##' @docType package
 ##' @keywords package
 ##'
-##' @import raster RSAGA
+##' @import raster RSAGA palinsol
 ##' @importFrom stats sd
 ##'
 NULL

@@ -6,8 +6,8 @@
 \usage{
 generateRasters(var, maindir, resName, timeName, outputDir,
   rasterExt = ".tif", nTiles = 1, tempScale = 1,
-  overwriteResults = TRUE, outputFormat = "GTiff", tempDir = "~/temp",
-  gdalinfoPath = NULL, gdal_translatePath = NULL)
+  overwriteResults = TRUE, outputFormat = "GTiff",
+  tempDir = "~/temp", gdalinfoPath = NULL, gdal_translatePath = NULL)
 }
 \arguments{
 \item{var}{a vector of variable names to generate, see Details.}

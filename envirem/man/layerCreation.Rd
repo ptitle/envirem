@@ -8,7 +8,8 @@ layerCreation(masterstack, solradstack, var, tempScale = 1)
 }
 \arguments{
 \item{masterstack}{rasterStack containing all precipitation, 
-min temperature, max temperature and bioclimatic variables}
+min temperature, max temperature, (mean temperature) and 
+bioclimatic variables}
 
 \item{solradstack}{rasterStack of monthly solar radiation}
 
@@ -69,8 +70,14 @@ solradFiles <- grep('solrad', rasterFiles, value=TRUE)
 worldclim <- stack(setdiff(rasterFiles, solradFiles))
 solar <- stack(solradFiles)
 
+# set up naming scheme - only precip is different from default
+assignNames(precip = 'prec_')
+
 # generate all possible envirem variables
 layerCreation(worldclim, solar, var='all', tempScale = 10)
+
+# set back to defaults
+assignNames(reset = TRUE)
 }
 }
 \seealso{
