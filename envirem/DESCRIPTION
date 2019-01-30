@@ -6,7 +6,7 @@ Date: 2019-01-29
 Author: Pascal O. Title, Jordan B. Bemmels
 Maintainer: Pascal Title <ptitle@umich.edu>
 Depends: raster, palinsol
-Imports: RSAGA, sp
+Imports: RSAGA, sp, methods
 Suggests: rgdal
 Description: Generation of bioclimatic rasters that will be particularly 
 	useful for species distribution modeling. 
@@ -17,3 +17,4 @@ NeedsCompilation: yes
 Encoding: UTF-8
 RoxygenNote: 6.1.1
 ByteCompile: true
+LazyData: true
