@@ -86,15 +86,15 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 	if (!is.null(masterstack)) {
 		#naming checks	
 		if (any(grepl(.var$tmean, names(masterstack)))) {
-			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, ')'), "\\2", names(masterstack))
+			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
 		} else {
-			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', '|', .var$precip_post, ')'), "\\2", names(masterstack))
+			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
 		}
 		
 		for (i in 1:9) {
 			ind <- which(newnameNums == as.character(i))
 			if (length(ind) > 0) {
-				reg <- paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, ')')
+				reg <- paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)')
 				tag <- gsub(reg, "\\1", names(masterstack)[ind])
 				numTag <- gsub(reg, "\\2",names(masterstack)[ind])
 				postTag <- gsub(reg, "\\3", names(masterstack)[ind])
@@ -153,7 +153,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 
 	if (!is.null(solradstack)) {
 		# now solrad
-		reg <- paste0('(', .var$solrad, ')', '([0-9]+)', '(', .var$solrad_post, ')')
+		reg <- paste0('(', .var$solrad, ')', '([0-9]+)', '(', .var$solrad_post, '$)')
 		newnameNums <- gsub(reg, "\\2", names(solradstack))
 		for (i in 1:9) {
 			ind <- which(newnameNums == as.character(i))
