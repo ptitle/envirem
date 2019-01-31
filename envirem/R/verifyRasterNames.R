@@ -81,6 +81,8 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		stop('Either masterstack or solradstack must be provided.')
 	}
 	
+	problem <- FALSE
+	
 	if (!is.null(masterstack)) {
 		#naming checks	
 		if (any(grepl(.var$tmean, names(masterstack)))) {
@@ -117,6 +119,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			} else {
 				
 				missingVar <- c()
+				problem <- TRUE
 				if (!all(expectednames$tmin %in% names(masterstack))) {
 					missingVar <- c(missingVar, setdiff(expectednames$tmin, names(masterstack)))
 				}
@@ -162,6 +165,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		
 		expectedSolRad <- paste0(.var$solrad, sprintf("%02d", 1:12), .var$solrad_post)
 		if (!identical(sort(expectedSolRad), sort(names(solradstack)))) {
+			problem <- TRUE
 			missingSolRad <- setdiff(expectedSolRad, names(solradstack))
 			
 			if (returnRasters) {
@@ -181,7 +185,9 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			return(solradstack)
 		}
 	} else {
-		cat('\t\tNames appear to be correct!\n')
+		if (!problem) {
+			cat('\t\tNames appear to be correct!\n')
+		}
 	}
 }
 

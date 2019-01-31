@@ -33,6 +33,6 @@ varnames <- function() {
 
 	cat('\n')
 	huxtable::print_screen(vartable)
-	cat('\n\n\tTo change these values, see ?assignNames.')
+	cat('\n\n\tTo change these values, see ?assignNames.\n')
 	
 }
