@@ -39,7 +39,7 @@ monthCountByTemp <- function(tempStack, minTemp = 10, tempScale = 1) {
 		stop('tempStack does not appear to have the naming scheme defined for tmean. See ?assignNames.')
 	}
 	
-	tempStack <- tempStack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(tempStack))))]]
+	tempStack <- tempStack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)', .var$tmean_post), "\\1", names(tempStack))))]]
 	
 	if (tempScale != 1) {	
 		tempStack <- tempStack / tempScale

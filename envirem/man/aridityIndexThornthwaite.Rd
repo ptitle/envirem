@@ -9,7 +9,8 @@ aridityIndexThornthwaite(precipStack, PETstack)
 \arguments{
 \item{precipStack}{rasterStack of monthly precipitation.}
 
-\item{PETstack}{rasterStack of monthly potential evapotranspiration.}
+\item{PETstack}{rasterStack of monthly potential evapotranspiration. 
+Layer names are assumed to end in the month number.}
 }
 \value{
 RasterLayer, unitless
@@ -48,7 +49,7 @@ precip <- grep('prec', names(env), value=TRUE)
 precip <- stack(env[[precip]])
 
 # set up naming scheme - only precip is different from default
-assignNames(precip = 'prec_')
+assignNames(precip = 'prec_##')
 
 aridityIndexThornthwaite(precip, pet)
 

@@ -46,7 +46,7 @@ defined via the custom naming environment. See \code{link{?assignNames}}
 for additional details.
 
 The function can test the temp/precip rasterstack
-and/or the solar radiation rasterstack separately.
+and/or the solar radiation rasterstack separately, or simultaneously.
 }
 \examples{
 # Find example rasters
@@ -60,6 +60,7 @@ solar <- stack(solradFiles)
 
 # modify naming
 names(worldclim) <- gsub('tmin_', 'minTemp', names(worldclim))
+names(worldclim) <- paste0(names(worldclim), '_v1.0')
 names(solar) <- gsub('et_solrad_', 'solar_', names(solar))
 
 # but don't specify this change
@@ -69,7 +70,7 @@ varnames()
 verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
 
 # But if we specify our naming scheme
-assignNames(tmin = 'minTemp', solrad = 'solar_', precip = 'prec_')
+assignNames(tmin = 'minTemp##', solrad = 'solar_##', precip = 'prec_##')
 varnames()
 
 verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)

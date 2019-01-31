@@ -71,7 +71,7 @@ worldclim <- stack(setdiff(rasterFiles, solradFiles))
 solar <- stack(solradFiles)
 
 # set up naming scheme - only precip is different from default
-assignNames(precip = 'prec_')
+assignNames(precip = 'prec_##')
 
 # generate all possible envirem variables
 layerCreation(worldclim, solar, var='all', tempScale = 10)

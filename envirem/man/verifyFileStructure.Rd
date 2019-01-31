@@ -25,17 +25,21 @@ functions to work properly.
 This function searches for the following
 in the directory specified by \code{path}:
 
-19 bioclimatic variables (default naming: bio_)
+19 bioclimatic variables
 	
-12 precipitation rasters (default naming: precip_)
+12 precipitation rasters
 
-12 min temperature rasters (default naming: tmin_)
+12 min temperature rasters
 
-12 max temperature rasters (default naming: tmax_)
+12 max temperature rasters
 
-12 mean temperature rasters [optional] (default naming: tmean_)
+12 mean temperature rasters [optional]
 
-12 solar radiation rasters (default naming: et_solrad_)
+12 solar radiation rasters
+
+The naming scheme will be checked against the one 
+defined via the custom naming environment. See \code{link{?assignNames}}
+for additional details.
 
 An equivalent function for checking the names of rasters in R can be 
 found at \code{\link{verifyRasterNames}}. 

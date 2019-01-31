@@ -66,7 +66,7 @@
 ##' solar <- stack(solradFiles)
 ##'
 ##' # set up naming scheme - only precip is different from default
-##' assignNames(precip = 'prec_')
+##' assignNames(precip = 'prec_##')
 ##' 
 ##' # generate all possible envirem variables
 ##' layerCreation(worldclim, solar, var='all', tempScale = 10)
@@ -120,10 +120,10 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	precipstack <- masterstack[[grep(.var$precip, names(masterstack), value = TRUE)]]
 	
 	#enforce ordering
-	tminstack <- tminstack[[order(as.numeric(gsub(paste0(.var$tmin, '([0-9]+)$'), "\\1", names(tminstack))))]]
-	tmaxstack <- tmaxstack[[order(as.numeric(gsub(paste0(.var$tmax, '([0-9]+)$'), "\\1", names(tmaxstack))))]]
-	precipstack <- precipstack[[order(as.numeric(gsub(paste0(.var$precip, '([0-9]+)$'), "\\1", names(precipstack))))]]
-	solradstack <- solradstack[[order(as.numeric(gsub(paste0(.var$solrad, '([0-9]+)$'), "\\1", names(solradstack))))]]
+	tminstack <- tminstack[[order(as.numeric(gsub(paste0(.var$tmin, '([0-9]+)', .var$tmin_post), "\\1", names(tminstack))))]]
+	tmaxstack <- tmaxstack[[order(as.numeric(gsub(paste0(.var$tmax, '([0-9]+)', .var$tmax_post), "\\1", names(tmaxstack))))]]
+	precipstack <- precipstack[[order(as.numeric(gsub(paste0(.var$precip, '([0-9]+)', .var$precip_post), "\\1", names(precipstack))))]]
+	solradstack <- solradstack[[order(as.numeric(gsub(paste0(.var$solrad, '([0-9]+)', .var$solrad_post), "\\1", names(solradstack))))]]
 	
 	# adjust temperature rasters to degrees C
 	if (tempScale != 1) {
@@ -132,7 +132,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	
 		# bioclim 1,2,4,5,6,7,8,9,10,11 are affected by tempScale
 		for (i in c(1, 2, 4, 5, 6, 7, 8, 9, 10, 11)) {
-			masterstack[[grep(paste0(.var$bio, sprintf("%02d$", i)), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, sprintf("%02d$", i)), names(masterstack))]] / tempScale
+			masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] / tempScale
 		}	
 	}
 	
@@ -143,7 +143,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 		names(tmeanstack) <- gsub(.var$tmax, .var$tmean, names(tmaxstack))
 	} else {
 		tmeanstack <- masterstack[[grep(.var$tmean, names(masterstack), value = TRUE)]]
-		tmeanstack <- tmeanstack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)$'), "\\1", names(tmeanstack))))]]
+		tmeanstack <- tmeanstack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)', .var$tmean_post), "\\1", names(tmeanstack))))]]
 		if (tempScale != 1) {
 			tmeanstack <- tmeanstack / tempScale
 		}
@@ -190,14 +190,14 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	#Compensated Thermicity Index
 	if ('thermicityIndex' %in% var) {
 		cat('\t\t...thermicity index...\n')
-		thermInd <- thermicityIndex(annualTemp=masterstack[[grep(paste0(.var$bio, '01'), names(masterstack))]], minTemp=masterstack[[grep(paste0(.var$bio, '06'), names(masterstack))]], maxTemp=tempExtremes[[1]], continentality = ci)
+		thermInd <- thermicityIndex(annualTemp=masterstack[[grep(paste0(.var$bio, '01', .var$bio_post), names(masterstack))]], minTemp=masterstack[[grep(paste0(.var$bio, '06', .var$bio_post), names(masterstack))]], maxTemp=tempExtremes[[1]], continentality = ci)
 		reslist[['thermicityIndex']] <- thermInd
 	}
 
 	#Emberger's pluviothermic quotient
 	if ('embergerQ' %in% var) {
 		cat("\t\t...emberger's Q...\n")
-		emberger <- embergerQ(masterstack[[grep(paste0(.var$bio, '12'), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '05'), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '06'), names(masterstack))]])
+		emberger <- embergerQ(masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '05', .var$bio_post), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '06', .var$bio_post), names(masterstack))]])
 		reslist[['embergerQ']] <- emberger
 	}
 
@@ -240,7 +240,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 	#climatic moisture index
 	if ('climaticMoistureIndex' %in% var) {
 		cat('\t\t...climatic moisture index...\n')
-		cmi <- climaticMoistureIndex(masterstack[[grep(paste0(.var$bio, '12'), names(masterstack))]], annualPET)
+		cmi <- climaticMoistureIndex(masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]], annualPET)
 		reslist[['climaticMoistureIndex']] <- cmi
 	}
 	

@@ -51,5 +51,6 @@
 ##'
 ##' @import raster RSAGA palinsol
 ##' @importFrom stats sd
+##' @importFrom huxtable hux print_screen
 ##'
 NULL
