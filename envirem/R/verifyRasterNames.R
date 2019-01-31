@@ -109,7 +109,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			names(expectednames)[5] <- 'tmean'
 		}		
 		
-		if (!identical(sort(unlist(expectednames)), sort(names(masterstack)))) {
+		if (!identical(sort(as.character(unlist(expectednames))), sort(names(masterstack)))) {
 			
 			if (all(unlist(expectednames) %in% names(masterstack))) {
 				extraVar <- setdiff(names(masterstack), unlist(expectednames))
@@ -143,9 +143,9 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 				}
 				
 				if (returnRasters) {
-					stop('The following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.')
+					stop('The following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.\n')
 				} else {
-					cat('\tThe following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.')
+					cat('\tThe following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.\n')
 				}
 			}			
 		}		
@@ -169,9 +169,9 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			missingSolRad <- setdiff(expectedSolRad, names(solradstack))
 			
 			if (returnRasters) {
-				stop('solradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.')
+				stop('solradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')
 			 } else {
-				cat('\tsolradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.')
+				cat('\tsolradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')
 			}
 		}
 	}
