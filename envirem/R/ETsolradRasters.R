@@ -68,7 +68,7 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL) {
 	# for each month, calculate insolation and fill raster
 	for (i in 1:12) {
 		
-		# cat(i, '\n')	
+		cat(i, '')	
 		RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
 		ras <- raster::raster(rasterTemplate)
 		tmp <- rep(RA, each = raster::ncol(rasterTemplate))
