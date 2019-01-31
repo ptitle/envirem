@@ -8,6 +8,7 @@
 ##' @param year The year solar radiation should be calculated for. See details.
 ##'
 ##' @param outputDir destination directory for rasters, can be \code{NULL}
+##' 
 ##'
 ##' @details Given the latitude values of the cells found in the raster template
 ##' 	and the year, monthly extraterrestrial solar radiation can be calculated,
@@ -93,10 +94,11 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL) {
 	} else {
 
 		outputDir <- gsub('/?$', '/', outputDir)
+		tifOptions <- c("COMPRESS=DEFLATE", "PREDICTOR=2", "ZLEVEL=6")
 		
 		for (i in 1:raster::nlayers(solradStack)) {
 			outputName <- paste0(outputDir, names(solradStack)[i], '.tif')
-			raster::writeRaster(solradStack[[i]], outputName, datatype = 'FLT4S', NAflag = -9999)	
+			raster::writeRaster(solradStack[[i]], outputName, datatype = 'FLT4S', NAflag = -9999, options = tifOptions)	
 		}
 	}
 }
