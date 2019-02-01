@@ -13,7 +13,10 @@
 ##' @param var vector of names of variables to generate, see Details.
 ##'
 ##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
-##' 	additional details. 
+##' 	additional details.
+##'
+##'	@param precipScale integer; scaling factor for the precipitation data, see \link{envirem}
+##' 	for additional details. 
 ##' 
 ##' @details The function \code{\link{verifyFileStructure}} should be used to 
 ##' verify that the appropriate rasters are present in \code{masterstack}.
@@ -82,7 +85,7 @@
 # Function takes stack of precip, mintemp, maxtemp, bioclim, and a stack of solar radiation, and generates rasterstack of new variables
 # var is a vector of variable names that will be generated. 
 
-layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
+layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipScale = 1) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -131,9 +134,19 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1) {
 		tmaxstack <- tmaxstack / tempScale
 	
 		# bioclim 1,2,4,5,6,7,8,9,10,11 are affected by tempScale
-		for (i in c(1, 2, 4, 5, 6, 7, 8, 9, 10, 11)) {
+		# but only bioclim 1,5,6 used in formulae
+		for (i in c(1, 5, 6)) {
 			masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] / tempScale
 		}	
+	}
+
+	# adjust precipitation rasters to mm
+	if (precipScale != 1) {
+		precipstack <- precipstack / precipScale
+	
+		# bioclim 12,13,14,15?,16,17,18,19 are affected by precipScale
+		# but only 12 is used in any envirem formulae
+		masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]] / precipScale	
 	}
 	
 	# if tmean not already present in stack, then calculate it from tmin and tmax

@@ -4,12 +4,15 @@
 \alias{climaticMoistureIndex}
 \title{Climatic Moisture Index}
 \usage{
-climaticMoistureIndex(annualPrecip, PET)
+climaticMoistureIndex(annualPrecip, PET, precipScale = 1)
 }
 \arguments{
-\item{annualPrecip}{rasterLayer of annual precipitation}
+\item{annualPrecip}{rasterLayer of annual precipitation (bioclim 12)}
 
 \item{PET}{rasterLayer of annual potential evapotranspiration}
+
+\item{precipScale}{integer; scaling factor for the precipitation data, see \link{envirem}
+for additional details.}
 }
 \value{
 rasterLayer ranging from -1 to +1.

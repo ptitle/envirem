@@ -4,7 +4,7 @@
 \alias{embergerQ}
 \title{Emberger's pluviometric quotient}
 \usage{
-embergerQ(P, M, m, tempScale = 1)
+embergerQ(P, M, m, tempScale = 1, precipScale = 1)
 }
 \arguments{
 \item{P}{rasterLayer, mean annual precipitation}
@@ -15,6 +15,9 @@ embergerQ(P, M, m, tempScale = 1)
 
 \item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
 additional details.}
+
+\item{precipScale}{integer; scaling factor for the precipitation data, see \link{envirem}
+for additional details.}
 }
 \value{
 rasterLayer in mm / degrees C

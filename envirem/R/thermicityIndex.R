@@ -14,7 +14,7 @@
 ##'
 ##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
 ##' 	additional details. 
-
+##'
 ##'
 ##' @details 	thermicity index = tempRange + minTemp + maxTemp
 ##'

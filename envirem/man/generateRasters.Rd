@@ -5,7 +5,7 @@
 \title{Execute Layer Creation}
 \usage{
 generateRasters(var, maindir, resName, timeName, outputDir,
-  rasterExt = ".tif", nTiles = 1, tempScale = 1,
+  rasterExt = ".tif", nTiles = 1, tempScale = 1, precipScale = 1,
   overwriteResults = TRUE, outputFormat = "GTiff",
   tempDir = "~/temp", gdalinfoPath = NULL, gdal_translatePath = NULL)
 }
@@ -29,6 +29,9 @@ tiling is requested, must be a perfect square}
 
 \item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
 additional details.}
+
+\item{precipScale}{integer; scaling factor for the precipitation data, see \link{envirem}
+for additional details.}
 
 \item{overwriteResults}{logical, should existing rasters be overwritten}
 

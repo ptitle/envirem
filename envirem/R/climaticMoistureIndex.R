@@ -2,9 +2,12 @@
 ##'
 ##' @description Generate climatic moisture index.
 ##'
-##' @param annualPrecip rasterLayer of annual precipitation
+##' @param annualPrecip rasterLayer of annual precipitation (bioclim 12)
 
 ##' @param PET rasterLayer of annual potential evapotranspiration
+##'
+##'	@param precipScale integer; scaling factor for the precipitation data, see \link{envirem}
+##' 	for additional details. 
 ##'
 ##' @details \code{P/PET - 1} when \code{P < PET} \cr
 ##' \code{1 - PET/P} when \code{P >= PET}
@@ -57,7 +60,11 @@
 ## cmi = 1 - (PET / P) when P >= PET
 ### where P = annual precipitation, PET = potential evapotranspiration
 
-climaticMoistureIndex <- function(annualPrecip, PET) {
+climaticMoistureIndex <- function(annualPrecip, PET, precipScale = 1) {
+	
+	if (precipScale != 1) {
+		raster::values(annualPrecip) <- raster::values(annualPrecip) / precipScale
+	}
 	
 	ind <- annualPrecip < PET
 	cmi <- raster::raster(ext = raster::extent(annualPrecip), resolution = raster::res(annualPrecip))

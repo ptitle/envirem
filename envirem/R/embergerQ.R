@@ -11,6 +11,9 @@
 ##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
 ##' 	additional details. 
 ##'
+##'	@param precipScale integer; scaling factor for the precipitation data, see \link{envirem}
+##' 	for additional details. 
+##'
 ##' @details \code{Q = 2000 P / [(M + m + 546.4) * (M - m)]}
 ##'
 ##' @return rasterLayer in mm / degrees C
@@ -35,11 +38,19 @@
 # P = mean annual precip
 # M = mean max temp of warmest month
 # m = mean min temp of coldest month
-embergerQ <- function(P, M, m, tempScale = 1) {
+embergerQ <- function(P, M, m, tempScale = 1, precipScale = 1) {
 	
-	#switch to 1 deg Celsius
-	raster::values(M) <- raster::values(M) / tempScale
-	raster::values(m) <- raster::values(m) / tempScale
+	#switch to 1 deg Celsius for temp
+	if (tempScale != 1) {
+		raster::values(M) <- raster::values(M) / tempScale
+		raster::values(m) <- raster::values(m) / tempScale
+	}
+	
+	# switch to mm for precip
+	if (precipScale != 1) {
+		raster::values(P) <- raster::values(P) / precipScale
+	}
+	
 	res <- 2000 * P / ((M + m + 546.4) * (M - m))
 	names(res) <- 'embergerQ'
 	return(res)

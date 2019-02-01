@@ -4,7 +4,8 @@
 \alias{layerCreation}
 \title{Creates all layers}
 \usage{
-layerCreation(masterstack, solradstack, var, tempScale = 1)
+layerCreation(masterstack, solradstack, var, tempScale = 1,
+  precipScale = 1)
 }
 \arguments{
 \item{masterstack}{rasterStack containing all precipitation, 
@@ -17,6 +18,9 @@ bioclimatic variables}
 
 \item{tempScale}{integer; scaling factor for the temperature data, see \link{envirem} for 
 additional details.}
+
+\item{precipScale}{integer; scaling factor for the precipitation data, see \link{envirem}
+for additional details.}
 }
 \value{
 rasterStack

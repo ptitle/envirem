@@ -26,6 +26,9 @@
 ##'	@param tempScale integer; scaling factor for the temperature data, see \link{envirem} for 
 ##' 	additional details. 
 ##'
+##'	@param precipScale integer; scaling factor for the precipitation data, see \link{envirem}
+##' 	for additional details. 
+##'
 ##' @param overwriteResults logical, should existing rasters be overwritten
 ##'
 ##' @param outputFormat output format for rasters, see \code{\link{writeRaster}} for options
@@ -91,7 +94,7 @@
 
 
 
-generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, tempScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL) {
+generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -166,7 +169,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 
 		clim <- raster::dropLayer(clim, which(grepl(.var$solrad, names(clim)) == TRUE))
 
-		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale)
+		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
 		
 		# write to disk
 		for (i in 1:nlayers(res)) {
@@ -211,11 +214,11 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			names(clim) <- gsub(tilename, '', names(clim))
 
 			#pull out solar radiation rasters and create new stack
-			solrad <- clim[[which(grepl('solrad', names(clim)) == TRUE)]]
+			solrad <- clim[[which(grepl(.var$solrad, names(clim)) == TRUE)]]
 
-			clim <- raster::dropLayer(clim, which(grepl('solrad', names(clim)) == TRUE))
+			clim <- raster::dropLayer(clim, which(grepl(.var$solrad, names(clim)) == TRUE))
 
-			res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale)
+			res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
 			names(res) <- paste(names(res), tilename, sep = '')
 
 			# write to disk
@@ -227,6 +230,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 	
 			#delete raster-package generated tmp files
 			raster::removeTmpFiles(h = 0)
+			gc()
 		}
 
 		# Combine tiles
