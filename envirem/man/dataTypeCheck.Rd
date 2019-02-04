@@ -16,7 +16,7 @@ Determines the best data type to implement when writing the raster to file
 Function to determine the most memory efficient data type given whether
 or not the raster contains integer or non-integer values,
 and the range of those values, based on the definitions described
-in \code{\link{dataType}}.
+in \code{\link[raster]{dataType}}.
 }
 \examples{
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)

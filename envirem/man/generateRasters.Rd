@@ -7,7 +7,8 @@
 generateRasters(var, maindir, resName, timeName, outputDir,
   rasterExt = ".tif", nTiles = 1, tempScale = 1, precipScale = 1,
   overwriteResults = TRUE, outputFormat = "GTiff",
-  tempDir = "~/temp", gdalinfoPath = NULL, gdal_translatePath = NULL)
+  tempDir = "~/temp", gdalinfoPath = NULL, gdal_translatePath = NULL,
+  useCompression = TRUE)
 }
 \arguments{
 \item{var}{a vector of variable names to generate, see Details.}
@@ -37,11 +38,14 @@ for additional details.}
 
 \item{outputFormat}{output format for rasters, see \code{\link{writeRaster}} for options}
 
-\item{tempDir}{temporary directory that will be created and then removed}
+\item{tempDir}{temporary directory for raster tiles that will be created and then removed}
 
 \item{gdalinfoPath}{path to gdalinfo binary, leave as \code{NULL} if it is in the default search path.}
 
 \item{gdal_translatePath}{path to gdal_translate binary, leave as \code{NULL} if it is in the default search path.}
+
+\item{useCompression}{logical; should compression options be used to achieve smaller file sizes.
+Only pertains to format GTiff.}
 }
 \value{
 The requested set of rasterLayers will be written to \code{outputDir}.
@@ -91,6 +95,15 @@ inferred with \code{\link{dataTypeCheck}}. This will reduce the file size of the
 
 If the goal is to use these rasters with the standalone Maxent program, we recommend 
 \code{outputFormat = 'EHdr'}.
+
+\strong{IMPORTANT}: Temporary files can quickly fill up your hard drive when working with
+	large rasters. There are two temporary directories to consider for this function: The
+	\code{tempDir} directory defined as an argument in this function is used for storing
+	intermediate files when splitting rasters into tiles (and is ignored if \code{nTiles = 1}).
+	The raster package will use another directory for storing temporary rasters. This can be 
+	can be viewed with \code{rasterOptions()}, and can be set with 
+	\code{rasterOptions(tmpdir = 'path-to-dir')}. Be sure that this is pointing to a directory
+	with plenty of available space. Both temporary directories are automatically cleared.
 }
 \seealso{
 Naming of rasters in inputDir will be checked with \code{\link{verifyFileStructure}}.

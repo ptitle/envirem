@@ -9,7 +9,7 @@
 ##' Function to determine the most memory efficient data type given whether
 ##' or not the raster contains integer or non-integer values,
 ##' and the range of those values, based on the definitions described
-##' in \code{\link{dataType}}. 
+##' in \code{\link[raster]{dataType}}. 
 ##'
 ##' @author Pascal Title
 ##'

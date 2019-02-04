@@ -33,11 +33,14 @@
 ##'
 ##' @param outputFormat output format for rasters, see \code{\link{writeRaster}} for options
 ##'
-##' @param tempDir temporary directory that will be created and then removed
+##' @param tempDir temporary directory for raster tiles that will be created and then removed
 ##'
 ##' @param gdalinfoPath path to gdalinfo binary, leave as \code{NULL} if it is in the default search path.
 ##'
 ##' @param gdal_translatePath path to gdal_translate binary, leave as \code{NULL} if it is in the default search path.
+##'
+##' @param useCompression logical; should compression options be used to achieve smaller file sizes.
+##' 	Only pertains to format GTiff.
 ##'
 ##'
 ##' @details 
@@ -79,6 +82,15 @@
 ##'
 ##' If the goal is to use these rasters with the standalone Maxent program, we recommend 
 ##' \code{outputFormat = 'EHdr'}.
+##' 
+##' \strong{IMPORTANT}: Temporary files can quickly fill up your hard drive when working with
+##' 	large rasters. There are two temporary directories to consider for this function: The
+##'		\code{tempDir} directory defined as an argument in this function is used for storing
+##' 	intermediate files when splitting rasters into tiles (and is ignored if \code{nTiles = 1}).
+##'		The raster package will use another directory for storing temporary rasters. This can be 
+##'		can be viewed with \code{rasterOptions()}, and can be set with 
+##' 	\code{rasterOptions(tmpdir = 'path-to-dir')}. Be sure that this is pointing to a directory
+##'		with plenty of available space. Both temporary directories are automatically cleared.
 ##'
 ##' @return The requested set of rasterLayers will be written to \code{outputDir}.
 ##'
@@ -94,7 +106,7 @@
 
 
 
-generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL) {
+generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL, useCompression = TRUE) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -153,6 +165,12 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 	if (length(list.files(outputDir, pattern='.tif$')) > 0 & overwriteResults == FALSE) {
 		stop('Rasters detected in output directory. Either remove them manually, or set overwriteResults to TRUE.')
 	}
+	
+	if (useCompression & outputFormat == 'GTiff') {
+		tifOptions <- c("COMPRESS=DEFLATE", "PREDICTOR=2", "ZLEVEL=6")
+	} else {
+		tifOptions <- NULL
+	}
 
 	cat(toupper(timeName), '--', resName, '\n')
 
@@ -178,8 +196,10 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			if (outputFormat == 'EHdr') {
 				outputName <- paste0(outputName, '.bil')
 			}
+			
 			dtype <- dataTypeCheck(res[[i]])[[2]]
-			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype, NAflag = -9999)	
+						
+			raster::writeRaster(res[[i]], outputName, overwrite = overwriteResults, format = outputFormat, datatype = dtype, NAflag = -9999, options = tifOptions)
 		}
 
 		# # write to disk
@@ -222,7 +242,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			names(res) <- paste(names(res), tilename, sep = '')
 
 			# write to disk
-			raster::writeRaster(res, paste0(tempDir, '/res/temp'), overwrite = TRUE, format = 'GTiff', NAflag = -9999, bylayer = TRUE, suffix = 'names')
+			raster::writeRaster(res, paste0(tempDir, '/res/temp'), overwrite = TRUE, format = 'GTiff', NAflag = -9999, bylayer = TRUE, suffix = 'names', options = tifOptions)
 		
 			#delete tile-specific temp files
 			toRemove <- list.files(path = tempDir, pattern = paste0(tilename, '.tif$'), full.names = TRUE)
@@ -264,6 +284,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			tilelist$format <- outputFormat
 			tilelist$NAflag <- -9999
 			tilelist$overwrite <- overwriteResults
+			tilelist$options <- tifOptions
 
 			m <- do.call(raster::mosaic, tilelist)
 		}
