@@ -183,14 +183,14 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		clim <- raster::stack(files)
 
 		#pull out solar radiation rasters and create new stack
-		solrad <- clim[[which(grepl(.var$solrad, names(clim)) == TRUE)]]
+		solrad <- clim[[grep(.var$solrad, names(clim))]]
 
-		clim <- raster::dropLayer(clim, which(grepl(.var$solrad, names(clim)) == TRUE))
+		clim <- raster::dropLayer(clim, grep(.var$solrad, names(clim)))
 
 		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
 		
 		# write to disk
-		for (i in 1:nlayers(res)) {
+		for (i in 1:raster::nlayers(res)) {
 			outputName <- paste(timeName, resName, sep = '_')
 			outputName <- paste0(outputDir, outputName, '_', names(res)[i])
 			if (outputFormat == 'EHdr') {
@@ -234,9 +234,9 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			names(clim) <- gsub(tilename, '', names(clim))
 
 			#pull out solar radiation rasters and create new stack
-			solrad <- clim[[which(grepl(.var$solrad, names(clim)) == TRUE)]]
+			solrad <- clim[[grep(.var$solrad, names(clim))]]
 
-			clim <- raster::dropLayer(clim, which(grepl(.var$solrad, names(clim)) == TRUE))
+			clim <- raster::dropLayer(clim, grep(.var$solrad, names(clim)))
 
 			res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
 			names(res) <- paste(names(res), tilename, sep = '')
@@ -261,7 +261,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		for (i in 1:length(resRasters)) {
 			cat('\tTiles being combined for', resRasters[i], '...\n')
 			files <- list.files(path = paste0(tempDir, '/res/'), pattern = '.tif$', full.names = TRUE)
-			files <- files[which(grepl(gsub('.tif', '', resRasters[i]), files) == TRUE)]
+			files <- files[grep(gsub('\\.tif', '', resRasters[i]), files)]
 
 			tilelist <- lapply(files, raster::raster)
 
@@ -269,7 +269,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			outputName <- paste(timeName, resName, sep = '_')
 			outputName <- paste0(outputDir, outputName)
 
-			fn <- paste0(outputName, gsub('temp', '', gsub('.tif', '', resRasters[i])))
+			fn <- paste0(outputName, gsub('temp', '', gsub('\\.tif', '', resRasters[i])))
 			
 			# determine data type
 			dtype <- dataTypeCheck(tilelist[[1]])[[2]]
@@ -290,6 +290,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 
 		#cleanup
-		system(paste0("rm -rf ", tempDir))
+		unlink(tempDir, recursive = TRUE)
+		# system(paste0("rm -rf ", tempDir))
 	}	
 }
