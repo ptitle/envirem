@@ -13,7 +13,7 @@
 ##' This function searches for the following
 ##' in the directory specified by \code{path}:
 ##'	
-##'	19 bioclimatic variables
+##'	bioclimatic variables 1, 5, 6 and 12 (only ones required)
 ##'		
 ##'	12 precipitation rasters
 ##'	
@@ -45,20 +45,20 @@
 ##' @author Pascal Title
 ##'
 ##' @examples
+##' rasterPath <- system.file('extdata', package='envirem')
+##'	list.files(rasterPath)
+##'
+##' # Assign naming scheme
+##' assignNames(precip = 'prec_##')
+##' varnames()
+##'
 ##' # As there are no problems with these files, the list of files 
 ##' # will be returned.
-##' verifyFileStructure(system.file('extdata', package='envirem'))
+##' verifyFileStructure(rasterPath)
+##'
+##' assignNames(reset = TRUE)
 ##' @export
 
-
-# Function to verify proper file structure for main functions
-## Expected file structure is:
-### 19 bioclim: bio_1.tif
-### 12 precip: prec_1.tif
-### 12 tmin: tmin_1.tif
-### 12 tmax: tmax_1.tif
-### 12 solar radiation: et_solrad_1.tif
-### tmean not used because may not be available for non-current
 
 verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif') {
 	files <- list.files(path = path, pattern = paste0(rasterExt, '$'))
@@ -72,7 +72,7 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 	bioclimFiles <- grep(xx, files, value = TRUE)
 	bioclimFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', bioclimFiles)
 	bioclimFiles <- bioclimFiles[order(as.numeric(gsub(paste0('(', .var$bio, ')', '([0-9]+)', .var$bio_post), '\\2', bioclimFiles)))]
-	if ((all(paste0(.var$bio, 1:19, .var$bio_post) %in% bioclimFiles) | all(paste0(.var$bio, sprintf("%02d", 1:19), .var$bio_post) %in% bioclimFiles)) & length(bioclimFiles) == 19) {
+	if ((all(paste0(.var$bio, c(1, 5, 6, 12), .var$bio_post) %in% bioclimFiles) | all(paste0(.var$bio, sprintf("%02d", c(1, 5, 6, 12)), .var$bio_post) %in% bioclimFiles))) {
 		bioclimCheck <- TRUE
 	} else {
 		bioclimCheck <- FALSE

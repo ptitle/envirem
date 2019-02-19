@@ -17,7 +17,7 @@
 ##' @details
 ##' This function checks that the following are present:
 ##' 
-##'	19 bioclimatic variables
+##'	bioclimatic variables 1, 5, 6 and 12 (only ones required)
 ##'		
 ##'	12 precipitation rasters
 ##'	
@@ -38,7 +38,8 @@
 ##'
 ##'
 ##' @return Prints messages to the console if \code{returnRasters = FALSE}, 
-##'	If \code{returnRasters = TRUE}, then a RasterStack is returned. 
+##'	If \code{returnRasters = TRUE}, then a RasterStack is returned. This RasterStack
+##' will not include rasters that were deemed unnecessary. 
 ##'
 ##' @author Pascal Title
 ##'
@@ -64,7 +65,8 @@
 ##'	verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
 ##' 
 ##'	# But if we specify our naming scheme
-##' assignNames(tmin = 'minTemp##', solrad = 'solar_##', precip = 'prec_##')
+##' assignNames(tmin = 'minTemp##_v1.0', tmax = 'tmax_##_v1.0', tmean = 'tmean_##_v1.0', 
+##' 	bio = 'bio_##_v1.0', solrad = 'solar_##', precip = 'prec_##_v1.0')
 ##' varnames()
 ##' 
 ##'	verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
@@ -103,7 +105,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		}
 		
 		# are all variables accounted for?
-		expectednames <- list(tmin = paste0(.var$tmin, sprintf("%02d", 1:12), .var$tmin_post), tmax = paste0(.var$tmax, sprintf("%02d", 1:12), .var$tmax_post), precip = paste0(.var$precip, sprintf("%02d", 1:12), .var$precip_post), bio = paste0(.var$bio, sprintf("%02d", 1:19), .var$bio_post))
+		expectednames <- list(tmin = paste0(.var$tmin, sprintf("%02d", 1:12), .var$tmin_post), tmax = paste0(.var$tmax, sprintf("%02d", 1:12), .var$tmax_post), precip = paste0(.var$precip, sprintf("%02d", 1:12), .var$precip_post), bio = paste0(.var$bio, sprintf("%02d", c(1, 5, 6, 12)), .var$bio_post))
 		if (any(grepl(.var$tmean, names(masterstack)))) {
 			expectednames[[5]] <- paste0(.var$tmean, sprintf("%02d", 1:12), .var$tmean_post)
 			names(expectednames)[5] <- 'tmean'
@@ -114,7 +116,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			if (all(unlist(expectednames) %in% names(masterstack))) {
 				extraVar <- setdiff(names(masterstack), unlist(expectednames))
 				masterstack <- raster::dropLayer(masterstack, extraVar)
-				cat('\tIgnoring the following rasters:', paste(extraVar, collapse = ', '), '\n')
+				cat('\tIn masterstack, ignoring the following rasters:', paste(extraVar, collapse = ', '), '\n')
 		
 			} else {
 				
@@ -167,6 +169,12 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		if (!identical(sort(expectedSolRad), sort(names(solradstack)))) {
 			problem <- TRUE
 			missingSolRad <- setdiff(expectedSolRad, names(solradstack))
+			
+			extraVar <- setdiff(names(solradstack), expectedSolRad)
+			if (length(extraVar) > 0) {
+				solradstack <- raster::dropLayer(solradstack, extraVar)
+				cat('\tIn solradstack, ignoring the following rasters:', paste(extraVar, collapse = ', '), '\n')
+			}	
 			
 			if (returnRasters) {
 				stop('solradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')

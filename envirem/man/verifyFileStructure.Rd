@@ -25,7 +25,7 @@ functions to work properly.
 This function searches for the following
 in the directory specified by \code{path}:
 
-19 bioclimatic variables
+bioclimatic variables 1, 5, 6 and 12 (only ones required)
 	
 12 precipitation rasters
 
@@ -52,9 +52,18 @@ If mean temperature rasters are not detected, the raster creation functions
 will create mean temperature by taking the mean of the min and max.
 }
 \examples{
+rasterPath <- system.file('extdata', package='envirem')
+list.files(rasterPath)
+
+# Assign naming scheme
+assignNames(precip = 'prec_##')
+varnames()
+
 # As there are no problems with these files, the list of files 
 # will be returned.
-verifyFileStructure(system.file('extdata', package='envirem'))
+verifyFileStructure(rasterPath)
+
+assignNames(reset = TRUE)
 }
 \author{
 Pascal Title

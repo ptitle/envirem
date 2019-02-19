@@ -20,7 +20,8 @@ standardized names.}
 }
 \value{
 Prints messages to the console if \code{returnRasters = FALSE}, 
-If \code{returnRasters = TRUE}, then a RasterStack is returned.
+If \code{returnRasters = TRUE}, then a RasterStack is returned. This RasterStack
+will not include rasters that were deemed unnecessary.
 }
 \description{
 Given a RasterStack, this function will verify the
@@ -29,7 +30,7 @@ naming scheme and check that all required rasters are present.
 \details{
 This function checks that the following are present:
 
-19 bioclimatic variables
+bioclimatic variables 1, 5, 6 and 12 (only ones required)
 	
 12 precipitation rasters
 
@@ -70,7 +71,8 @@ varnames()
 verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
 
 # But if we specify our naming scheme
-assignNames(tmin = 'minTemp##', solrad = 'solar_##', precip = 'prec_##')
+assignNames(tmin = 'minTemp##_v1.0', tmax = 'tmax_##_v1.0', tmean = 'tmean_##_v1.0', 
+	bio = 'bio_##_v1.0', solrad = 'solar_##', precip = 'prec_##_v1.0')
 varnames()
 
 verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
