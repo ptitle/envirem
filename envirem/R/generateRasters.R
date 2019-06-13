@@ -121,9 +121,9 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 	varRecognized <- var %in% allvar
 	if (!all(varRecognized == TRUE)) {
 		badvar <- which(varRecognized == FALSE)
-		cat('The following variable names were not recognized:\n')
+		message('The following variable names were not recognized:')
 		for (i in 1:length(badvar)) {
-			cat('\t', badvar[i], '\n')
+			message('\t', badvar[i])
 		}
 		stop('\nVariable names must match official set.')
 	}
@@ -172,7 +172,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		tifOptions <- NULL
 	}
 
-	cat(toupper(timeName), '--', resName, '\n')
+	message(toupper(timeName), '--', resName)
 
 	if (nTiles == 1) {
 		# no tiling
@@ -217,7 +217,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		#take each raster and generate tiles, s per raster (ending with tile1, tile2, tile3, tile4)
 		files <- verifyFileStructure(path = maindir, returnFileNames = TRUE, rasterExt = rasterExt)	
 
-		cat('\tSplitting rasters into tiles...\n')
+		message('\tSplitting rasters into tiles...')
 		for (i in 1:length(files)) {
 			split_raster(files[i], s = s, outputDir = tempDir, gdalinfoPath = gdalinfoPath, gdal_translatePath = gdal_translatePath)
 		}
@@ -227,7 +227,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 
 		for (i in 1:nTiles) {
 			tilename <- paste('_tile', i, sep='')
-			cat('\t', tilename, '\n')
+			message('\t', tilename)
 
 			#load rasters
 			clim <- raster::stack(list.files(path = tempDir, pattern = paste(tilename, '.tif$', sep=''), full.names = TRUE))
@@ -254,12 +254,12 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 
 		# Combine tiles
-		cat('\n\tPutting tiles back together...\n\n')
+		message('\n\tPutting tiles back together...\n')
 		resRasters <- list.files(path = paste0(tempDir, '/res/'), pattern='.tif$')
 		resRasters <- unique(gsub("_tile\\d\\d?", "", resRasters))
 
 		for (i in 1:length(resRasters)) {
-			cat('\tTiles being combined for', resRasters[i], '...\n')
+			message('\tTiles being combined for', resRasters[i], '...')
 			files <- list.files(path = paste0(tempDir, '/res/'), pattern = '.tif$', full.names = TRUE)
 			files <- files[grep(gsub('\\.tif', '', resRasters[i]), files)]
 

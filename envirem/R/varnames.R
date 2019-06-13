@@ -31,8 +31,8 @@ varnames <- function() {
 		rep('##', 6),
 		c(.var$bio_post, .var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
 
-	cat('\n')
+	message('')
 	huxtable::print_screen(vartable)
-	cat('\n\n\tTo change these values, see ?assignNames.\n')
+	message('\n\n\tTo change these values, see ?assignNames.')
 	
 }

@@ -116,7 +116,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			if (all(unlist(expectednames) %in% names(masterstack))) {
 				extraVar <- setdiff(names(masterstack), unlist(expectednames))
 				masterstack <- raster::dropLayer(masterstack, extraVar)
-				cat('\tIn masterstack, ignoring the following rasters:', paste(extraVar, collapse = ', '), '\n')
+				message('\tIn masterstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
 		
 			} else {
 				
@@ -147,7 +147,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 				if (returnRasters) {
 					stop('The following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.\n')
 				} else {
-					cat('\tThe following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.\n')
+					message('\tThe following rasters are missing or are not recognized: ', paste(missingVar, collapse = ', '), '\n\tEnsure that you have defined the proper naming scheme. See ?assignNames.')
 				}
 			}			
 		}		
@@ -173,13 +173,13 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			extraVar <- setdiff(names(solradstack), expectedSolRad)
 			if (length(extraVar) > 0) {
 				solradstack <- raster::dropLayer(solradstack, extraVar)
-				cat('\tIn solradstack, ignoring the following rasters:', paste(extraVar, collapse = ', '), '\n')
+				message('\tIn solradstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
 			}	
 			
 			if (returnRasters) {
 				stop('solradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')
 			 } else {
-				cat('\tsolradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')
+				message('\tsolradstack must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.')
 			}
 		}
 	}
@@ -194,7 +194,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		}
 	} else {
 		if (!problem) {
-			cat('\t\tNames appear to be correct!\n')
+			message('\t\tNames appear to be correct!')
 		}
 	}
 }

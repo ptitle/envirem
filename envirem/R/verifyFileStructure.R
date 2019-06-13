@@ -134,24 +134,24 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 	}
 	
 	if (!tmeanCheck) {
-		cat('\ttmean files are not properly named or missing. Tmean will therefore be calculated.\n')
+		message('\ttmean files are not properly named or missing. Tmean will therefore be calculated.')
 	}
 
 	if (!all(bioclimCheck, precipCheck, tminCheck, tmaxCheck, solradCheck)) {
 		if (!bioclimCheck) {
-			cat('\tbioclim files are not properly named.\n')
+			message('\tbioclim files are not properly named.')
 		}
 		if (!precipCheck) {
-			cat('\tprecip files are not properly named.\n')
+			message('\tprecip files are not properly named.')
 		}
 		if (!tminCheck) {
-			cat('\ttmin files are not properly named.\n')
+			message('\ttmin files are not properly named.')
 		}
 		if (!tmaxCheck) {
-			cat('\ttmax files are not properly named.\n')
+			message('\ttmax files are not properly named.')
 		}
 		if (!solradCheck) {
-			cat('\tsolrad files are not properly named.\n')
+			message('\tsolrad files are not properly named.')
 		}
 	} else {
 		if (returnFileNames) {
