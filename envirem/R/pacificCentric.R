@@ -34,7 +34,7 @@ pacificCentric <- function(r, crop = TRUE) {
 	eHemisphere <- raster::extent(0, 180, -90, 90)
 	leftRas <- raster::crop(r, wHemisphere)
 	rightRas <- raster::crop(r, eHemisphere)
-	leftRas <- raster::shift(leftRas, x=360)
+	leftRas <- raster::shift(leftRas, 360)
 	newRas <- raster::raster(xmn=0, xmx=360,ymn=-90,ymx=90, resolution=rep(raster::res(r), 2))
 	origin(rightRas) <- origin(newRas)
 	origin(leftRas) <- origin(newRas)
