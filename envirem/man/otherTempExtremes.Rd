@@ -19,7 +19,7 @@ same units as input rasters.
 }
 \description{
 Generates max temp of the coldest month, min temp of the warmest month, mean temp
-of the coldest month, mean temp of the warmest month.
+	of the coldest month, mean temp of the warmest month.
 }
 \examples{
 \donttest{

@@ -6,13 +6,13 @@
 \alias{envirem-package}
 \title{envirem}
 \description{
-Generation of bioclimatic rasters that are complementary to the WorldClim dataset.
+Generation of bioclimatic rasters that are complementary to the typical 19 bioclim variables.
 }
 \details{
 Package: envirem\cr
 Type: Package\cr
-Version: 1.4\cr
-Date: 2019-01-29\cr
+Version: 2.0\cr
+Date: 2019-06-28\cr
 License: GPL-2 | GPL-3\cr
 
 \strong{NOTE}: Temperature rasters are now assumed by default to be in degrees C and precipitation in mm. 

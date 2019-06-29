@@ -26,10 +26,10 @@ varnames <- function() {
 	# cat('\nto change these values, see ?assignNames.')
 
 
-	vartable <- huxtable::hux(c('bio:','tmin:','tmax:','tmean:','precip:','solrad:'), 
-		c(.var$bio, .var$tmin, .var$tmax, .var$tmean, .var$precip, .var$solrad),
-		rep('##', 6),
-		c(.var$bio_post, .var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
+	vartable <- huxtable::hux(c('tmin:','tmax:','tmean:','precip:','solrad:'), 
+		c(.var$tmin, .var$tmax, .var$tmean, .var$precip, .var$solrad),
+		rep('##', 5),
+		c(.var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
 
 	message('')
 	huxtable::print_screen(vartable)

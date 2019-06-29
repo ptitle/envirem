@@ -23,9 +23,9 @@ Cropping to [100, 300] is equivalent to [100, -60]
 \examples{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-bio1 <- raster(grep('bio_1\\\\.', rasterFiles, value=TRUE))
+tmin1 <- raster(grep('tmin_1\\\\.', rasterFiles, value=TRUE))
 
-pacificCentric(bio1, crop = TRUE)
+pacificCentric(tmin1, crop = TRUE)
 }
 \author{
 Pascal Title

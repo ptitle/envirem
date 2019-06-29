@@ -4,8 +4,7 @@
 ##' naming scheme and check that all required rasters are present.
 ##'
 ##' @param masterstack rasterStack containing all precipitation, 
-##' min temperature, max temperature, (mean temperature) and 
-##' bioclimatic variables
+##' min temperature, max temperature, and (optionally) mean temperature variables. 
 ##'
 ##' @param solradstack rasterStack of monthly solar radiation
 ##'
@@ -17,8 +16,6 @@
 ##' @details
 ##' This function checks that the following are present:
 ##' 
-##'	bioclimatic variables 1, 5, 6 and 12 (only ones required)
-##'		
 ##'	12 precipitation rasters
 ##'	
 ##'	12 min temperature rasters
@@ -66,7 +63,7 @@
 ##' 
 ##'	# But if we specify our naming scheme
 ##' assignNames(tmin = 'minTemp##_v1.0', tmax = 'tmax_##_v1.0', tmean = 'tmean_##_v1.0', 
-##' 	bio = 'bio_##_v1.0', solrad = 'solar_##', precip = 'prec_##_v1.0')
+##' 	solrad = 'solar_##', precip = 'prec_##_v1.0')
 ##' varnames()
 ##' 
 ##'	verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
@@ -88,15 +85,15 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 	if (!is.null(masterstack)) {
 		#naming checks	
 		if (any(grepl(.var$tmean, names(masterstack)))) {
-			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
+			newnameNums <- gsub(paste0('(', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
 		} else {
-			newnameNums <- gsub(paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
+			newnameNums <- gsub(paste0('(', .var$tmin, '|', .var$tmax, '|', .var$precip, ')', '([0-9]+)', '(', .var$tmin_post, '|', .var$tmax_post, '|', .var$precip_post, '$)'), "\\2", names(masterstack))
 		}
 		
 		for (i in 1:9) {
 			ind <- which(newnameNums == as.character(i))
 			if (length(ind) > 0) {
-				reg <- paste0('(', .var$bio, '|', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$bio_post, '|', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)')
+				reg <- paste0('(', .var$tmin, '|', .var$tmax, '|', .var$tmean, '|', .var$precip, ')', '([0-9]+)', '(', .var$tmin_post, '|', .var$tmax_post, '|', .var$tmean_post, '|', .var$precip_post, '$)')
 				tag <- gsub(reg, "\\1", names(masterstack)[ind])
 				numTag <- gsub(reg, "\\2",names(masterstack)[ind])
 				postTag <- gsub(reg, "\\3", names(masterstack)[ind])
@@ -105,7 +102,7 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		}
 		
 		# are all variables accounted for?
-		expectednames <- list(tmin = paste0(.var$tmin, sprintf("%02d", 1:12), .var$tmin_post), tmax = paste0(.var$tmax, sprintf("%02d", 1:12), .var$tmax_post), precip = paste0(.var$precip, sprintf("%02d", 1:12), .var$precip_post), bio = paste0(.var$bio, sprintf("%02d", c(1, 5, 6, 12)), .var$bio_post))
+		expectednames <- list(tmin = paste0(.var$tmin, sprintf("%02d", 1:12), .var$tmin_post), tmax = paste0(.var$tmax, sprintf("%02d", 1:12), .var$tmax_post), precip = paste0(.var$precip, sprintf("%02d", 1:12), .var$precip_post))
 		if (any(grepl(.var$tmean, names(masterstack)))) {
 			expectednames[[5]] <- paste0(.var$tmean, sprintf("%02d", 1:12), .var$tmean_post)
 			names(expectednames)[5] <- 'tmean'
@@ -134,10 +131,6 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 					missingVar <- c(missingVar, setdiff(expectednames$precip, names(masterstack)))
 				}
 				
-				if (!all(expectednames$bio %in% names(masterstack))) {
-					missingVar <- c(missingVar, setdiff(expectednames$bio, names(masterstack)))
-				}
-		
 				if ('tmean' %in% names(expectednames)) {
 					if (!all(expectednames$tmean %in% names(masterstack))) {
 						missingVar <- c(missingVar, setdiff(expectednames$tmean, names(masterstack)))

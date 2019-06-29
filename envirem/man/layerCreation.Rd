@@ -8,9 +8,8 @@ layerCreation(masterstack, solradstack, var, tempScale = 1,
   precipScale = 1)
 }
 \arguments{
-\item{masterstack}{rasterStack containing all precipitation, 
-min temperature, max temperature, (mean temperature) and 
-bioclimatic variables}
+\item{masterstack}{rasterStack containing all monthly precipitation, 
+min temperature, max temperature, and optionally mean temperature rasters.}
 
 \item{solradstack}{rasterStack of monthly solar radiation}
 

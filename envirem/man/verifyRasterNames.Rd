@@ -9,8 +9,7 @@ verifyRasterNames(masterstack = NULL, solradstack = NULL,
 }
 \arguments{
 \item{masterstack}{rasterStack containing all precipitation, 
-min temperature, max temperature, (mean temperature) and 
-bioclimatic variables}
+min temperature, max temperature, and (optionally) mean temperature variables.}
 
 \item{solradstack}{rasterStack of monthly solar radiation}
 
@@ -30,8 +29,6 @@ naming scheme and check that all required rasters are present.
 \details{
 This function checks that the following are present:
 
-bioclimatic variables 1, 5, 6 and 12 (only ones required)
-	
 12 precipitation rasters
 
 12 min temperature rasters
@@ -72,7 +69,7 @@ verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = 
 
 # But if we specify our naming scheme
 assignNames(tmin = 'minTemp##_v1.0', tmax = 'tmax_##_v1.0', tmean = 'tmean_##_v1.0', 
-	bio = 'bio_##_v1.0', solrad = 'solar_##', precip = 'prec_##_v1.0')
+	solrad = 'solar_##', precip = 'prec_##_v1.0')
 varnames()
 
 verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)

@@ -24,9 +24,7 @@ functions to work properly.
 \details{
 This function searches for the following
 in the directory specified by \code{path}:
-
-bioclimatic variables 1, 5, 6 and 12 (only ones required)
-	
+		
 12 precipitation rasters
 
 12 min temperature rasters

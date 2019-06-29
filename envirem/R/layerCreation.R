@@ -4,9 +4,8 @@
 ##' For the distinction between this function and \code{\link{generateRasters}}, 
 ##' see \code{Details}. 
 ##'
-##' @param masterstack rasterStack containing all precipitation, 
-##' min temperature, max temperature, (mean temperature) and 
-##' bioclimatic variables
+##' @param masterstack rasterStack containing all monthly precipitation, 
+##' min temperature, max temperature, and optionally mean temperature rasters.
 ##'
 ##' @param solradstack rasterStack of monthly solar radiation
 ##'
@@ -132,21 +131,6 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	if (tempScale != 1) {
 		tminstack <- tminstack / tempScale
 		tmaxstack <- tmaxstack / tempScale
-	
-		# bioclim 1,2,4,5,6,7,8,9,10,11 are affected by tempScale
-		# but only bioclim 1,5,6 used in formulae
-		for (i in c(1, 5, 6)) {
-			masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, sprintf("%02d", i), .var$bio_post), names(masterstack))]] / tempScale
-		}	
-	}
-
-	# adjust precipitation rasters to mm
-	if (precipScale != 1) {
-		precipstack <- precipstack / precipScale
-	
-		# bioclim 12,13,14,15?,16,17,18,19 are affected by precipScale
-		# but only 12 is used in any envirem formulae
-		masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]] <- masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]] / precipScale	
 	}
 	
 	# if tmean not already present in stack, then calculate it from tmin and tmax
@@ -161,7 +145,29 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 			tmeanstack <- tmeanstack / tempScale
 		}
 	}
-			
+	
+	# Bioclim variables 1, 5, 6, 12 are used for some of the ENVIREM variables.
+	# Calculate those that are needed for the requested variables. 
+	bioclimstack <- vector('list', length = 4)
+	names(bioclimstack) <- c('bio1', 'bio5', 'bio6', 'bio12')
+	if ('thermicityIndex' %in% var) {
+		# bio1 needed: annual mean temperature
+		bioclimstack[['bio1']] <- raster::calc(tmeanstack, fun = mean)
+	}
+	if ('embergerQ' %in% var) {
+		# bio5 needed: max temp of the warmest month
+		bioclimstack[['bio5']] <- raster::calc(tmaxstack, fun = max)
+	}
+	if (any(c('thermicityIndex', 'embergerQ') %in% var)) {
+		# bio6 needed: min temp of the coldest month
+		bioclimstack[['bio6']] <- raster::calc(tminstack, fun = min)
+	}
+	if (any(c('embergerQ', 'climaticMoistureIndex') %in% var)) {
+		# bio12 needed: annual precipitation
+		bioclimstack[['bio12']] <- raster::calc(precipstack, fun = sum)
+	}
+	bioclimstack <- raster::stack(bioclimstack)
+				
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
 		message('\t\t...temp extremes...')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)
@@ -203,14 +209,14 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	#Compensated Thermicity Index
 	if ('thermicityIndex' %in% var) {
 		message('\t\t...thermicity index...')
-		thermInd <- thermicityIndex(annualTemp=masterstack[[grep(paste0(.var$bio, '01', .var$bio_post), names(masterstack))]], minTemp=masterstack[[grep(paste0(.var$bio, '06', .var$bio_post), names(masterstack))]], maxTemp=tempExtremes[[1]], continentality = ci)
+		thermInd <- thermicityIndex(annualTemp = bioclimstack[['bio1']], minTemp = bioclimstack[['bio6']], maxTemp = tempExtremes[[1]], continentality = ci)
 		reslist[['thermicityIndex']] <- thermInd
 	}
 
 	#Emberger's pluviothermic quotient
 	if ('embergerQ' %in% var) {
 		message("\t\t...emberger's Q...")
-		emberger <- embergerQ(masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '05', .var$bio_post), names(masterstack))]], masterstack[[grep(paste0(.var$bio, '06', .var$bio_post), names(masterstack))]])
+		emberger <- embergerQ(bioclimstack[['bio12']], bioclimstack[['bio5']], bioclimstack[['bio6']])
 		reslist[['embergerQ']] <- emberger
 	}
 
@@ -253,7 +259,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	#climatic moisture index
 	if ('climaticMoistureIndex' %in% var) {
 		message('\t\t...climatic moisture index...')
-		cmi <- climaticMoistureIndex(masterstack[[grep(paste0(.var$bio, '12', .var$bio_post), names(masterstack))]], annualPET)
+		cmi <- climaticMoistureIndex(bioclimstack[['bio12']], annualPET)
 		reslist[['climaticMoistureIndex']] <- cmi
 	}
 	

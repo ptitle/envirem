@@ -28,7 +28,7 @@ to disk, run an RSAGA function to calculate the topographic wetness index,
 and will then read it back in and return it. 
 
 This function requires that SAGA-GIS be installed on your system.
-SAGA-GIS can be found at \url{www.saga-gis.org}. 
+SAGA-GIS can be found at \url{http://www.saga-gis.org}. 
 
 See the documentation for \code{RSAGA::rsaga.env} for specifying appropriate paths
 and parallelization details.

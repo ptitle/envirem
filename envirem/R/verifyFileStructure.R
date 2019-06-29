@@ -12,9 +12,7 @@
 ##' @details 	
 ##' This function searches for the following
 ##' in the directory specified by \code{path}:
-##'	
-##'	bioclimatic variables 1, 5, 6 and 12 (only ones required)
-##'		
+##'			
 ##'	12 precipitation rasters
 ##'	
 ##'	12 min temperature rasters
@@ -66,17 +64,18 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 	if (!exists('.var', mode = 'environment')) {
 		stop('Variable naming environment not found.')
 	}
-	
-	#check bioclim
-	xx <- paste0(.var$bio, '\\d\\d?', .var$bio_post)
-	bioclimFiles <- grep(xx, files, value = TRUE)
-	bioclimFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', bioclimFiles)
-	bioclimFiles <- bioclimFiles[order(as.numeric(gsub(paste0('(', .var$bio, ')', '([0-9]+)', .var$bio_post), '\\2', bioclimFiles)))]
-	if ((all(paste0(.var$bio, c(1, 5, 6, 12), .var$bio_post) %in% bioclimFiles) | all(paste0(.var$bio, sprintf("%02d", c(1, 5, 6, 12)), .var$bio_post) %in% bioclimFiles))) {
-		bioclimCheck <- TRUE
-	} else {
-		bioclimCheck <- FALSE
-	}
+
+	# Bioclim variables are now generated where needed	
+	# #check bioclim
+	# xx <- paste0(.var$bio, '\\d\\d?', .var$bio_post)
+	# bioclimFiles <- grep(xx, files, value = TRUE)
+	# bioclimFiles <- gsub(paste0('(', xx, ')', '(\\.\\w+$)'), '\\1', bioclimFiles)
+	# bioclimFiles <- bioclimFiles[order(as.numeric(gsub(paste0('(', .var$bio, ')', '([0-9]+)', .var$bio_post), '\\2', bioclimFiles)))]
+	# if ((all(paste0(.var$bio, c(1, 5, 6, 12), .var$bio_post) %in% bioclimFiles) | all(paste0(.var$bio, sprintf("%02d", c(1, 5, 6, 12)), .var$bio_post) %in% bioclimFiles))) {
+		# bioclimCheck <- TRUE
+	# } else {
+		# bioclimCheck <- FALSE
+	# }
 	
 	#check precip
 	xx <- paste0(.var$precip, '\\d\\d?', .var$precip_post)
@@ -137,10 +136,10 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 		message('\ttmean files are not properly named or missing. Tmean will therefore be calculated.')
 	}
 
-	if (!all(bioclimCheck, precipCheck, tminCheck, tmaxCheck, solradCheck)) {
-		if (!bioclimCheck) {
-			message('\tbioclim files are not properly named.')
-		}
+	if (!all(precipCheck, tminCheck, tmaxCheck, solradCheck)) {
+		# if (!bioclimCheck) {
+			# message('\tbioclim files are not properly named.')
+		# }
 		if (!precipCheck) {
 			message('\tprecip files are not properly named.')
 		}
@@ -156,9 +155,9 @@ verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif'
 	} else {
 		if (returnFileNames) {
 			if (tmeanCheck) {
-				files <- c(bioclimFiles, precipFiles, tminFiles, tmaxFiles, tmeanFiles, solradFiles)
+				files <- c(precipFiles, tminFiles, tmaxFiles, tmeanFiles, solradFiles)
 			} else {
-				files <- c(bioclimFiles, precipFiles, tminFiles, tmaxFiles, solradFiles)
+				files <- c(precipFiles, tminFiles, tmaxFiles, solradFiles)
 			}
 			files <- paste0(gsub('/?$', '/', path), files, rasterExt)
 			return(files)

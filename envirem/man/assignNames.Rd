@@ -4,11 +4,9 @@
 \alias{assignNames}
 \title{Defining variable names}
 \usage{
-assignNames(bio, tmin, tmax, tmean, precip, solrad, reset)
+assignNames(tmin, tmax, tmean, precip, solrad, reset)
 }
 \arguments{
-\item{bio}{naming scheme for the 19 bioclimatic variables}
-
 \item{tmin}{naming scheme for minimum temperature}
 
 \item{tmax}{naming scheme for maximum temperature}
@@ -30,29 +28,28 @@ The \code{.var} environment contains the naming scheme for the input variables,
 and this will be queried by the various functions in this R package. The user 
 should use this function to define the names of the variables, up until the variable number,
 and after the variable number (prefix and suffix relative to the number). This is done by
-providing a template of the naming, and placing \code{##} where the numbers would be
-(either 1:12 or 1:19). 
+providing a template of the naming, and placing \code{##} where the numbers would be (1:12). 
 For example, if your minimum temperature rasters are named as 
 \code{worldclim_v2_LGM_ccsm4_minTemp_1_land.tif}, then you should define the following:
 \code{"worldclim_v2_LGM_ccsm4_minTemp_##_land"} for \code{tmin}. 
 
 This only needs to be done once during your R session. 
 For any variable name, if these tags are removed, and the file extension is removed, only the 
-variable number should remain (either month number, or bioclim variable number). 
+variable number should remain (the month number). 
 
 When using the \code{assignNames()} function, you can specify as many or as few as needed.
 
 Variable numbers can have zero-padding. This is handled automatically. 
 Therefore, \code{bio_1} or \code{bio_01} are both fine, and nothing needs to be specified. 
 
-The default values are \code{bio_}, \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, and 
+The default values are \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, and 
 \code{et_solrad_}, with no suffix. 
 You can use the function \code{varnames()} to see the current assigned values.
 }
 \examples{
 \donttest{
 varnames()
-assignNames(bio = 'bioclim_##_5arcmin')	
+assignNames(precip = 'precip_##_5arcmin')	
 assignNames(solrad = 'solar_##', tmin = 'minTemp##')
 varnames()
 
