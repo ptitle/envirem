@@ -4,8 +4,14 @@
 \alias{thermicityIndex}
 \title{Compensated Thermicity index}
 \usage{
-thermicityIndex(annualTemp, minTemp, maxTemp, continentality,
-  returnCompensated = TRUE, tempScale = 1)
+thermicityIndex(
+  annualTemp,
+  minTemp,
+  maxTemp,
+  continentality,
+  returnCompensated = TRUE,
+  tempScale = 1
+)
 }
 \arguments{
 \item{annualTemp}{rasterLayer, mean annual temperature}

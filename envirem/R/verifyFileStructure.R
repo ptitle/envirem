@@ -30,10 +30,6 @@
 ##' An equivalent function for checking the names of rasters in R can be 
 ##' found at \code{\link{verifyRasterNames}}. 
 ##'
-##' The naming of the variables is defined by default as shown above. 
-##' Changes to the naming scheme can easily be made. See \code{link{?assignNames}}
-##' for more information.
-##'
 ##' If mean temperature rasters are not detected, the raster creation functions
 ##' will create mean temperature by taking the mean of the min and max.
 ##'
@@ -58,7 +54,7 @@
 ##' @export
 
 
-verifyFileStructure <- function(path, returnFileNames = TRUE, rasterExt = '.tif') {
+verifyFileStructure <- function(path = './', returnFileNames = TRUE, rasterExt = '.tif') {
 	files <- list.files(path = path, pattern = paste0(rasterExt, '$'))
 	
 	if (!exists('.var', mode = 'environment')) {
