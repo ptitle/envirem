@@ -8,6 +8,8 @@
 ##' @param year The year solar radiation should be calculated for. See details.
 ##'
 ##' @param outputDir destination directory for rasters, can be \code{NULL}
+##'
+##' @param ... additional arguments passed to \code{writeRaster}
 ##' 
 ##'
 ##' @details Given the latitude values of the cells found in the raster template
@@ -50,7 +52,7 @@
 ## midHolocene: -6000
 ## LGM: -21500
 
-ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL) {
+ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 	
 	# extract latitudes from cells
 	latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
@@ -80,8 +82,8 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL) {
 	solradStack <- raster::stack(solradStack)
 	raster::projection(solradStack) <- raster::projection(rasterTemplate)
 	
-	# rename as ET_solrad_01, etc...
-	names(solradStack) <- paste0(.var$solrad, sprintf("%02d", 1:12))
+	# rename using the naming scheme supplied
+	names(solradStack) <- paste0(.var$solrad, sprintf("%02d", 1:12), .var$solrad_post)
 	
 	# mask NA regions
 	solradStack <- raster::mask(solradStack, rasterTemplate)	
@@ -98,7 +100,7 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL) {
 		
 		for (i in 1:raster::nlayers(solradStack)) {
 			outputName <- paste0(outputDir, names(solradStack)[i], '.tif')
-			raster::writeRaster(solradStack[[i]], outputName, datatype = 'FLT4S', NAflag = -9999, options = tifOptions)	
+			raster::writeRaster(solradStack[[i]], outputName, datatype = 'FLT4S', NAflag = -9999, options = tifOptions, ...)	
 		}
 	}
 }

@@ -4,7 +4,7 @@
 \alias{ETsolradRasters}
 \title{Extraterrestrial Solar Radiation}
 \usage{
-ETsolradRasters(rasterTemplate, year, outputDir = NULL)
+ETsolradRasters(rasterTemplate, year, outputDir = NULL, ...)
 }
 \arguments{
 \item{rasterTemplate}{any rasterLayer that can be used to extract 
@@ -13,6 +13,8 @@ extent, resolution, etc.}
 \item{year}{The year solar radiation should be calculated for. See details.}
 
 \item{outputDir}{destination directory for rasters, can be \code{NULL}}
+
+\item{...}{additional arguments passed to \code{writeRaster}}
 }
 \value{
 If \code{outputDir = NULL}, a RasterStack is returned. Otherwise, rasters
