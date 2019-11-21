@@ -4,24 +4,31 @@
 \alias{generateRasters}
 \title{Execute Layer Creation}
 \usage{
-generateRasters(var, maindir, resName, timeName, outputDir,
-  rasterExt = ".tif", nTiles = 1, tempScale = 1, precipScale = 1,
-  overwriteResults = TRUE, outputFormat = "GTiff",
-  tempDir = "~/temp", gdalinfoPath = NULL, gdal_translatePath = NULL,
-  useCompression = TRUE)
+generateRasters(
+  var,
+  maindir,
+  prefix = "",
+  outputDir = "./",
+  rasterExt = ".tif",
+  nTiles = 1,
+  tempScale = 1,
+  precipScale = 1,
+  overwriteResults = TRUE,
+  outputFormat = "GTiff",
+  tempDir = "~/temp",
+  gdalinfoPath = NULL,
+  gdal_translatePath = NULL,
+  useCompression = TRUE
+)
 }
 \arguments{
 \item{var}{a vector of variable names to generate, see Details.}
 
 \item{maindir}{path to directory of input rasters}
 
-\item{resName}{output nametag for the resolution}
+\item{prefix}{prefix to append to output filename}
 
-\item{timeName}{output nametag for the time period}
-
-\item{outputDir}{output directory. A directory will be generated according 
-to the resName and timeName, so this is the output location for the 
-directory that will be generated.}
+\item{outputDir}{output directory.}
 
 \item{rasterExt}{the file extension of the input rasters}
 
@@ -53,7 +60,7 @@ The requested set of rasterLayers will be written to \code{outputDir}.
 \description{
 Main function to generate specified ENVIREM layers.
 If requested, this function will split input rasters into tiles, generate desired variables,
-and reassemble the results. Results are named according to specified resName and timeName. 
+and reassemble the results. 
 For the distinction between this function and \code{\link{layerCreation}}, 
 see \code{Details}.
 }
@@ -85,7 +92,6 @@ thermicityIndex \cr
 
 If \code{var = 'all'}, then all of the variables will be generated.
 
-\code{resName} and \code{timeName} are only used for naming the output directory.
 
 Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
 and with identical resolution, origin and extent. 

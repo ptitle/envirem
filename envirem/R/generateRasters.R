@@ -2,7 +2,7 @@
 ##'
 ##' @description Main function to generate specified ENVIREM layers.
 ##' If requested, this function will split input rasters into tiles, generate desired variables,
-##' and reassemble the results. Results are named according to specified resName and timeName. 
+##' and reassemble the results. 
 ##' For the distinction between this function and \code{\link{layerCreation}}, 
 ##' see \code{Details}. 
 ##'
@@ -10,13 +10,9 @@
 ##'
 ##' @param maindir path to directory of input rasters
 ##'
-##' @param resName output nametag for the resolution
+##' @param prefix prefix to append to output filename
 ##'
-##' @param timeName output nametag for the time period
-##'
-##' @param outputDir output directory. A directory will be generated according 
-##' to the resName and timeName, so this is the output location for the 
-##' directory that will be generated.
+##' @param outputDir output directory.
 ##'
 ##' @param rasterExt the file extension of the input rasters
 ##'
@@ -72,7 +68,6 @@
 ##' 
 ##' If \code{var = 'all'}, then all of the variables will be generated.
 ##' 
-##' \code{resName} and \code{timeName} are only used for naming the output directory.
 ##' 
 ##' Rasters in \code{mainDir} should be named appropriately (see \code{\link{verifyFileStructure}})
 ##' and with identical resolution, origin and extent. 
@@ -106,7 +101,7 @@
 
 
 
-generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL, useCompression = TRUE) {
+generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL, useCompression = TRUE) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -127,7 +122,14 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 		stop('\nVariable names must match official set.')
 	}
+	
+	# check results directory
+	outputDir <- gsub('/?$', '/', outputDir)
 
+	if (!dir.exists(outputDir)) {
+		stop('\noutputDir does not exist.')
+	}
+	
 	#check nTiles
 	if (nTiles > 1) {
 		#number of tiles must be a perfect square
@@ -145,25 +147,11 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 	}
 
-	# check and create results directory
-	outputDir <- gsub('/?$', '/', outputDir)
-
-	if (!dir.exists(outputDir)) {
-		dir.create(outputDir)
-	}
-
-	outputDir <- paste0(outputDir, timeName)
-	if (!dir.exists(outputDir)) {
-		dir.create(outputDir)
-	}
-
-	outputDir <- paste0(outputDir, '/', resName, '/')
-	if (!dir.exists(outputDir)) {
-		dir.create(outputDir)
-	}
-
-	if (length(list.files(outputDir, pattern='.tif$')) > 0 & overwriteResults == FALSE) {
-		stop('Rasters detected in output directory. Either remove them manually, or set overwriteResults to TRUE.')
+	outputExt <- c(raster='.grd', ascii='.asc', SAGA='.sdat', IDRISI='.rst', CDF='.nc', GTiff='.tif', ENVI='.envi', EHdr='.bil', HFA='.img')
+	outputExt <- outputExt[outputFormat]
+	outputFiles <- paste0(outputDir, prefix, var, outputExt)
+	if (any(outputFiles %in% list.files(outputDir)) & overwriteResults == FALSE) {
+		stop('Found files in outputDir with same names as new files. Either remove them manually, or set overwriteResults to TRUE.')
 	}
 	
 	if (useCompression & outputFormat == 'GTiff') {
@@ -171,8 +159,6 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 	} else {
 		tifOptions <- NULL
 	}
-
-	message(toupper(timeName), '--', resName)
 
 	if (nTiles == 1) {
 		# no tiling
@@ -191,8 +177,7 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		
 		# write to disk
 		for (i in 1:raster::nlayers(res)) {
-			outputName <- paste(timeName, resName, sep = '_')
-			outputName <- paste0(outputDir, outputName, '_', names(res)[i])
+			outputName <- paste0(outputDir, prefix, names(res)[i])
 			if (outputFormat == 'EHdr') {
 				outputName <- paste0(outputName, '.bil')
 			}
@@ -239,13 +224,13 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 			clim <- raster::dropLayer(clim, grep(.var$solrad, names(clim)))
 
 			res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
-			names(res) <- paste(names(res), tilename, sep = '')
+			names(res) <- paste0(names(res), tilename)
 
 			# write to disk
 			raster::writeRaster(res, paste0(tempDir, '/res/temp'), overwrite = TRUE, format = 'GTiff', NAflag = -9999, bylayer = TRUE, suffix = 'names', options = tifOptions)
 		
 			#delete tile-specific temp files
-			toRemove <- list.files(path = tempDir, pattern = paste0(tilename, '.tif$'), full.names = TRUE)
+			toRemove <- list.files(path = tempDir, pattern = paste0(tilename, '\\.tif$'), full.names = TRUE)
 			file.remove(toRemove)
 	
 			#delete raster-package generated tmp files
@@ -254,22 +239,19 @@ generateRasters <- function(var, maindir, resName, timeName, outputDir, rasterEx
 		}
 
 		# Combine tiles
-		message('\n\tPutting tiles back together...\n')
-		resRasters <- list.files(path = paste0(tempDir, '/res/'), pattern='.tif$')
+		message('\n\tPutting tiles back together...')
+		resRasters <- list.files(path = paste0(tempDir, '/res/'), pattern='\\.tif$')
 		resRasters <- unique(gsub("_tile\\d\\d?", "", resRasters))
 
 		for (i in 1:length(resRasters)) {
-			message('\tTiles being combined for', resRasters[i], '...')
-			files <- list.files(path = paste0(tempDir, '/res/'), pattern = '.tif$', full.names = TRUE)
+			message('\t\tTiles being combined for ', gsub('temp_', '', resRasters[i]), '...')
+			files <- list.files(path = paste0(tempDir, '/res/'), pattern = '\\.tif$', full.names = TRUE)
 			files <- files[grep(gsub('\\.tif', '', resRasters[i]), files)]
 
 			tilelist <- lapply(files, raster::raster)
 
 			# write to disk
-			outputName <- paste(timeName, resName, sep = '_')
-			outputName <- paste0(outputDir, outputName)
-
-			fn <- paste0(outputName, gsub('temp', '', gsub('\\.tif', '', resRasters[i])))
+			fn <- paste0(outputDir, prefix, gsub('temp_', '', gsub('\\.tif', '', resRasters[i])))
 			
 			# determine data type
 			dtype <- dataTypeCheck(tilelist[[1]])[[2]]
