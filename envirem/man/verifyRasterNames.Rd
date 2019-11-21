@@ -4,8 +4,11 @@
 \alias{verifyRasterNames}
 \title{Verify Raster Names}
 \usage{
-verifyRasterNames(masterstack = NULL, solradstack = NULL,
-  returnRasters = FALSE)
+verifyRasterNames(
+  masterstack = NULL,
+  solradstack = NULL,
+  returnRasters = FALSE
+)
 }
 \arguments{
 \item{masterstack}{rasterStack containing all precipitation, 
