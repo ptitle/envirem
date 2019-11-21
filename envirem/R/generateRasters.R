@@ -150,7 +150,7 @@ generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterE
 	outputExt <- c(raster='.grd', ascii='.asc', SAGA='.sdat', IDRISI='.rst', CDF='.nc', GTiff='.tif', ENVI='.envi', EHdr='.bil', HFA='.img')
 	outputExt <- outputExt[outputFormat]
 	outputFiles <- paste0(outputDir, prefix, var, outputExt)
-	if (any(outputFiles %in% list.files(outputDir)) & overwriteResults == FALSE) {
+	if (any(basename(outputFiles) %in% list.files(outputDir)) & overwriteResults == FALSE) {
 		stop('Found files in outputDir with same names as new files. Either remove them manually, or set overwriteResults to TRUE.')
 	}
 	
@@ -169,9 +169,9 @@ generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterE
 		clim <- raster::stack(files)
 
 		#pull out solar radiation rasters and create new stack
-		solrad <- clim[[grep(.var$solrad, names(clim))]]
+		solrad <- clim[[grep(paste0(.var$solrad, '\\d\\d?', .var$solrad_post), names(clim))]]
 
-		clim <- raster::dropLayer(clim, grep(.var$solrad, names(clim)))
+		clim <- raster::dropLayer(clim, names(solrad))
 
 		res <- layerCreation(masterstack = clim, solradstack = solrad, var = var, tempScale = tempScale, precipScale = precipScale)
 		

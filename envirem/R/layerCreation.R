@@ -108,7 +108,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	
 	#naming checks and name standardization
 	check <- verifyRasterNames(masterstack, solradstack, returnRasters = TRUE)
-	solradstack <- check[[grep(.var$solrad, names(check))]]
+	solradstack <- check[[grep(paste0(.var$solrad, '\\d\\d?', .var$solrad_post), names(check))]]
 	masterstack <- raster::dropLayer(check, names(solradstack))
 		
 	#receiving list
@@ -117,9 +117,9 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 
 	#create some separate stacks
 	message('\t\t...splitting rasterstack...')
-	tminstack <- masterstack[[grep(.var$tmin, names(masterstack), value = TRUE)]]
-	tmaxstack <- masterstack[[grep(.var$tmax, names(masterstack), value = TRUE)]]
-	precipstack <- masterstack[[grep(.var$precip, names(masterstack), value = TRUE)]]
+	tminstack <- masterstack[[grep(paste0(.var$tmin, '\\d\\d?', .var$tmin_post), names(masterstack), value = TRUE)]]
+	tmaxstack <- masterstack[[grep(paste0(.var$tmax, '\\d\\d?', .var$tmax_post), names(masterstack), value = TRUE)]]
+	precipstack <- masterstack[[grep(paste0(.var$precip, '\\d\\d?', .var$precip_post), names(masterstack), value = TRUE)]]
 	
 	#enforce ordering
 	tminstack <- tminstack[[order(as.numeric(gsub(paste0(.var$tmin, '([0-9]+)', .var$tmin_post), "\\1", names(tminstack))))]]
@@ -134,12 +134,12 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	}
 	
 	# if tmean not already present in stack, then calculate it from tmin and tmax
-	if (!any(grepl(.var$tmean, names(masterstack)))) {
+	if (!any(grepl(paste0(.var$tmean, '\\d\\d?', .var$tmean_post), names(masterstack)))) {
 		message('\t\t...calculating mean temp...')
 		tmeanstack <- (tmaxstack + tminstack) / 2 #new mean
-		names(tmeanstack) <- gsub(.var$tmax, .var$tmean, names(tmaxstack))
+		names(tmeanstack) <- gsub(paste0('(', .var$tmax, ')(\\d\\d?)(', .var$tmax_post, ')'), paste0(.var$tmean, '\\2', .var$tmean_post), names(tmaxstack))
 	} else {
-		tmeanstack <- masterstack[[grep(.var$tmean, names(masterstack), value = TRUE)]]
+		tmeanstack <- masterstack[[grep(paste0(.var$tmean, '\\d\\d?', .var$tmean_post), names(masterstack), value = TRUE)]]
 		tmeanstack <- tmeanstack[[order(as.numeric(gsub(paste0(.var$tmean, '([0-9]+)', .var$tmean_post), "\\1", names(tmeanstack))))]]
 		if (tempScale != 1) {
 			tmeanstack <- tmeanstack / tempScale
@@ -150,6 +150,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	# Calculate those that are needed for the requested variables. 
 	bioclimstack <- vector('list', length = 4)
 	names(bioclimstack) <- c('bio1', 'bio5', 'bio6', 'bio12')
+	message('\t\t...calculating necessary bioclim variables...')
 	if ('thermicityIndex' %in% var) {
 		# bio1 needed: annual mean temperature
 		bioclimstack[['bio1']] <- raster::calc(tmeanstack, fun = mean)
