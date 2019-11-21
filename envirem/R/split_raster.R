@@ -45,11 +45,9 @@ split_raster <- function(file, s = 2, outputDir, gdalinfoPath = NULL, gdal_trans
 	#s = division applied to each side of raster (s=2 -> 4 tiles)
      
     outputDir <- gsub('/?$', '/', outputDir)
-    filename <- gsub(".\\w+$", "", file)
-    if (grepl('/', filename)) {
-    	filename <- gsub('(.+)(/)(\\w+$)', '\\3', filename)
-    }
-    filename <- paste(outputDir, filename, sep='')
+    filename <- gsub("\\.\\w+$", "", file)
+    filename <- basename(filename)
+    filename <- paste0(outputDir, filename)
 
     if (is.null(gdalinfoPath)) {
     	gdalinfo_str <- Sys.which('gdalinfo')
@@ -59,7 +57,6 @@ split_raster <- function(file, s = 2, outputDir, gdalinfoPath = NULL, gdal_trans
     } else {
     	gdalinfo_str <- gdalinfoPath
     }
-    gdalinfo_str <- paste0(gdalinfo_str, ' ', file)
 
     if (is.null(gdal_translatePath)) {
     	gdal_translate_str <- Sys.which('gdal_translate')
@@ -71,8 +68,8 @@ split_raster <- function(file, s = 2, outputDir, gdalinfoPath = NULL, gdal_trans
     }
        
     # pick size of each side
-    x <- as.numeric(gsub("[^0-9]", "", unlist(strsplit(system(gdalinfo_str, intern = TRUE)[3], ", "))))[1]
-    y <- as.numeric(gsub("[^0-9]", "", unlist(strsplit(system(gdalinfo_str, intern = TRUE)[3], ", "))))[2]
+    x <- as.numeric(gsub("[^0-9]", "", unlist(strsplit(system2(command = gdalinfo_str, args = file, stdout = TRUE)[3], ", "))))[1]
+    y <- as.numeric(gsub("[^0-9]", "", unlist(strsplit(system2(command = gdalinfo_str, args = file, stdout = TRUE)[3], ", "))))[2]
      
     # t is nr. of iterations per side
     t <- s - 1
@@ -81,9 +78,9 @@ split_raster <- function(file, s = 2, outputDir, gdalinfoPath = NULL, gdal_trans
         for (j in 0:t) {
         	counter <- counter + 1
             # [-srcwin xoff yoff xsize ysize] src_dataset dst_dataset
-            srcwin_str <- paste("-srcwin ", i * x/s, j * y/s, x/s, y/s)
-            gdal_str <- paste0(gdal_translate_str, ' ', srcwin_str, " ", file, " ", filename, "_tile", counter, ".tif")
-            system(gdal_str)
+            srcwin_str <- paste("-srcwin", i * x/s, j * y/s, x/s, y/s)
+            args <- paste0(srcwin_str, " ", file, " ", filename, "_tile", counter, ".tif")
+            log <- system2(command = gdal_translate_str, args = args, stdout = TRUE)
         }
     }
 }
