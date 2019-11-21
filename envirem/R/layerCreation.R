@@ -166,7 +166,9 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		# bio12 needed: annual precipitation
 		bioclimstack[['bio12']] <- raster::calc(precipstack, fun = sum)
 	}
-	bioclimstack <- raster::stack(bioclimstack)
+	if (any(c('thermicityIndex', 'embergerQ', 'climaticMoistureIndex') %in% var)) {
+		bioclimstack <- raster::stack(bioclimstack)
+	}
 				
 	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
 		message('\t\t...temp extremes...')
