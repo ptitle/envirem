@@ -54,31 +54,49 @@
 
 ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 	
-	# extract latitudes from cells
-	latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
-	
-	if (!grepl('+proj=longlat', raster::projection(rasterTemplate))) {
-		# if input raster is not in longlat, transform latitude values to degrees
-		xy <- cbind.data.frame(long = 0, lat = latvals)
-		xy <- sp::SpatialPoints(xy, proj4string = sp::CRS(projection(rasterTemplate)))
-		xy <- sp::spTransform(xy, sp::CRS('+proj=longlat +datum=WGS84'))
-		latvals <- sp::coordinates(xy)[, 2]
-	}
-		
 	solradStack <- vector('list', 12)
 	
-	# for each month, calculate insolation and fill raster
-	for (i in 1:12) {
-		
-		message(i, ' ', appendLF = FALSE)	
-		RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
-		ras <- raster::raster(rasterTemplate)
-		tmp <- rep(RA, each = raster::ncol(rasterTemplate))
-		tmp <- matrix(data = tmp, nrow = raster::nrow(ras), ncol = raster::ncol(ras), byrow = TRUE)
-		ras[ ] <- tmp
-		solradStack[[i]] <- ras
-	}
+	if (grepl('+proj=longlat', raster::projection(rasterTemplate))) {
+				
+		# extract latitudes from cells
+		latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
 
+		# for each month, calculate insolation and fill raster
+		for (i in 1:12) {
+			
+			message(i, ' ', appendLF = FALSE)	
+			RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
+			ras <- raster::raster(rasterTemplate)
+			tmp <- rep(RA, each = raster::ncol(rasterTemplate))
+			tmp <- matrix(data = tmp, nrow = raster::nrow(ras), ncol = raster::ncol(ras), byrow = TRUE)
+			ras[ ] <- tmp
+			solradStack[[i]] <- ras
+		}
+
+	} else {
+
+		templatePts <- raster::rasterToPoints(rasterTemplate)
+		templatePtsLongLat <- sf::st_as_sf(as.data.frame(templatePts), coords = c('x', 'y'), crs = raster::projection(rasterTemplate))
+		templatePtsLongLat <- sf::st_transform(templatePtsLongLat, crs = '+proj=longlat +datum=WGS84')
+			
+		templatePts <- cbind(templatePts, sf::st_coordinates(templatePtsLongLat))
+		colnames(templatePts) <- c('x', 'y', raster::labels(rasterTemplate), 'long', 'lat')
+		
+		# uniqueLat <- unique(templatePts[,2])
+		# uniqueLatTransformed <- templatePts[sapply(uniqueLat, function(x) which(templatePts[,2] == x)[1]), 'lat']
+		# names(uniqueLatTransformed) <- NULL
+
+		# for each month, calculate insolation and fill raster
+		for (i in 1:12) {
+			
+			message(i, ' ', appendLF = FALSE)
+			RA <- sapply(templatePts[,5], function(x) calcSolRad(year = year, lat = x, month = i))
+			ras <- raster::raster(rasterTemplate)
+			values(ras)[!is.na(values(rasterTemplate))] <- RA
+			solradStack[[i]] <- ras
+		}
+	}
+	
 	solradStack <- raster::stack(solradStack)
 	raster::projection(solradStack) <- raster::projection(rasterTemplate)
 	

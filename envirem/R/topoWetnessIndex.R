@@ -86,7 +86,7 @@ topoWetnessIndex <- function(dem, sagaEnv) {
 
 	# write raster to SAGA format	
 	raster::writeRaster(dem, filename = 'saga_temp_twi_gtif.tif', format = 'GTiff')
-	RSAGA::rsaga.import.gdal(in.grid = 'saga_temp_twi_gtif.tif', out.grid = 'saga_temp_twi_in', env = sagaEnv)
+	RSAGA::rsaga.import.gdal(in.grid = 'saga_temp_twi_gtif.tif', out.grid = 'saga_temp_twi_in', env = sagaEnv, check.module.exists = FALSE, warn = FALSE)
 
 	#temporary outfile
 	outfile <- 'saga_temp_twi_out.sgrd'

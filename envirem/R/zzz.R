@@ -1,6 +1,4 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("\nNew feature: You must now define the naming scheme of your rasters. See ?assignNames.\n")
-  packageStartupMessage("\nImportant changes have been made regarding units for temperature rasters. Please check out ?envirem\n")
-	
+  packageStartupMessage("\nPlease see the vignette at https://envirem.github.io/ENVIREM_tutorial.html for a detailed walk-through of this package.\n")	
 }
 

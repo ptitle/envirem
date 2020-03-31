@@ -41,7 +41,7 @@ If a path is returned, then you can leave those arguments as \code{NULL}.
 \dontrun{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-tmin1file <- grep('tmin_1\\.', rasterFiles, value=TRUE)
+tmin1file <- grep('tmin_1\\\\.', rasterFiles, value=TRUE)
 
 We will split this raster into 4 tiles, that will be written to disk.
 split_raster(tmin1file, s = 2, outputDir = '~/temp/', gdalinfoPath = NULL, 

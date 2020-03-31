@@ -10,8 +10,8 @@ Generation of bioclimatic rasters that are complementary to the typical 19 biocl
 \details{
 Package: envirem\cr
 Type: Package\cr
-Version: 2.0\cr
-Date: 2019-06-28\cr
+Version: 2.1\cr
+Date: 2019-11-24\cr
 License: GPL-2 | GPL-3\cr
 
 \strong{NOTE}: Temperature rasters are now assumed by default to be in degrees C and precipitation in mm. 
