@@ -3,7 +3,7 @@
 ##' @description Generate monthly extraterrestrial solar radiation rasters.
 ##'
 ##' @param rasterTemplate any rasterLayer that can be used to extract 
-##' 	extent, resolution, etc.
+##' 	extent, resolution, projection, etc.
 ##'
 ##' @param year The year solar radiation should be calculated for. See details.
 ##'
@@ -20,6 +20,8 @@
 ##' 	Suggestions would be \code{year = 40} for the present, \code{year = -6000} 
 ##' 	for the mid Holocene, and \code{year = -21500} for the LGM.
 ##' 	
+##' 	If you are having problems with this function and the rasterTemplate is not in 
+##' 	long/lat, try with an unprojected long/lat raster.
 ##'
 ##' @return If \code{outputDir = NULL}, a RasterStack is returned. Otherwise, rasters
 ##'		are written to disk in the designated directory, and nothing is returned. 
@@ -56,55 +58,69 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 	
 	solradStack <- vector('list', 12)
 	
-	if (grepl('+proj=longlat', raster::projection(rasterTemplate))) {
-				
-		# extract latitudes from cells
-		latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
-
-		# for each month, calculate insolation and fill raster
-		for (i in 1:12) {
-			
-			message(i, ' ', appendLF = FALSE)	
-			RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
-			ras <- raster::raster(rasterTemplate)
-			tmp <- rep(RA, each = raster::ncol(rasterTemplate))
-			tmp <- matrix(data = tmp, nrow = raster::nrow(ras), ncol = raster::ncol(ras), byrow = TRUE)
-			ras[ ] <- tmp
-			solradStack[[i]] <- ras
-		}
-
+	if ((grepl('+proj=longlat', raster::projection(rasterTemplate)))) {
+		isLongLat <- TRUE
 	} else {
-
+		isLongLat <- FALSE
+	}
+	
+	if (!isLongLat) {
+		
+		rasterTemplate2 <- rasterTemplate
+				
+		# get coordinates of cells with data, and transform to long/lat
 		templatePts <- raster::rasterToPoints(rasterTemplate)
 		templatePtsLongLat <- sf::st_as_sf(as.data.frame(templatePts), coords = c('x', 'y'), crs = raster::projection(rasterTemplate))
 		templatePtsLongLat <- sf::st_transform(templatePtsLongLat, crs = '+proj=longlat +datum=WGS84')
-			
-		templatePts <- cbind(templatePts, sf::st_coordinates(templatePtsLongLat))
-		colnames(templatePts) <- c('x', 'y', raster::labels(rasterTemplate), 'long', 'lat')
 		
-		# uniqueLat <- unique(templatePts[,2])
-		# uniqueLatTransformed <- templatePts[sapply(uniqueLat, function(x) which(templatePts[,2] == x)[1]), 'lat']
-		# names(uniqueLatTransformed) <- NULL
-
-		# for each month, calculate insolation and fill raster
-		for (i in 1:12) {
-			
-			message(i, ' ', appendLF = FALSE)
-			RA <- sapply(templatePts[,5], function(x) calcSolRad(year = year, lat = x, month = i))
-			ras <- raster::raster(rasterTemplate)
-			values(ras)[!is.na(values(rasterTemplate))] <- RA
-			solradStack[[i]] <- ras
-		}
+		# get an estimate of resolution in long/lat
+		extentLL <- raster::extent(templatePtsLongLat)
+		resx <- (extentLL@xmax - extentLL@xmin)  / raster::ncol(rasterTemplate)
+		resy <- (extentLL@ymax - extentLL@ymin)  / raster::nrow(rasterTemplate)
+		resx <- floor(resx * 100) / 100
+		resy <- floor(resy * 100) / 100
+		
+		rasterTemplate <- raster::raster(ext = extentLL, res = c(resx, resy), crs = '+proj=longlat +datum=WGS84')
+		
+		rasterTemplate[] <- raster::extract(rasterTemplate2, rgdal::project(coordinates(rasterTemplate), projection(rasterTemplate2)))
 	}
+		
+	# extract latitudes from cells
+	latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
 	
+	# for each month, calculate insolation and fill raster
+	for (i in 1:12) {
+		
+		message(i, ' ', appendLF = FALSE)	
+		RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
+		ras <- raster::raster(rasterTemplate)
+		tmp <- rep(RA, each = raster::ncol(rasterTemplate))
+		tmp <- matrix(data = tmp, nrow = raster::nrow(ras), ncol = raster::ncol(ras), byrow = TRUE)
+		ras[ ] <- tmp
+		solradStack[[i]] <- ras
+	}
+		
 	solradStack <- raster::stack(solradStack)
 	raster::projection(solradStack) <- raster::projection(rasterTemplate)
 	
 	# rename using the naming scheme supplied
 	names(solradStack) <- paste0(.var$solrad, sprintf("%02d", 1:12), .var$solrad_post)
 	
-	# mask NA regions
-	solradStack <- raster::mask(solradStack, rasterTemplate)	
+	if (!isLongLat) {	
+		
+		# project to input projection
+		e <- raster::projectExtent(solradStack, crs = raster::projection(rasterTemplate2))
+		newStack <- raster::projectRaster(solradStack, to = e, res = raster::res(rasterTemplate2))
+		newStack <- raster::resample(newStack, rasterTemplate2)
+		newStack <- raster::mask(newStack, rasterTemplate2)
+		solradStack <- newStack
+		rm(newStack)
+		
+	} else {	
+	
+		# mask NA regions
+		solradStack <- raster::mask(solradStack, rasterTemplate)	
+	}
 	
 	# write to disk, if requested
 	if (is.null(outputDir)) {

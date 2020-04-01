@@ -8,7 +8,7 @@ ETsolradRasters(rasterTemplate, year, outputDir = NULL, ...)
 }
 \arguments{
 \item{rasterTemplate}{any rasterLayer that can be used to extract 
-extent, resolution, etc.}
+extent, resolution, projection, etc.}
 
 \item{year}{The year solar radiation should be calculated for. See details.}
 
@@ -32,6 +32,9 @@ Given the latitude values of the cells found in the raster template
 	of the other rasters that will be used for generating ENVIREM variables. 
 	Suggestions would be \code{year = 40} for the present, \code{year = -6000} 
 	for the mid Holocene, and \code{year = -21500} for the LGM.
+	
+	If you are having problems with this function and the rasterTemplate is not in 
+	long/lat, try with an unprojected long/lat raster.
 }
 \examples{
 \donttest{
