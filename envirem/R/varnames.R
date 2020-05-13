@@ -32,7 +32,7 @@ varnames <- function() {
 		c(.var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
 
 	message('')
-	huxtable::print_screen(vartable)
+	huxtable::print_screen(vartable, colnames = FALSE)
 	message('\n\n\tTo change these values, see ?assignNames.')
 	
 }
