@@ -2,7 +2,7 @@
 ##'
 ##' @description Calculate Emberger's pluviometric quotient.
 ##'
-##' @param P rasterLayer, mean annual precipitation
+##' @param P rasterLayer, total annual precipitation
 
 ##' @param M rasterLayer, mean max temperature of the warmest month
 ##'

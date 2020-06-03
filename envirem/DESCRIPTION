@@ -1,12 +1,12 @@
 Package: envirem
 Type: Package
 Title: Generation of ENVIREM Variables
-Version: 2.1
-Date: 2019-11-24
+Version: 2.2
+Date: 2020-06-03
 Author: Pascal O. Title, Jordan B. Bemmels
 Maintainer: Pascal Title <ptitle@iu.edu>
 Depends: raster, palinsol
-Imports: RSAGA, sf, methods, huxtable
+Imports: RSAGA, sf, methods, knitr
 Suggests: rgdal
 Description: Generation of bioclimatic rasters that are complementary to the typical 19 bioclim variables.  
 License: GPL (>=2)

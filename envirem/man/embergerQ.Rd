@@ -7,7 +7,7 @@
 embergerQ(P, M, m, tempScale = 1, precipScale = 1)
 }
 \arguments{
-\item{P}{rasterLayer, mean annual precipitation}
+\item{P}{rasterLayer, total annual precipitation}
 
 \item{M}{rasterLayer, mean max temperature of the warmest month}
 

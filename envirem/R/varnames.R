@@ -24,15 +24,14 @@ varnames <- function() {
 	# print(sprintf("%-7s %-11s %-3s %s", 'precip:', .var$precip, '##', .var$precip_post))
 	# print(sprintf("%-7s %-11s %-3s %s", 'solrad:', .var$solrad, '##', .var$solrad_post))
 	# cat('\nto change these values, see ?assignNames.')
+		
+	vartable <- cbind.data.frame(variable = c('tmin:','tmax:','tmean:','precip:','solrad:'), 
+		prefix = c(.var$tmin, .var$tmax, .var$tmean, .var$precip, .var$solrad),
+		index = rep('##', 5),
+		suffix = c(.var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
+		
 
-
-	vartable <- huxtable::hux(c('tmin:','tmax:','tmean:','precip:','solrad:'), 
-		c(.var$tmin, .var$tmax, .var$tmean, .var$precip, .var$solrad),
-		rep('##', 5),
-		c(.var$tmin_post, .var$tmax_post, .var$tmean_post, .var$precip_post, .var$solrad_post))
-
-	message('')
-	huxtable::print_screen(vartable, colnames = FALSE)
-	message('\n\n\tTo change these values, see ?assignNames.')
+	print(knitr::kable(vartable, format = 'pandoc', align = c('l', 'l', 'c', 'l')))
+	message('\n\tTo change these values, see ?assignNames.')
 	
 }

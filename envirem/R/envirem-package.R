@@ -13,8 +13,8 @@
 ##' 
 ##' Package: envirem\cr
 ##' Type: Package\cr
-##' Version: 2.1\cr
-##' Date: 2019-11-24\cr
+##' Version: 2.2\cr
+##' Date: 2020-06-03\cr
 ##' License: GPL-2 | GPL-3\cr
 ##'
 ##' \strong{NOTE}: Temperature rasters are now assumed by default to be in degrees C and precipitation in mm. 
@@ -46,6 +46,6 @@
 ##'
 ##' @import raster RSAGA palinsol
 ##' @importFrom stats sd
-##' @importFrom huxtable hux print_screen
+##' @importFrom knitr kable
 ##'
 NULL
