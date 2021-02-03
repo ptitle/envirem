@@ -4,13 +4,19 @@
 \alias{layerCreation}
 \title{Creates all layers}
 \usage{
-layerCreation(masterstack, solradstack, var, tempScale = 1, precipScale = 1)
+layerCreation(
+  masterstack,
+  solradstack = NULL,
+  var,
+  tempScale = 1,
+  precipScale = 1
+)
 }
 \arguments{
 \item{masterstack}{rasterStack containing all monthly precipitation, 
 min temperature, max temperature, and optionally mean temperature rasters.}
 
-\item{solradstack}{rasterStack of monthly solar radiation}
+\item{solradstack}{rasterStack of monthly solar radiation, can be \code{NULL} if not needed.}
 
 \item{var}{vector of names of variables to generate, see Details.}
 

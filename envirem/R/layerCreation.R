@@ -7,7 +7,7 @@
 ##' @param masterstack rasterStack containing all monthly precipitation, 
 ##' min temperature, max temperature, and optionally mean temperature rasters.
 ##'
-##' @param solradstack rasterStack of monthly solar radiation
+##' @param solradstack rasterStack of monthly solar radiation, can be \code{NULL} if not needed.
 ##'
 ##' @param var vector of names of variables to generate, see Details.
 ##'
@@ -86,7 +86,7 @@
 # Function takes stack of precip, mintemp, maxtemp, bioclim, and a stack of solar radiation, and generates rasterstack of new variables
 # var is a vector of variable names that will be generated. 
 
-layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipScale = 1) {
+layerCreation <- function(masterstack, solradstack = NULL, var, tempScale = 1, precipScale = 1) {
 
 	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "meanTempColdest", "meanTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
@@ -108,11 +108,19 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		stop('\nVariable names must match official set.')
 	}
 	
+	solradVar <- c('annualPET','PETseasonality','aridityIndexThornthwaite','climaticMoistureIndex','PETColdestQuarter','PETWarmestQuarter','PETWettestQuarter','PETDriestQuarter')
+	needsSolRad <- ifelse(any(var %in% solradVar), TRUE, FALSE)
+	
 	#naming checks and name standardization
-	check <- verifyRasterNames(masterstack, solradstack, returnRasters = TRUE)
-	solradstack <- check[[grep(paste0(.var$solrad, '\\d\\d?', .var$solrad_post), names(check))]]
-	masterstack <- raster::dropLayer(check, names(solradstack))
-		
+	if (needsSolRad) {
+		check <- verifyRasterNames(masterstack, solradstack, returnRasters = TRUE)
+		solradstack <- check[[grep(paste0(.var$solrad, '\\d\\d?', .var$solrad_post), names(check))]]
+		masterstack <- raster::dropLayer(check, names(solradstack))
+	} else {
+		check <- verifyRasterNames(masterstack, returnRasters = TRUE)
+		masterstack <- check	
+	}	
+	
 	#receiving list
 	reslist <- vector('list', length = length(var))
 	names(reslist) <- var
@@ -127,7 +135,10 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	tminstack <- tminstack[[order(as.numeric(gsub(paste0(.var$tmin, '([0-9]+)', .var$tmin_post), "\\1", names(tminstack))))]]
 	tmaxstack <- tmaxstack[[order(as.numeric(gsub(paste0(.var$tmax, '([0-9]+)', .var$tmax_post), "\\1", names(tmaxstack))))]]
 	precipstack <- precipstack[[order(as.numeric(gsub(paste0(.var$precip, '([0-9]+)', .var$precip_post), "\\1", names(precipstack))))]]
-	solradstack <- solradstack[[order(as.numeric(gsub(paste0(.var$solrad, '([0-9]+)', .var$solrad_post), "\\1", names(solradstack))))]]
+	
+	if (needsSolRad) {
+		solradstack <- solradstack[[order(as.numeric(gsub(paste0(.var$solrad, '([0-9]+)', .var$solrad_post), "\\1", names(solradstack))))]]
+	}
 	
 	# adjust temperature rasters to degrees C
 	if (tempScale != 1) {
@@ -232,7 +243,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 	}
 
 	#annual potential evapotranspiration
-	if (any(c('annualPET','PETseasonality','aridityIndexThornthwaite','climaticMoistureIndex','PETColdestQuarter','PETWarmestQuarter','PETWettestQuarter','PETDriestQuarter') %in% var)) {
+	if (any(solradVar %in% var)) {
 		monthPET <- monthlyPET(Tmean = tmeanstack, RA = solradstack, TD = abs(tmaxstack - tminstack))
 	}
 

@@ -7,6 +7,8 @@
 ##'
 ##' @param returnFileNames logical, should file paths and names be returned
 ##'
+##' @param includeSolRad logical, should solar radiation files be required?
+##'
 ##' @param rasterExt file extension of rasters
 ##'
 ##' @details 	
@@ -54,7 +56,7 @@
 ##' @export
 
 
-verifyFileStructure <- function(path = './', returnFileNames = TRUE, rasterExt = '.tif') {
+verifyFileStructure <- function(path = './', returnFileNames = TRUE, includeSolRad = TRUE, rasterExt = '.tif') {
 	files <- list.files(path = path, pattern = paste0(rasterExt, '$'))
 	
 	if (!exists('.var', mode = 'environment')) {
@@ -132,7 +134,7 @@ verifyFileStructure <- function(path = './', returnFileNames = TRUE, rasterExt =
 		message('\ttmean files are not properly named or missing. Tmean will therefore be calculated.')
 	}
 
-	if (!all(precipCheck, tminCheck, tmaxCheck, solradCheck)) {
+	if (!all(precipCheck, tminCheck, tmaxCheck) | (!solradCheck & includeSolRad)) {
 		# if (!bioclimCheck) {
 			# message('\tbioclim files are not properly named.')
 		# }
@@ -145,7 +147,7 @@ verifyFileStructure <- function(path = './', returnFileNames = TRUE, rasterExt =
 		if (!tmaxCheck) {
 			message('\ttmax files are not properly named.')
 		}
-		if (!solradCheck) {
+		if (!solradCheck & includeSolRad) {
 			message('\tsolrad files are not properly named.')
 		}
 	} else {

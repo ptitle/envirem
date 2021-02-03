@@ -4,12 +4,19 @@
 \alias{verifyFileStructure}
 \title{Verify File Structure}
 \usage{
-verifyFileStructure(path = "./", returnFileNames = TRUE, rasterExt = ".tif")
+verifyFileStructure(
+  path = "./",
+  returnFileNames = TRUE,
+  includeSolRad = TRUE,
+  rasterExt = ".tif"
+)
 }
 \arguments{
 \item{path}{path to directory of rasters}
 
 \item{returnFileNames}{logical, should file paths and names be returned}
+
+\item{includeSolRad}{logical, should solar radiation files be required?}
 
 \item{rasterExt}{file extension of rasters}
 }
