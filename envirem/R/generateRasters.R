@@ -58,6 +58,8 @@
 ##' growingDegDays5 \cr
 ##' maxTempColdest \cr
 ##' minTempWarmest \cr
+##' meanTempColdest \cr
+##' meanTempWarmest \cr
 ##' monthCountByTemp10 \cr
 ##' PETColdestQuarter \cr
 ##' PETDriestQuarter \cr
@@ -103,7 +105,7 @@
 
 generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterExt = '.tif', nTiles = 1, tempScale = 1, precipScale = 1, overwriteResults = TRUE, outputFormat = 'GTiff', tempDir = '~/temp', gdalinfoPath = NULL, gdal_translatePath = NULL, useCompression = TRUE) {
 
-	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
+	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "meanTempColdest", "meanTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
 	if (class(var) == 'character') {
 		if (length(var) == 1) {

@@ -14,6 +14,6 @@ URL: http://envirem.github.io
 BugReports: https://github.com/ptitle/envirem/issues
 NeedsCompilation: yes
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 ByteCompile: true
 LazyData: true

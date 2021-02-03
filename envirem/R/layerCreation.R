@@ -39,6 +39,8 @@
 ##' growingDegDays5 \cr
 ##' maxTempColdest \cr
 ##' minTempWarmest \cr
+##' meanTempColdest \cr
+##' meanTempWarmest \cr
 ##' monthCountByTemp10 \cr
 ##' PETColdestQuarter \cr
 ##' PETDriestQuarter \cr
@@ -86,7 +88,7 @@
 
 layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipScale = 1) {
 
-	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
+	allvar <- c("annualPET", "aridityIndexThornthwaite", "climaticMoistureIndex", "continentality", "embergerQ", "growingDegDays0", "growingDegDays5", "maxTempColdest", "minTempWarmest", "meanTempColdest", "meanTempWarmest", "monthCountByTemp10", "PETColdestQuarter", "PETDriestQuarter", "PETseasonality", "PETWarmestQuarter", "PETWettestQuarter", "thermicityIndex")
 
 	if (class(var) == 'character') {
 		if (length(var) == 1) {
@@ -171,7 +173,7 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		bioclimstack <- raster::stack(bioclimstack)
 	}
 				
-	if (any(c('minTempWarmest','maxTempColdest','thermicityIndex','continentality') %in% var)) {
+	if (any(c('minTempWarmest', 'maxTempColdest', 'meanTempWarmest', 'meanTempColdest', 'thermicityIndex', 'continentality') %in% var)) {
 		message('\t\t...temp extremes...')
 		tempExtremes <- otherTempExtremes(tmeanstack, tminstack, tmaxstack)
 		if ('minTempWarmest' %in% var) {
@@ -179,6 +181,12 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		}
 		if ('maxTempColdest' %in% var) {
 			reslist[['maxTempColdest']] <- tempExtremes[['maxTempColdest']]
+		}
+		if ('meanTempWarmest' %in% var) {
+			reslist[['meanTempWarmest']] <- tempExtremes[['meanTempWarmest']]
+		}
+		if ('meanTempColdest' %in% var) {
+			reslist[['meanTempColdest']] <- tempExtremes[['meanTempColdest']]
 		}
 	}
 
@@ -273,8 +281,8 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		reslist[['aridityIndexThornthwaite']] <- aridIndThorn
 	}
 
-	# if minTempWarmest or maxTempColdest were requested, put them back on the same
-	# scale as the input temperature rasters
+	# if minTempWarmest, maxTempColdest, meanTempWarmest, meanTempColdest were requested, 
+	# put them back on the same scale as the input temperature rasters
 	if ('minTempWarmest' %in% var) {
 		reslist[['minTempWarmest']] <- reslist[['minTempWarmest']] * tempScale
 	}
@@ -283,6 +291,13 @@ layerCreation <- function(masterstack, solradstack, var, tempScale = 1, precipSc
 		reslist[['maxTempColdest']] <- reslist[['maxTempColdest']] * tempScale
 	}
 
+	if ('meanTempWarmest' %in% var) {
+		reslist[['meanTempWarmest']] <- reslist[['meanTempWarmest']] * tempScale
+	}
+
+	if ('meanTempColdest' %in% var) {
+		reslist[['meanTempColdest']] <- reslist[['meanTempColdest']] * tempScale
+	}
 
 	reslist <- raster::stack(reslist)
 	return(reslist)

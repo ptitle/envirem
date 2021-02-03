@@ -51,6 +51,8 @@ growingDegDays0 \cr
 growingDegDays5 \cr
 maxTempColdest \cr
 minTempWarmest \cr
+meanTempColdest \cr
+meanTempWarmest \cr
 monthCountByTemp10 \cr
 PETColdestQuarter \cr
 PETDriestQuarter \cr
