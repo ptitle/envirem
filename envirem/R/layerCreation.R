@@ -181,7 +181,7 @@ layerCreation <- function(masterstack, solradstack = NULL, var, tempScale = 1, p
 		bioclimstack[['bio12']] <- raster::calc(precipstack, fun = sum)
 	}
 	if (any(c('thermicityIndex', 'embergerQ', 'climaticMoistureIndex') %in% var)) {
-		bioclimstack <- raster::stack(bioclimstack)
+		bioclimstack <- raster::stack(bioclimstack[!sapply(bioclimstack, is.null)])
 	}
 				
 	if (any(c('minTempWarmest', 'maxTempColdest', 'meanTempWarmest', 'meanTempColdest', 'thermicityIndex', 'continentality') %in% var)) {

@@ -19,6 +19,7 @@
 ##' For example, if your minimum temperature rasters are named as 
 ##' \code{worldclim_v2_LGM_ccsm4_minTemp_1_land.tif}, then you should define the following:
 ##' \code{"worldclim_v2_LGM_ccsm4_minTemp_##_land"} for \code{tmin}. 
+##' File extensions should not be included at all (not as a suffix).
 ##'
 ##' This only needs to be done once during your R session. 
 ##' For any variable name, if these tags are removed, and the file extension is removed, only the 
