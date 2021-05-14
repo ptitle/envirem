@@ -8,3 +8,4 @@ envirem/envirem.Rcheck/
 .RData
 .Rhistory
 old/*
+dev/*

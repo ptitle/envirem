@@ -23,7 +23,7 @@
 ##'
 ##' @references
 ##' GDAL. 2015. GDAL - Geospatial Data Abstraction Library: Version 1.11.3, 
-##' Open Source Geospatial Foundation, \url{http://gdal.org}
+##' Open Source Geospatial Foundation, \url{https://gdal.org}
 ##'
 ##' @author Pascal Title
 ##'
