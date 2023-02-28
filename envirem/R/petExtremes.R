@@ -1,13 +1,14 @@
 ##' @title PET Extremes
-##' @description Calculates mean PET of the coldest, warmest, wettest and driest quarters.
+##' @description Calculates summed PET of the coldest, warmest, wettest and driest quarters.
 ##'
 ##' @param PETstack rasterStack of monthly PET,
 ##' 	layer names assumed to end in month numbers
 ##' @param precipStack rasterStack of monthly precipitation
 ##' @param meantempStack rasterStack of monthly mean temperature
 ##' 
-##' @details Generates mean monthly PET for the warmest, coldest, wettest and driest 
-##' 3 consecutive months.
+##' @details Generates summed monthly PET for the warmest, coldest, wettest and driest 
+##' 3 consecutive months. Previous versions of the envirem package incorrectly 
+##' calculated mean quarterly PET. 
 ##'
 ##' @return rasterStack of PETColdestQuarter, PETWarmestQuarter, PETWettestQuarter, PETDriestQuarter
 ##' in mm / month.
@@ -64,50 +65,50 @@ petExtremes <- function(PETstack, precipStack, meantempStack) {
 
 	possibleQuarters <- c(1:12, 1, 2)
 	
-	# calculate mean temperature and mean precipitation for each possible quarter. 
+	# calculate mean temperature and summed precipitation for each possible quarter. 
 	tempQuarters <- vector('list', length = 12)
 	precipQuarters <- vector('list', length = 12)
 	for (i in 1:12) {
 		tempQuarters[[i]] <- mean(meantempStack[[possibleQuarters[i:(i + 2)]]])
-		precipQuarters[[i]] <- mean(precipStack[[possibleQuarters[i:(i + 2)]]])
+		precipQuarters[[i]] <- sum(precipStack[[possibleQuarters[i:(i + 2)]]])
 	}
 	
 	tempQuarters <- raster::stack(tempQuarters)
 	precipQuarters <- raster::stack(precipQuarters)
 
-	# mean PET of coldest quarter
+	# summed PET of coldest quarter
 	QuarterInd <- which.min(tempQuarters)
 	PETColdestQuarter <- raster::raster(QuarterInd)
 	for (i in 1:12) {
 		cells <- which(raster::values(QuarterInd) == i)
-		PETColdestQuarter[cells] <- mean(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
+		PETColdestQuarter[cells] <- sum(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
 	}
 	names(PETColdestQuarter) <- 'PETColdestQuarter'
 	
-	# mean PET of warmest quarter
+	# summed PET of warmest quarter
 	QuarterInd <- which.max(tempQuarters)
 	PETWarmestQuarter <- raster::raster(QuarterInd)
 	for (i in 1:12) {
 		cells <- which(raster::values(QuarterInd) == i)
-		PETWarmestQuarter[cells] <- mean(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
+		PETWarmestQuarter[cells] <- sum(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
 	}
 	names(PETWarmestQuarter) <- 'PETWarmestQuarter'
 	
-	# mean PET of wettest quarter
+	# summed PET of wettest quarter
 	QuarterInd <- which.max(precipQuarters)
 	PETWettestQuarter <- raster::raster(QuarterInd)
 	for (i in 1:12) {
 		cells <- which(raster::values(QuarterInd) == i)
-		PETWettestQuarter[cells] <- mean(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
+		PETWettestQuarter[cells] <- sum(PETstack[[possibleQuarters[i:(i + 2)]]])[cells]	
 	}
 	names(PETWettestQuarter) <- 'PETWettestQuarter'
 
-	# mean PET of driest quarter
+	# summed PET of driest quarter
 	QuarterInd <- which.min(precipQuarters)
 	PETDriestQuarter <- raster::raster(QuarterInd)
 	for (i in 1:12) {
 		cells <- which(raster::values(QuarterInd) == i)
-		PETDriestQuarter[cells] <- mean(PETstack[[possibleQuarters[i:(i+2)]]])[cells]	
+		PETDriestQuarter[cells] <- sum(PETstack[[possibleQuarters[i:(i+2)]]])[cells]	
 	}
 	names(PETDriestQuarter) <- 'PETDriestQuarter'
 

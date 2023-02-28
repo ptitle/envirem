@@ -19,11 +19,12 @@ rasterStack of PETColdestQuarter, PETWarmestQuarter, PETWettestQuarter, PETDries
 in mm / month.
 }
 \description{
-Calculates mean PET of the coldest, warmest, wettest and driest quarters.
+Calculates summed PET of the coldest, warmest, wettest and driest quarters.
 }
 \details{
-Generates mean monthly PET for the warmest, coldest, wettest and driest 
-3 consecutive months.
+Generates summed monthly PET for the warmest, coldest, wettest and driest 
+3 consecutive months. Previous versions of the envirem package incorrectly 
+calculated mean quarterly PET.
 }
 \examples{
 \donttest{

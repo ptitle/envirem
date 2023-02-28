@@ -174,6 +174,7 @@ generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterE
 			files <- verifyFileStructure(path = maindir, returnFileNames = TRUE, includeSolRad = TRUE, rasterExt = rasterExt)
 			if (all(is.null(files))) stop('Something wrong with input files.')
 			clim <- raster::stack(files)
+			names(clim) <- gsub(rasterExt, '', basename(files))
 	
 			#pull out solar radiation rasters and create new stack
 			solrad <- clim[[grep(paste0(.var$solrad, '\\d\\d?', .var$solrad_post), names(clim))]]	
@@ -182,6 +183,7 @@ generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterE
 			files <- verifyFileStructure(path = maindir, returnFileNames = TRUE, includeSolRad = FALSE, rasterExt = rasterExt)
 			if (all(is.null(files))) stop('Something wrong with input files.')
 			clim <- raster::stack(files)
+			names(clim) <- gsub(rasterExt, '', basename(files))
 			solrad <- NULL
 		}
 		
@@ -233,8 +235,9 @@ generateRasters <- function(var, maindir, prefix = '', outputDir = './', rasterE
 			message('\t', tilename)
 
 			#load rasters
-			clim <- raster::stack(list.files(path = tempDir, pattern = paste(tilename, '.tif$', sep=''), full.names = TRUE))
-			names(clim) <- gsub(tilename, '', names(clim))
+			files <- list.files(path = tempDir, pattern = paste(tilename, '.tif$', sep=''), full.names = TRUE)
+			clim <- raster::stack(files)
+			names(clim) <- gsub(paste0(tilename, '|', rasterExt), '', basename(files))
 
 			if (needsSolRad) {
 				#pull out solar radiation rasters and create new stack
