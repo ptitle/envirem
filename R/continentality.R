@@ -60,3 +60,27 @@ continentality <- function(tmax, tmin, tempScale = 1) {
 	names(res) <- 'continentality'
 	return(res)
 }
+
+
+# calculation according to Conrad 1946
+continentality <- function(tmax, tmin, tempScale = 1) {
+	res <- tmax - tmin
+	res <- res / tempScale
+	
+	lats <- xyFromCell(res, cell = 1:raster::ncell(res), spatial = TRUE)
+	if (!raster::isLonLat(res[[1]])) {
+		lats <- sp::spTransform(lats, sp::CRS('+proj=longlat +datum=WGS84'))
+	}
+	lats <- abs(sp::coordinates(lats)[,2])
+	lats <- sin(lats + 10)
+	
+	res <- ((1.7 * raster::values(res)) / lats) - 14
+	continentality <- tmax[[1]]
+	raster::values(continentality) <- res
+	
+	names(continentality) <- 'continentality'
+	return(continentality)
+}
+
+
+
