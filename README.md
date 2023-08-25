@@ -1,6 +1,7 @@
   <!-- badges: start -->
   [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/envirem)](https://github.com/r-hub/cranlogs.app)
-  [![cran version](https://www.r-pkg.org/badges/version/envirem)](https://cran.r-project.org/package=envirem)  
+  [![cran version](https://www.r-pkg.org/badges/version/envirem)](https://cran.r-project.org/package=envirem)
+  [![R-CMD-check](https://github.com/ptitle/envirem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptitle/envirem/actions/workflows/R-CMD-check.yaml)
   <!-- badges: end -->
 # envirem
 An R package for generating additional bioclimatic variables

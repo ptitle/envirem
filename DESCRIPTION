@@ -8,7 +8,7 @@ Maintainer: Pascal Title <pascal.title@stonybrook.edu>
 Depends: terra, palinsol
 Imports: methods, knitr
 Description: Generation of bioclimatic rasters that are complementary to the typical 19 bioclim variables.  
-License: GPL (>=2)
+License: GPL (>= 3)
 URL: http://envirem.github.io
 BugReports: https://github.com/ptitle/envirem/issues
 NeedsCompilation: yes

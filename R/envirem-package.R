@@ -48,4 +48,4 @@
 ##' @importFrom stats sd
 ##' @importFrom knitr kable
 ##'
-NULL
+"_PACKAGE"

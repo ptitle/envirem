@@ -313,5 +313,6 @@ generateEnvirem <- function(masterstack, solradstack = NULL, monthPET = NULL, va
 	}
 
 	reslist <- terra::rast(reslist)
+	reslist <- reslist[[var]]
 	return(reslist)
 }

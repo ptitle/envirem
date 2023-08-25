@@ -1,4 +1,4 @@
-##' @export
+
 
 # define a custom environment for defining the naming of variables
 
