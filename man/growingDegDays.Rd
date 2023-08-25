@@ -7,7 +7,7 @@
 growingDegDays(meantempstack, baseTemp, tempScale = 1)
 }
 \arguments{
-\item{meantempstack}{rasterStack of mean monthly temperature in deg C}
+\item{meantempstack}{SpatRaster of mean monthly temperature in deg C}
 
 \item{baseTemp}{base temperature in degrees C.}
 
@@ -27,7 +27,7 @@ multiplied by total number of days
 \examples{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 meantemp <- env[[grep('tmean', names(env), value=TRUE)]]
 growingDegDays(meantemp, 10, tempScale = 10)

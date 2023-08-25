@@ -4,7 +4,7 @@
 \alias{assignNames}
 \title{Defining variable names}
 \usage{
-assignNames(tmin, tmax, tmean, precip, solrad, reset)
+assignNames(tmin, tmax, tmean, precip, solrad, pet, reset)
 }
 \arguments{
 \item{tmin}{naming scheme for minimum temperature}
@@ -16,6 +16,8 @@ assignNames(tmin, tmax, tmean, precip, solrad, reset)
 \item{precip}{naming scheme for precipitation}
 
 \item{solrad}{naming scheme for solar radiation}
+
+\item{pet}{naming scheme for monthly potential evapotranspiration}
 
 \item{reset}{if \code{TRUE}, then names are set to default values}
 }
@@ -43,16 +45,16 @@ When using the \code{assignNames()} function, you can specify as many or as few 
 Variable numbers can have zero-padding. This is handled automatically. 
 Therefore, \code{bio_1} or \code{bio_01} are both fine, and nothing needs to be specified. 
 
-The default values are \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, and 
-\code{et_solrad_}, with no suffix. 
-You can use the function \code{varnames()} to see the current assigned values.
+The default values are \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, 
+\code{et_solrad_} and \code{pet_}, with no suffix. 
+You can use the function \code{namingScheme()} to see the current assigned values.
 }
 \examples{
 \donttest{
-varnames()
+namingScheme()
 assignNames(precip = 'precip_##_5arcmin')	
 assignNames(solrad = 'solar_##', tmin = 'minTemp##')
-varnames()
+namingScheme()
 
 # set back to default
 assignNames(reset = TRUE)

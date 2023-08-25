@@ -27,7 +27,7 @@ Generate Continentality index.
 \donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # identify appropriate layers
 tmean <- grep('tmean', names(env))

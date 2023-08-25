@@ -17,7 +17,7 @@ extent, resolution, projection, etc.}
 \item{...}{additional arguments passed to \code{writeRaster}}
 }
 \value{
-If \code{outputDir = NULL}, a RasterStack is returned. Otherwise, rasters
+If \code{outputDir = NULL}, a SpatRaster is returned. Otherwise, rasters
 	are written to disk in the designated directory, and nothing is returned. 
 	Naming of the layers uses the tag specified via \code{\link{assignNames}}.
 }
@@ -40,7 +40,7 @@ Given the latitude values of the cells found in the raster template
 \donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # set aside a template raster
 template <- env[[1]]

@@ -30,7 +30,7 @@
 ##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' # identify appropriate layers
 ##' tmean <- grep('tmean', names(env))
@@ -62,25 +62,32 @@ continentality <- function(tmax, tmin, tempScale = 1) {
 }
 
 
-# calculation according to Conrad 1946
-continentality <- function(tmax, tmin, tempScale = 1) {
-	res <- tmax - tmin
-	res <- res / tempScale
+# # # calculation according to Conrad 1946
+# continentality <- function(tmax, tmin, tempScale = 1, conrad = FALSE) {
+	# res <- tmax - tmin
+	# res <- res / tempScale
 	
-	lats <- xyFromCell(res, cell = 1:raster::ncell(res), spatial = TRUE)
-	if (!raster::isLonLat(res[[1]])) {
-		lats <- sp::spTransform(lats, sp::CRS('+proj=longlat +datum=WGS84'))
-	}
-	lats <- abs(sp::coordinates(lats)[,2])
-	lats <- sin(lats + 10)
-	
-	res <- ((1.7 * raster::values(res)) / lats) - 14
-	continentality <- tmax[[1]]
-	raster::values(continentality) <- res
-	
-	names(continentality) <- 'continentality'
-	return(continentality)
-}
+	# if (conrad) {
+		# lats <- terra::crds(res, df = TRUE, na.rm = FALSE)
+		# lats <- terra::vect(lats, geom = colnames(lats), crs = terra::crs(res))
+		# if (!terra::is.lonlat(res)) {
+			# lats <- terra::project(lats, 'EPSG:4326')
+		# }
+		# lats <- abs(terra::crds(lats)[,2])
+		# lats <- sin(lats + 10)
+		
+		# res <- ((1.7 * as.numeric(terra::values(res))) / lats) - 14
+		# continentality <- tmax[[1]]
+		# terra::values(continentality) <- res
+
+		# names(continentality) <- 'continentality'
+		# return(continentality)
+
+	# } else {
+		# names(res) <- 'continentality'
+		# return(res)		
+	# }
+# }
 
 
 

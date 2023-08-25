@@ -3,14 +3,14 @@
 ##' @description Generates max temp of the coldest month, min temp of the warmest month, mean temp
 ##'		of the coldest month, mean temp of the warmest month.
 ##'
-##' @param meantempStack rasterStack of monthly mean temperature
+##' @param meantempStack SpatRaster of monthly mean temperature
 ##'
-##' @param mintempStack rasterStack of monthly min temperature
+##' @param mintempStack SpatRaster of monthly min temperature
 ##'
-##' @param maxtempStack rasterStack of monthly max temperature
+##' @param maxtempStack SpatRaster of monthly max temperature
 ##'
 ##'
-##' @return rasterStack of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in 
+##' @return SpatRaster of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in 
 ##' same units as input rasters.
 ##'
 ##' @author Pascal Title
@@ -19,7 +19,7 @@
 ##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' # identify appropriate layers
 ##' tmean <- grep('tmean', names(env))
@@ -48,11 +48,11 @@ otherTempExtremes <- function(meantempStack, mintempStack, maxtempStack) {
 	##identify coldest month by mean temp
 	## get index of coldest month by cell	
 	coldestMonth <- which.min(meantempStack)
-	maxTempColdest <- raster::raster(coldestMonth)
+	maxTempColdest <- terra::rast(coldestMonth)
 	#get max temp of this month
 	# we will loop through 1:12, and identify which cells have this value, then extract temp for those cells
 	for (i in 1:12) {
-		cells <- which(raster::values(coldestMonth) == i)
+		cells <- which(terra::values(coldestMonth) == i)
 		maxTempColdest[cells] <- maxtempStack[[i]][cells]
 	}
 	names(maxTempColdest) <- 'maxTempColdest'
@@ -61,11 +61,11 @@ otherTempExtremes <- function(meantempStack, mintempStack, maxtempStack) {
 	##identify warmest month by mean temp
 	## get index of coldest month by cell	
 	warmestMonth <- which.max(meantempStack)
-	minTempWarmest <- raster::raster(warmestMonth)
+	minTempWarmest <- terra::rast(warmestMonth)
 	#get max temp of this month
 	# we will loop through 1:12, and identify which cells have this value, then extract temp for those cells
 	for (i in 1:12) {
-		cells <- which(raster::values(warmestMonth) == i)
+		cells <- which(terra::values(warmestMonth) == i)
 		minTempWarmest[cells] <- mintempStack[[i]][cells]
 	}
 	names(minTempWarmest) <- 'minTempWarmest'
@@ -78,5 +78,5 @@ otherTempExtremes <- function(meantempStack, mintempStack, maxtempStack) {
 	meanTempWarmest <- max(meantempStack)
 	names(meanTempWarmest) <- 'meanTempWarmest'	
 
-	return(raster::stack(list(maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest)))
+	return(terra::rast(list(maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest)))
 }

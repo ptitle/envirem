@@ -7,9 +7,9 @@
 aridityIndexThornthwaite(precipStack, PETstack, precipScale = 1)
 }
 \arguments{
-\item{precipStack}{rasterStack of monthly precipitation.}
+\item{precipStack}{SpatRaster of monthly precipitation.}
 
-\item{PETstack}{rasterStack of monthly potential evapotranspiration. 
+\item{PETstack}{SpatRaster of monthly potential evapotranspiration. 
 Layer names are assumed to end in the month number.}
 
 \item{precipScale}{integer; scaling factor for the precipitation data, see \link{envirem}
@@ -30,7 +30,7 @@ where n = sum of monthly PET for those months
 \donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # identify the appropriate layers
 meantemp <- grep('mean', names(env), value=TRUE)
@@ -38,18 +38,18 @@ solar <- grep('solrad', names(env), value=TRUE)
 maxtemp <- grep('tmax', names(env), value=TRUE)
 mintemp <- grep('tmin', names(env), value=TRUE)
 
-# read them in as rasterStacks
-meantemp <- stack(env[[meantemp]])
-solar <- stack(env[[solar]])
-maxtemp <- stack(env[[maxtemp]])
-mintemp <- stack(env[[mintemp]])
+# read them in as SpatRasters
+meantemp <- env[[meantemp]]
+solar <- env[[solar]]
+maxtemp <- env[[maxtemp]]
+mintemp <- env[[mintemp]]
 tempRange <- abs(maxtemp - mintemp)
 
 # get monthly PET
 pet <- monthlyPET(meantemp, solar, tempRange)
 
 precip <- grep('prec', names(env), value=TRUE)
-precip <- stack(env[[precip]])
+precip <- env[[precip]]
 
 # set up naming scheme - only precip is different from default
 assignNames(precip = 'prec_##')

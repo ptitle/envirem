@@ -8,6 +8,7 @@
 ##' @param tmean naming scheme for mean temperature
 ##' @param precip naming scheme for precipitation
 ##' @param solrad naming scheme for solar radiation
+##' @param pet naming scheme for monthly potential evapotranspiration
 ##' @param reset if \code{TRUE}, then names are set to default values
 
 ##' @details 	
@@ -30,23 +31,23 @@
 ##' Variable numbers can have zero-padding. This is handled automatically. 
 ##'	Therefore, \code{bio_1} or \code{bio_01} are both fine, and nothing needs to be specified. 
 ##' 
-##' The default values are \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, and 
-##' \code{et_solrad_}, with no suffix. 
-##' You can use the function \code{varnames()} to see the current assigned values.
+##' The default values are \code{tmin_}, \code{tmax_}, \code{tmean_}, \code{precip_}, 
+##' \code{et_solrad_} and \code{pet_}, with no suffix. 
+##' You can use the function \code{namingScheme()} to see the current assigned values.
 ##'
 ##' @examples
 ##' \donttest{
-##'	varnames()
+##'	namingScheme()
 ##' assignNames(precip = 'precip_##_5arcmin')	
 ##' assignNames(solrad = 'solar_##', tmin = 'minTemp##')
-##' varnames()
+##' namingScheme()
 ##'
 ##' # set back to default
 ##' assignNames(reset = TRUE)
 ##' }
 ##' @export
 
-assignNames <- function(tmin, tmax, tmean, precip, solrad, reset) {
+assignNames <- function(tmin, tmax, tmean, precip, solrad, pet, reset) {
 	
 	# if (methods::hasArg(bio)) {
 		# if (!grepl('##', bio)) {
@@ -119,20 +120,32 @@ assignNames <- function(tmin, tmax, tmean, precip, solrad, reset) {
 		assign('solrad', prefix, envir = .var)
 		assign('solrad_post', suffix, envir = .var)
 	}
+
+	if (methods::hasArg(pet)) {
+		if (!grepl('##', pet)) {
+			stop('The PET tag must contain ## to represent the numbers 1:12.')
+		}
+		prefix <- strsplit(pet, split = "##")[[1]][1]
+		suffix <- strsplit(pet, split = "##")[[1]][2]
+		if (is.na(prefix)) prefix <- ''
+		if (is.na(suffix)) suffix <- ''
+		assign('pet', prefix, envir = .var)
+		assign('pet_post', suffix, envir = .var)
+	}
 	
 	if (methods::hasArg(reset)) {
-#		assign('bio', 'bio_', envir = .var)
 		assign('tmin', 'tmin_', envir = .var)
 		assign('tmax', 'tmax_', envir = .var)
 		assign('tmean', 'tmean_', envir = .var)
 		assign('precip', 'precip_', envir = .var)
 		assign('solrad', 'et_solrad_', envir = .var)
-#		assign('bio_post', '', envir = .var)
+		assign('pet', 'PET_', envir = .var)
 		assign('tmin_post', '', envir = .var)
 		assign('tmax_post', '', envir = .var)
 		assign('tmean_post', '', envir = .var)
 		assign('precip_post', '', envir = .var)
 		assign('solrad_post', '', envir = .var)
+		assign('pet_post', '', envir = .var)
 	}
 }
 

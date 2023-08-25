@@ -2,7 +2,7 @@
 ##'
 ##' @description Growing degree days above some base temperature.
 ##'
-##' @param meantempstack rasterStack of mean monthly temperature in deg C
+##' @param meantempstack SpatRaster of mean monthly temperature in deg C
 ##'
 ##' @param baseTemp base temperature in degrees C.
 ##'
@@ -25,7 +25,7 @@
 ##' @examples
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' meantemp <- env[[grep('tmean', names(env), value=TRUE)]]
 ##' growingDegDays(meantemp, 10, tempScale = 10)
@@ -43,7 +43,7 @@ growingDegDays <- function(meantempstack, baseTemp, tempScale = 1) {
 	Ndays <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 	
 	gdd <- meantempstack
-	for (i in 1:raster::nlayers(meantempstack)) {
+	for (i in 1:terra::nlyr(meantempstack)) {
 		gdd[[i]] <- meantempstack[[i]] - baseTemp
 		gdd[[i]][gdd[[i]] < 0] <- 0
 		gdd[[i]] <- gdd[[i]] * Ndays[i]

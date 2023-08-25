@@ -7,7 +7,7 @@
 monthCountByTemp(tempStack, minTemp = 10, tempScale = 1)
 }
 \arguments{
-\item{tempStack}{rasterStack of monthly mean temperature in degrees C}
+\item{tempStack}{SpatRaster of monthly mean temperature in degrees C}
 
 \item{minTemp}{reference temperature in degrees C}
 
@@ -23,7 +23,7 @@ Number of months with mean temperature greater than some base temp.
 \examples{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # identify the appropriate layers
 meantemp <- grep('mean', names(env), value=TRUE)

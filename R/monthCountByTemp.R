@@ -2,7 +2,7 @@
 ##'
 ##' @description Number of months with mean temperature greater than some base temp.
 ##'
-##' @param tempStack rasterStack of monthly mean temperature in degrees C
+##' @param tempStack SpatRaster of monthly mean temperature in degrees C
 ##'
 ##' @param minTemp reference temperature in degrees C
 ##'
@@ -22,7 +22,7 @@
 ##' @examples
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' # identify the appropriate layers
 ##' meantemp <- grep('mean', names(env), value=TRUE)

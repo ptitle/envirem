@@ -27,7 +27,7 @@
 ##' @examples
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' embergerQ(env[['bio_12']], env[['bio_5']], env[['bio_6']], tempScale = 10)
 ##' @export
@@ -42,13 +42,13 @@ embergerQ <- function(P, M, m, tempScale = 1, precipScale = 1) {
 	
 	#switch to 1 deg Celsius for temp
 	if (tempScale != 1) {
-		raster::values(M) <- raster::values(M) / tempScale
-		raster::values(m) <- raster::values(m) / tempScale
+		M <- M / tempScale
+		m <- m / tempScale
 	}
 	
 	# switch to mm for precip
 	if (precipScale != 1) {
-		raster::values(P) <- raster::values(P) / precipScale
+		P <- P / precipScale
 	}
 	
 	res <- 2000 * P / ((M + m + 546.4) * (M - m))

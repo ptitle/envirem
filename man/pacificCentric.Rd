@@ -7,12 +7,12 @@
 pacificCentric(r, crop = TRUE)
 }
 \arguments{
-\item{r}{rasterLayer or rasterStack in unprojected geographic coordinates}
+\item{r}{rasterLayer or SpatRaster in unprojected geographic coordinates}
 
 \item{crop}{logical, should raster then be cropped to longitude [100, 300]}
 }
 \value{
-rasterLayer or rasterStack
+rasterLayer or SpatRaster
 }
 \description{
 Takes a raster that is centered on 0 longitude (default) and recenters it on the Pacific
@@ -23,7 +23,7 @@ Cropping to [100, 300] is equivalent to [100, -60]
 \examples{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-tmin1 <- raster(grep('tmin_1\\\\.', rasterFiles, value=TRUE))
+tmin1 <- rast(grep('tmin_1\\\\.', rasterFiles, value=TRUE))
 
 pacificCentric(tmin1, crop = TRUE)
 }

@@ -1,15 +1,17 @@
 ##' @title Verify Raster Names
 ##'
-##' @description Given a RasterStack, this function will verify the
+##' @description Given a SpatRaster, this function will verify the
 ##' naming scheme and check that all required rasters are present.
 ##'
-##' @param masterstack rasterStack containing all precipitation, 
+##' @param masterstack SpatRaster containing all precipitation, 
 ##' min temperature, max temperature, and (optionally) mean temperature variables. 
 ##'
-##' @param solradstack rasterStack of monthly solar radiation
+##' @param solradstack SpatRaster of monthly solar radiation
+##'
+##' @param monthPET SpatRaster of monthly potential evapotranspiration
 ##'
 ##' @param returnRasters if \code{FALSE}, the function checks names
-##' and reports back. If \code{TRUE}, a RasterStack is returned with
+##' and reports back. If \code{TRUE}, a SpatRaster is returned with
 ##' standardized names.
 ##'
 ##'
@@ -26,16 +28,18 @@
 ##'	
 ##'	12 solar radiation rasters
 ##'
+##' 12 PET rasters [optional]
+##'
 ##' The naming scheme will be checked against the one 
 ##' defined via the custom naming environment. See \code{link{?assignNames}}
 ##' for additional details.
 ##'
-##' The function can test the temp/precip rasterstack
-##' and/or the solar radiation rasterstack separately, or simultaneously.
+##' The function can test the temp/precip SpatRaster
+##' and/or the solar radiation SpatRaster separately, or simultaneously.
 ##'
 ##'
 ##' @return Prints messages to the console if \code{returnRasters = FALSE}, 
-##'	If \code{returnRasters = TRUE}, then a RasterStack is returned. This RasterStack
+##'	If \code{returnRasters = TRUE}, then a SpatRaster is returned. This SpatRaster
 ##' will not include rasters that were deemed unnecessary. 
 ##'
 ##' @author Pascal Title
@@ -47,8 +51,8 @@
 ##'	# create stack of temperature and precipitation rasters
 ##'	# and stack of solar radiation rasters
 ##'	solradFiles <- grep('solrad', rasterFiles, value=TRUE)
-##'	worldclim <- stack(setdiff(rasterFiles, solradFiles))
-##'	solar <- stack(solradFiles)
+##'	worldclim <- rast(setdiff(rasterFiles, solradFiles))
+##'	solar <- rast(solradFiles)
 ##'
 ##'	# modify naming
 ##'	names(worldclim) <- gsub('tmin_', 'minTemp', names(worldclim))
@@ -56,7 +60,7 @@
 ##'	names(solar) <- gsub('et_solrad_', 'solar_', names(solar))
 ##'
 ##'	# but don't specify this change
-##'	varnames()
+##'	namingScheme()
 ##'
 ##'	# Run check
 ##'	verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
@@ -64,7 +68,7 @@
 ##'	# But if we specify our naming scheme
 ##' assignNames(tmin = 'minTemp##_v1.0', tmax = 'tmax_##_v1.0', tmean = 'tmean_##_v1.0', 
 ##' 	solrad = 'solar_##', precip = 'prec_##_v1.0')
-##' varnames()
+##' namingScheme()
 ##' 
 ##'	verifyRasterNames(masterstack = worldclim, solradstack = solar, returnRasters = FALSE)
 ##'
@@ -74,12 +78,12 @@
 ##' @export
 
 
-verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRasters = FALSE) {
+verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, monthPET = NULL, returnRasters = FALSE) {
 	
-	if (is.null(masterstack) & is.null(solradstack)) {
-		stop('Either masterstack or solradstack must be provided.')
+	if (is.null(masterstack) & is.null(solradstack) & is.null(monthPET)) {
+		stop('At least one input must be provided.')
 	}
-	
+		
 	problem <- FALSE
 	
 	if (!is.null(masterstack)) {
@@ -112,8 +116,13 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			
 			if (all(unlist(expectednames) %in% names(masterstack))) {
 				extraVar <- setdiff(names(masterstack), unlist(expectednames))
-				masterstack <- raster::dropLayer(masterstack, extraVar)
-				message('\tIn masterstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
+				if (length(setdiff(names(masterstack), extraVar)) > 0) {
+					masterstack <- terra::subset(masterstack, extraVar, negate = TRUE)
+					message('\tIn masterstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
+				} else {
+					masterstack <- NULL
+					message('\tIn masterstack, all rasters were ignored.')
+				}
 		
 			} else {
 				
@@ -165,8 +174,13 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 			
 			extraVar <- setdiff(names(solradstack), expectedSolRad)
 			if (length(extraVar) > 0) {
-				solradstack <- raster::dropLayer(solradstack, extraVar)
-				message('\tIn solradstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
+				if (length(setdiff(names(solradstack), extraVar)) > 0) {
+					solradstack <- terra::subset(solradstack, extraVar, negate = TRUE)
+					message('\tIn solradstack, ignoring the following rasters:', paste(extraVar, collapse = ', '))
+				} else {
+					solradstack <- NULL
+					message('\tIn solradstack, all rasters were ignored.')
+				}
 			}	
 			
 			if (returnRasters) {
@@ -177,14 +191,47 @@ verifyRasterNames <- function(masterstack = NULL, solradstack = NULL, returnRast
 		}
 	}
 
-	if (returnRasters) {
-		if (!is.null(masterstack) & !is.null(solradstack)) {
-			return(raster::stack(masterstack, solradstack))	
-		} else if (!is.null(masterstack) & is.null(solradstack)) {
-			return(masterstack)
-		} else if (is.null(masterstack) & !is.null(solradstack)) {
-			return(solradstack)
+	if (!is.null(monthPET)) {
+		# now PET
+		reg <- paste0('(', .var$pet, ')', '([0-9]+)', '(', .var$pet_post, '$)')
+		newnameNums <- gsub(reg, "\\2", names(monthPET))
+		for (i in 1:9) {
+			ind <- which(newnameNums == as.character(i))
+			if (length(ind) > 0) {
+				numTag <- gsub(reg, "\\2",names(monthPET)[ind])
+				names(monthPET)[ind] <- paste0(.var$pet, gsub(as.character(i), sprintf("%02d", i), numTag), .var$pet_post)
+			}
 		}
+		
+		expectedPET <- paste0(.var$pet, sprintf("%02d", 1:12), .var$pet_post)
+		if (!identical(sort(expectedPET), sort(names(monthPET)))) {
+			problem <- TRUE
+			missingPET <- setdiff(expectedPET, names(monthPET))
+			
+			extraVar <- setdiff(names(monthPET), expectedPET)
+			if (length(extraVar) > 0) {
+				if (length(setdiff(names(monthPET), extraVar)) > 0) {
+					monthPET <- terra::subset(monthPET, extraVar, negate = TRUE)
+					message('\tIn monthPET, ignoring the following rasters:', paste(extraVar, collapse = ', '))
+				} else {
+					monthPET <- NULL
+					message('\tIn monthPET, all rasters were ignored.')
+				}
+			}	
+			
+			if (returnRasters) {
+				stop('monthPET must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.\n')
+			 } else {
+				message('\tmonthPET must have 12 monthly variables. Ensure that you have defined the proper naming scheme. \n\tSee ?assignNames.')
+			}
+		}
+	}
+
+	
+	ret <- c(masterstack, solradstack, monthPET)
+
+	if (returnRasters) {
+		return(c(masterstack, solradstack, monthPET))
 	} else {
 		if (!problem) {
 			message('\t\tNames appear to be correct!')

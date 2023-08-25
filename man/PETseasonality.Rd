@@ -7,7 +7,7 @@
 PETseasonality(PETstack)
 }
 \arguments{
-\item{PETstack}{rasterStack of monthly PET rasters}
+\item{PETstack}{SpatRaster of monthly PET rasters}
 }
 \value{
 rasterLayer in mm / month
@@ -22,7 +22,7 @@ PET seasonality = 100 * standard deviation of monthly PET.
 \donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # identify the appropriate layers
 meantemp <- grep('mean', names(env), value=TRUE)
@@ -30,11 +30,11 @@ solar <- grep('solrad', names(env), value=TRUE)
 maxtemp <- grep('tmax', names(env), value=TRUE)
 mintemp <- grep('tmin', names(env), value=TRUE)
 
-# read them in as rasterStacks
-meantemp <- stack(env[[meantemp]])
-solar <- stack(env[[solar]])
-maxtemp <- stack(env[[maxtemp]])
-mintemp <- stack(env[[mintemp]])
+# read them in as SpatRasters
+meantemp <- env[[meantemp]]
+solar <- env[[solar]]
+maxtemp <- env[[maxtemp]]
+mintemp <- env[[mintemp]]
 tempRange <- abs(maxtemp - mintemp)
 
 # get monthly PET

@@ -40,7 +40,7 @@
 ##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' # identify appropriate layers
 ##' tmean <- grep('tmean', names(env))
@@ -74,33 +74,33 @@ thermicityIndex <- function(annualTemp, minTemp, maxTemp, continentality, return
 	
 	if (returnCompensated) {
 		# use continentality values to implement corrections for compensated metric
-		ind <- which(raster::values(continentality) < 9)
+		ind <- which(terra::values(continentality) < 9)
 		c1 <- continentality
-		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[setdiff(1:terra::ncell(c1), ind)] <- NA
 		c1[ind] <- (9 - c1[ind]) * 10
 		thermicity[ind] <- thermicity[ind] - c1[ind]		
 		
-		ind <- intersect(which(raster::values(continentality) > 18), which(raster::values(continentality) <= 21))
+		ind <- intersect(which(terra::values(continentality) > 18), which(terra::values(continentality) <= 21))
 		c1 <- continentality
-		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[setdiff(1:terra::ncell(c1), ind)] <- NA
 		c1[ind] <- (c1[ind] - 18) * 5
 		thermicity[ind] <- thermicity[ind] + c1[ind]
 		
-		ind <- intersect(which(raster::values(continentality) > 21), which(raster::values(continentality) <= 28))
+		ind <- intersect(which(terra::values(continentality) > 21), which(terra::values(continentality) <= 28))
 		c1 <- continentality
-		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[setdiff(1:terra::ncell(c1), ind)] <- NA
 		c1[ind] <- ((c1[ind] - 21) * 15) + 15
 		thermicity[ind] <- thermicity[ind] + c1[ind]
 		
-		ind <- intersect(which(raster::values(continentality) > 28), which(raster::values(continentality) <= 46))
+		ind <- intersect(which(terra::values(continentality) > 28), which(terra::values(continentality) <= 46))
 		c1 <- continentality
-		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[setdiff(1:terra::ncell(c1), ind)] <- NA
 		c1[ind] <- ((c1[ind] - 28) * 25) + 15 + 105
 		thermicity[ind] <- thermicity[ind] + c1[ind]
 	
-		ind <- intersect(which(raster::values(continentality) > 46), which(raster::values(continentality) <= 65))
+		ind <- intersect(which(terra::values(continentality) > 46), which(terra::values(continentality) <= 65))
 		c1 <- continentality
-		c1[setdiff(1:raster::ncell(c1), ind)] <- NA
+		c1[setdiff(1:terra::ncell(c1), ind)] <- NA
 		c1[ind] <- ((c1[ind] - 46) * 30) + 15 + 105 + 425
 		thermicity[ind] <- thermicity[ind] + c1[ind]
 		

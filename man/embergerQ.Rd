@@ -31,7 +31,7 @@ Calculate Emberger's pluviometric quotient.
 \examples{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 embergerQ(env[['bio_12']], env[['bio_5']], env[['bio_6']], tempScale = 10)
 }

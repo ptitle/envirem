@@ -33,7 +33,7 @@ Of course, it is also perfectly acceptable to leave \code{tempScale = 1} and \co
 and modify the input rasters yourself. 
 
 
-The main function for generating ENVIREM rasters is \code{\link{generateRasters}}. 
+The main function for generating ENVIREM rasters is \code{\link{generateEnvirem}}. 
 A complete tutorial of this R package can be found at \url{http://envirem.github.io}.
 }
 \references{

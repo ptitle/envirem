@@ -23,7 +23,7 @@
 ##' 	If you are having problems with this function and the rasterTemplate is not in 
 ##' 	long/lat, try with an unprojected long/lat raster.
 ##'
-##' @return If \code{outputDir = NULL}, a RasterStack is returned. Otherwise, rasters
+##' @return If \code{outputDir = NULL}, a SpatRaster is returned. Otherwise, rasters
 ##'		are written to disk in the designated directory, and nothing is returned. 
 ##'		Naming of the layers uses the tag specified via \code{\link{assignNames}}. 
 ##'
@@ -38,7 +38,7 @@
 ##' \donttest{
 ##' # Find example rasters
 ##' rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-##' env <- stack(rasterFiles)
+##' env <- rast(rasterFiles)
 ##'
 ##' # set aside a template raster
 ##' template <- env[[1]]
@@ -55,10 +55,8 @@
 ## LGM: -21500
 
 ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
-	
-	solradStack <- vector('list', 12)
-	
-	if ((grepl('+proj=longlat', raster::projection(rasterTemplate)))) {
+		
+	if (terra::is.lonlat(rasterTemplate)) {
 		isLongLat <- TRUE
 	} else {
 		isLongLat <- FALSE
@@ -67,59 +65,56 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 	if (!isLongLat) {
 		
 		rasterTemplate2 <- rasterTemplate
-				
-		# get coordinates of cells with data, and transform to long/lat
-		templatePts <- raster::rasterToPoints(rasterTemplate)
-		templatePtsLongLat <- sf::st_as_sf(as.data.frame(templatePts), coords = c('x', 'y'), crs = raster::projection(rasterTemplate))
-		templatePtsLongLat <- sf::st_transform(templatePtsLongLat, crs = '+proj=longlat +datum=WGS84')
+		rasterTemplate <- terra::project(rasterTemplate, 'EPSG:4326')
 		
-		# get an estimate of resolution in long/lat
-		extentLL <- raster::extent(templatePtsLongLat)
-		resx <- (extentLL@xmax - extentLL@xmin)  / raster::ncol(rasterTemplate)
-		resy <- (extentLL@ymax - extentLL@ymin)  / raster::nrow(rasterTemplate)
-		resx <- floor(resx * 100) / 100
-		resy <- floor(resy * 100) / 100
+		# rasterTemplate2 <- rasterTemplate
+		# # get coordinates of cells with data, and transform to long/lat
+		# templatePts <- terra::as.points(rasterTemplate)
+		# templatePtsLongLat <- terra::project(templatePts, 'EPSG:4326')
 		
-		rasterTemplate <- raster::raster(ext = extentLL, res = c(resx, resy), crs = '+proj=longlat +datum=WGS84')
+		# # get an estimate of resolution in long/lat
+		# extentLL <- terra::ext(templatePtsLongLat)	
+		# resx <- (extentLL$xmax - extentLL$xmin)  / terra::ncol(rasterTemplate)
+		# resy <- (extentLL$ymax - extentLL$ymin)  / terra::nrow(rasterTemplate)
+		# resx <- floor(resx * 100) / 100
+		# resy <- floor(resy * 100) / 100
 		
-		rasterTemplate[] <- raster::extract(rasterTemplate2, rgdal::project(coordinates(rasterTemplate), projection(rasterTemplate2)))
+		# rasterTemplate <- terra::rast(extentLL, res = c(resx, resy), crs = 'EPSG:4326')
+		
+		# terra::values(rasterTemplate) <- terra::extract(rasterTemplate2, terra::project(terra::as.points(rasterTemplate), rasterTemplate2), ID = FALSE)[,1]
+		
 	}
 		
 	# extract latitudes from cells
-	latvals <- raster::yFromCell(rasterTemplate, raster::cellFromCol(rasterTemplate, 1))
+	latvals <- terra::yFromRow(rasterTemplate, row = 1:nrow(rasterTemplate))
 	
 	# for each month, calculate insolation and fill raster
+	solradStack <- terra::rast(rasterTemplate, nlyrs = 12)
 	for (i in 1:12) {
 		
 		message(i, ' ', appendLF = FALSE)	
 		RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
-		ras <- raster::raster(rasterTemplate)
-		tmp <- rep(RA, each = raster::ncol(rasterTemplate))
-		tmp <- matrix(data = tmp, nrow = raster::nrow(ras), ncol = raster::ncol(ras), byrow = TRUE)
-		ras[ ] <- tmp
+		tmp <- rep(RA, each = terra::ncol(rasterTemplate))
+		tmp <- matrix(data = tmp, nrow = terra::nrow(rasterTemplate), ncol = terra::ncol(rasterTemplate), byrow = FALSE)
+		ras <- terra::init(rasterTemplate, fun = tmp)
 		solradStack[[i]] <- ras
 	}
 		
-	solradStack <- raster::stack(solradStack)
-	raster::projection(solradStack) <- raster::projection(rasterTemplate)
-	
 	# rename using the naming scheme supplied
 	names(solradStack) <- paste0(.var$solrad, sprintf("%02d", 1:12), .var$solrad_post)
 	
 	if (!isLongLat) {	
 		
 		# project to input projection
-		e <- raster::projectExtent(solradStack, crs = raster::projection(rasterTemplate2))
-		newStack <- raster::projectRaster(solradStack, to = e, res = raster::res(rasterTemplate2))
-		newStack <- raster::resample(newStack, rasterTemplate2)
-		newStack <- raster::mask(newStack, rasterTemplate2)
-		solradStack <- newStack
-		rm(newStack)
+		solradStack <- terra::project(solradStack, rasterTemplate2)
 		
+		# mask NA regions
+		solradStack <- terra::mask(solradStack, rasterTemplate2)	
+				
 	} else {	
 	
 		# mask NA regions
-		solradStack <- raster::mask(solradStack, rasterTemplate)	
+		solradStack <- terra::mask(solradStack, rasterTemplate)	
 	}
 	
 	# write to disk, if requested
@@ -130,12 +125,9 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 	} else {
 
 		outputDir <- gsub('/?$', '/', outputDir)
-		tifOptions <- c("COMPRESS=DEFLATE", "PREDICTOR=2", "ZLEVEL=6")
+		outputName <- paste0(outputDir, names(solradStack), '.tif')
+		terra::writeRaster(solradStack, outputName, datatype = 'FLT4S', NAflag = -9999, ...)
 		
-		for (i in 1:raster::nlayers(solradStack)) {
-			outputName <- paste0(outputDir, names(solradStack)[i], '.tif')
-			raster::writeRaster(solradStack[[i]], outputName, datatype = 'FLT4S', NAflag = -9999, options = tifOptions, ...)	
-		}
 	}
 }
 

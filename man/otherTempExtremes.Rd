@@ -7,14 +7,14 @@
 otherTempExtremes(meantempStack, mintempStack, maxtempStack)
 }
 \arguments{
-\item{meantempStack}{rasterStack of monthly mean temperature}
+\item{meantempStack}{SpatRaster of monthly mean temperature}
 
-\item{mintempStack}{rasterStack of monthly min temperature}
+\item{mintempStack}{SpatRaster of monthly min temperature}
 
-\item{maxtempStack}{rasterStack of monthly max temperature}
+\item{maxtempStack}{SpatRaster of monthly max temperature}
 }
 \value{
-rasterStack of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in 
+SpatRaster of maxTempColdest, minTempWarmest, meanTempColdest, meanTempWarmest, in 
 same units as input rasters.
 }
 \description{
@@ -25,7 +25,7 @@ Generates max temp of the coldest month, min temp of the warmest month, mean tem
 \donttest{
 # Find example rasters
 rasterFiles <- list.files(system.file('extdata', package='envirem'), full.names=TRUE)
-env <- stack(rasterFiles)
+env <- rast(rasterFiles)
 
 # identify appropriate layers
 tmean <- grep('tmean', names(env))
