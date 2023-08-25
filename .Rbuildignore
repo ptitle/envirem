@@ -1,4 +1,4 @@
 ^\.github$
-^\docs$
+^docs/*
 ^LICENSE\.md$
 ^README\.md$

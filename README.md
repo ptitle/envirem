@@ -4,8 +4,11 @@
   [![R-CMD-check](https://github.com/ptitle/envirem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptitle/envirem/actions/workflows/R-CMD-check.yaml)
   <!-- badges: end -->
 # envirem
-An R package for generating additional bioclimatic variables
+An R package for generating additional bioclimatic variables.
 
+Please check out [https://ptitle.github.io/envirem/](https://ptitle.github.io/envirem/) for an updated demo of the R package.
+
+The original precomputed set of rasters are hosted at the University of Michigan [here](https://deepblue.lib.umich.edu/data/concern/data_sets/gt54kn05f). 
 
 ## Updates
 **August 2023 -- envirem v3.0**: The envirem package has been substantially updated such that previously written scripts that use the envirem package will no longer run and will need to be updated. Under the hood, this package no longer depends on raster and rgdal and now uses SpatRaster objects with the [terra](https://cran.r-project.org/package=terra) package. From the user's perspective, some functions have been renamed. 
