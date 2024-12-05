@@ -8,7 +8,7 @@
 ##' @param solradstack rasterStack of monthly solar radiation, can be \code{NULL} if not needed.
 ##'
 ##' @param monthPET rasterStack of monthly potential evapotranspiration. If \code{NULL}, 
-##' 	will be calculated internally.
+##' 	will be calculated internally. If supplied, solradstack is not needed.
 ##'
 ##' @param var vector of names of variables to generate, see Details.
 ##'
@@ -103,6 +103,11 @@ generateEnvirem <- function(masterstack, solradstack = NULL, monthPET = NULL, va
 	
 	solradVar <- c('annualPET','PETseasonality','aridityIndexThornthwaite','climaticMoistureIndex','PETColdestQuarter','PETWarmestQuarter','PETWettestQuarter','PETDriestQuarter')
 	needsSolRad <- ifelse(any(var %in% solradVar), TRUE, FALSE)
+	
+	# if monthly PET is already supplied, no need for solrad
+	if (!is.null(monthPET)) {
+		needsSolRad <- FALSE
+	}
 	
 	#naming checks and name standardization
 	if (needsSolRad) {

@@ -25,8 +25,7 @@
 ##'
 ##' @references
 ##' Rivas-Martínez, S. & Rivas-Sáenz, S. “Synoptical Worldwide Bioclimatic 
-##' Classification System”.  Available online at \url{http://www.globalbioclimatics.org/}
-##' [accessed 15 February 2016]
+##' Classification System”. [accessed 15 February 2016]
 ##' 
 ##' Sayre, R., Comer, P., Warner, H. & Cress, J. (2009) \emph{A new map of standardized
 ##' terrestrial ecosystems of the conterminous United States: US Geological Survey 

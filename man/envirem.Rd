@@ -2,8 +2,8 @@
 % Please edit documentation in R/envirem-package.R
 \docType{package}
 \name{envirem}
-\alias{envirem}
 \alias{envirem-package}
+\alias{envirem}
 \title{envirem}
 \description{
 Generation of bioclimatic rasters that are complementary to the typical 19 bioclim variables.
@@ -35,17 +35,17 @@ and modify the input rasters yourself.
 
 
 The main function for generating ENVIREM rasters is \code{\link{generateEnvirem}}. 
-A complete tutorial of this R package can be found at \url{http://envirem.github.io}.
+A complete tutorial of this R package can be found at \url{https://ptitle.github.io/envirem/}.
 }
 \references{
-\url{http://envirem.github.io}
+\url{https://github.com/ptitle/envirem}
 
 Title, P.O., Bemmels, J.B. 2018. ENVIREM: An expanded set of bioclimatic and topographic variables increases flexibility and improves performance of ecological niche modeling. Ecography 41:291–307.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://envirem.github.io}
+  \item \url{https://github.com/ptitle/envirem}
   \item Report bugs at \url{https://github.com/ptitle/envirem/issues}
 }
 

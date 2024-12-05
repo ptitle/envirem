@@ -20,7 +20,7 @@ min temperature, max temperature, and optionally mean temperature rasters.}
 \item{solradstack}{rasterStack of monthly solar radiation, can be \code{NULL} if not needed.}
 
 \item{monthPET}{rasterStack of monthly potential evapotranspiration. If \code{NULL}, 
-will be calculated internally.}
+will be calculated internally. If supplied, solradstack is not needed.}
 
 \item{var}{vector of names of variables to generate, see Details.}
 
