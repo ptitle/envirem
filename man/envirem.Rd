@@ -16,6 +16,7 @@ Date: 2020-06-03\cr
 License: GPL-2 | GPL-3\cr
 
 \strong{NOTE}: Temperature rasters are now assumed by default to be in degrees C and precipitation in mm. 
+However, different input datasets may have different units. For example, worldclim v1 has temperature 
 rasters in degrees C * 10. Worldclim v2 uses degrees C. CHELSA has several options, depending 
 on whether rasters are downloaded as floating point or integer. Therefore, there is an argument 
 \code{tempScale} to specify the units of temperature, and \code{precipScale} to define precipitation units:

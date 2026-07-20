@@ -95,7 +95,7 @@ ETsolradRasters <- function(rasterTemplate, year, outputDir = NULL, ...) {
 		message(i, ' ', appendLF = FALSE)	
 		RA <- sapply(latvals, function(x) calcSolRad(year = year, lat = x, month = i))
 		tmp <- rep(RA, each = terra::ncol(rasterTemplate))
-		tmp <- matrix(data = tmp, nrow = terra::nrow(rasterTemplate), ncol = terra::ncol(rasterTemplate), byrow = FALSE)
+		tmp <- matrix(data = tmp, nrow = terra::nrow(rasterTemplate), ncol = terra::ncol(rasterTemplate), byrow = TRUE)
 		ras <- terra::init(rasterTemplate, fun = tmp)
 		solradStack[[i]] <- ras
 	}
